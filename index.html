@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>New Project</title>
+<link href="css/reset.css" rel="stylesheet" type="text/css">
+<link href="css/style.css" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+var efforttally = paperworktally = yessirtally = 0;
+//max int: 9,007,199,254,740,992
+$(document).ready(function() {
+	$("#efforter").click(function() {
+		efforttally++;
+		$("#efforttally").html(efforttally + " Effort");
+	});
+	
+	$("#paperworker").mousemove(function() {
+		paperworktally++;
+		$("#paperworktally").html(paperworktally + " Paperwork");
+	});
+	
+	$("#yessirer").scroll(function() {
+		yessirtally++;
+		$("#yessirtally").html(yessirtally + " Yes, Sir!");
+	});
+});
+</script>
+</head>
+<body>
+<div id="navbar">
+</div>
+<div id="game">
+	<div id="col1">
+		<div style="width:200px;margin: 0 auto; border:1px solid black">
+			Effort
+			<div id="efforter" title="Click here!" style="width:100%;height:200px;border:1px solid black"></div>
+			<div id="efforttally">0 Effort</div>
+		</div>
+	</div>
+	<div id="col2">
+		<div style="width:200px;margin: 0 auto; border:1px solid black">
+			Paperwork
+			<div id="paperworker" title="Wiggle here!" style="width:100%;height:200px;border:1px solid black"></div>
+			<div id="paperworktally">0 Paperwork</div>
+		</div>
+	</div>
+	<div id="col3">
+		<div style="width:200px;margin: 0 auto; border:1px solid black">
+			Yes, Sir!
+			<div id="yessirer" title="Scroll here!" style="width:100%;height:200px;border:1px solid black;overflow-x:hidden;overflow-y:scroll">
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			</div>
+			<div id="yessirtally">0 Yes, Sir!</div>
+		</div>
+	</div>
+	<div id="col4">
+		<div style="width:200px;margin: 0 auto; border:1px solid black">
+			Goals
+		</div>
+		<ol>
+			<li>Class Clown</li>
+			<li>Class Treasurer</li>
+			<li>Class Vice President</li>
+			<li>Class President</li>
+			<li>Prom Royalty</li>
+			<li>Sports Captain</li>
+			<li>Fry Cook</li>
+			<li>Assistant Assistant Manager</li>
+			<li>Assistant Manager</li>
+			<li>General Manager</li>
+			<li>District Manager</li>
+			<li>PTA Treasurer</li>
+			<li>PTA Vice President</li>
+			<li>PTA President</li>
+			<li>City Council</li>
+			<li>Deputy Mayor</li>
+			<li>Mayor</li>
+			<li>Judge</li>
+			<li>Lieutenant Governor</li>
+			<li>Governor</li>
+			<li>Senator</li>
+			<li>Vice President</li>
+			<li>President of the United States</li>
+			<li>Head of United Nations</li>
+			<li>President of the Western Hemisphere</li>
+			<li>President of Earth</li>
+			<li>President of the Solar System</li>
+			<li>President of the Solar Interstellar Neighborhood</li>
+			<li>President of the Milky Way Galaxy</li>
+			<li>President of the Local Galactic Group</li>
+			<li>President of the Virgo Supercluster</li>
+			<li>President of all Local Superclusters</li>
+			<li>President of the Observable Universe</li>
+			<li>President of Universe, Observable or Not</li>
+			<li>President of The Multiverse</li>
+			<li>President of Time</li>
+			<li>Vice God</li>
+			<li>God</li>
+		</ol>
+	</div>
+	
+	<div id="menu">
+	</div>
+</div>
+</body>
+</html>
