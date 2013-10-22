@@ -10,7 +10,13 @@
 var efforttally = paperworktally = yessirtally = 0;
 var scrollerBase = 10;
 var scrollStatus = "";
+var fps = 10;	//starting at 10 Frames Per Second, then stepping it up to make sure no slow down; goal is at least 30
 //max int: 9,007,199,254,740,992
+var mainHandle = null;
+function main() {
+	update();
+	draw();
+}
 $(document).ready(function() {
 	$("#yessirer").scrollTop(scrollerBase);
 	$("#efforter").click(function() {
@@ -47,6 +53,7 @@ $(document).ready(function() {
 		$("#yessirtally").html(yessirtally + " Yes, Sir!");
 		$(this).scrollTop(scrollerBase);
 	});
+	mainHandle = setInterval(main, 1000/fps);
 });
 </script>
 </head>
