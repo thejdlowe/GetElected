@@ -8,8 +8,11 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
 var efforttally = paperworktally = yessirtally = 0;
+var scrollerBase = 10;
+var scrollStatus = "";
 //max int: 9,007,199,254,740,992
 $(document).ready(function() {
+	$("#yessirer").scrollTop(scrollerBase);
 	$("#efforter").click(function() {
 		efforttally++;
 		$("#efforttally").html(efforttally + " Effort");
@@ -20,9 +23,29 @@ $(document).ready(function() {
 		$("#paperworktally").html(paperworktally + " Paperwork");
 	});
 	
-	$("#yessirer").scroll(function() {
-		yessirtally++;
+	$("#yessirer").scroll( function(e) {
+		var scrollerLoc = $(this).scrollTop();
+		if(scrollStatus === "") {
+			yessirtally++;
+			if (scrollerLoc < scrollerBase) scrollStatus = "U";
+			else scrollStatus = "D";
+		}
+		else {
+			if(scrollerLoc !== scrollerBase) {
+				if(scrollerLoc < scrollerBase && scrollStatus === "D") {
+					yessirtally++;
+					scrollStatus = "U";
+				}
+				else if(scrollerLoc > scrollerBase && scrollStatus === "U") {
+					yessirtally++;
+					scrollStatus = "D";
+				}
+			}
+		}
+		console.log("scrollerLoc: " + scrollerLoc);
+		console.log("scrollStatus: " + scrollStatus);
 		$("#yessirtally").html(yessirtally + " Yes, Sir!");
+		$(this).scrollTop(scrollerBase);
 	});
 });
 </script>
@@ -46,9 +69,9 @@ $(document).ready(function() {
 		</div>
 	</div>
 	<div id="col3">
-		<div style="width:200px;margin: 0 auto; border:1px solid black">
+		<div style="width:200px;margin: 0 auto; border:1px solid black;overflow:hidden;">
 			Yes, Sir!
-			<div id="yessirer" title="Scroll here!" style="width:100%;height:200px;border:1px solid black;overflow-x:hidden;overflow-y:scroll">
+			<div id="yessirer" title="Scroll here!" style="width:200%;height:200px;border:1px solid black;overflow-x:hidden;overflow-y:scroll">
 			<br />
 			<br />
 			<br />
@@ -63,13 +86,12 @@ $(document).ready(function() {
 			<br />
 			<br />
 			<br />
+
 			<br />
 			<br />
 			<br />
 			<br />
-			<br />
-			<br />
-			<br />
+			&nbsp;
 			</div>
 			<div id="yessirtally">0 Yes, Sir!</div>
 		</div>
@@ -80,6 +102,7 @@ $(document).ready(function() {
 		</div>
 		<ol>
 			<li>Class Clown</li>
+			<li>Hall Monitor</li>
 			<li>Class Treasurer</li>
 			<li>Class Vice President</li>
 			<li>Class President</li>
