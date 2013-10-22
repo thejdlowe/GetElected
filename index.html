@@ -10,51 +10,88 @@
 var efforttally = paperworktally = yessirtally = 0;
 var scrollerBase = 10;
 var scrollStatus = "";
-var fps = 10;	//starting at 10 Frames Per Second, then stepping it up to make sure no slow down; goal is at least 30
+var fps = 30;	//starting at 10 Frames Per Second, then stepping it up to make sure no slow down; goal is at least 30
+var efforttoggle = 1;
 //max int: 9,007,199,254,740,992
-var mainHandle = null;
-function main() {
-	update();
-	draw();
+var Game = {};
+/*
+	Game.Goal
+		id:				String ID to be used to generate the list of goals; when the goal is clicked on, we use the li's ID to science.
+		name:			String name of the goal
+		reqArr:			Object of the requirements to hit the goal.
+			Format:		{effort: 0, paperwork: 0, yessir: 0}
+		unlocks:		function that executes when requirements are met. Use this to show next requirements; do NOT use this to show/hide goals
+*/
+Game.Goal = function(id, name, reqArr, unlocks) {
+	this.id = id;
+	this.name = name;
+	this.reqArr = reqArr;
+	this.unlocks = unlocks;
+	return this;
 }
-$(document).ready(function() {
+Game.Goals = {
+};
+Game.Initialize = function() {
 	$("#yessirer").scrollTop(scrollerBase);
-	$("#efforter").click(function() {
+	$("#efforter").click(function(e) {
 		efforttally++;
-		$("#efforttally").html(efforttally + " Effort");
+		
+		/*
+			PRETTY PRETTY ANIMATIONS, DAMMIT
+		*/
+		var obj = $("#effortclone").clone();
+		obj.html("+1");
+		$("body").append(obj);
+		var left = 15 * efforttoggle;
+		efforttoggle *= -1;
+		obj.offset({left: e.pageX, top: e.pageY - 30});
+		obj.css("opacity", 100);
+		obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
+			$(this).remove();
+		});
 	});
 	
 	$("#paperworker").mousemove(function() {
 		paperworktally++;
-		$("#paperworktally").html(paperworktally + " Paperwork");
 	});
 	
 	$("#yessirer").scroll( function(e) {
 		var scrollerLoc = $(this).scrollTop();
-		if(scrollStatus === "") {
+		if(scrollStatus === "") {	//Status not yet set! SUCCESS, BITCHES
 			yessirtally++;
 			if (scrollerLoc < scrollerBase) scrollStatus = "U";
 			else scrollStatus = "D";
 		}
 		else {
-			if(scrollerLoc !== scrollerBase) {
-				if(scrollerLoc < scrollerBase && scrollStatus === "D") {
+			if(scrollerLoc !== scrollerBase) {	//If current location is not equal to the base that it should always be reset to, THEEEEEENNNN...
+				if(scrollerLoc < scrollerBase && scrollStatus === "D") {	//If location is "lower" (i.e. higher...it's weird) and the last status is down, then tally up and switch status to up!
 					yessirtally++;
 					scrollStatus = "U";
 				}
-				else if(scrollerLoc > scrollerBase && scrollStatus === "U") {
+				else if(scrollerLoc > scrollerBase && scrollStatus === "U") {	//See comment above, but opposite it!...No, not the "Status not yet set" comment. Sheesh.
 					yessirtally++;
 					scrollStatus = "D";
 				}
 			}
 		}
-		console.log("scrollerLoc: " + scrollerLoc);
-		console.log("scrollStatus: " + scrollStatus);
-		$("#yessirtally").html(yessirtally + " Yes, Sir!");
 		$(this).scrollTop(scrollerBase);
 	});
-	mainHandle = setInterval(main, 1000/fps);
-});
+	Game.Loop();
+}
+Game.Update = function() {
+}
+Game.Draw = function() {
+	$("#efforttally").html(efforttally + " Effort");
+	$("#paperworktally").html(paperworktally + " Paperwork");
+	$("#yessirtally").html(yessirtally + " Yes, Sir!");
+}
+Game.Loop = function() {
+	Game.Update();
+	Game.Draw();
+	setTimeout(Game.Loop, 1000/fps);
+}
+
+$(document).ready(Game.Initialize);
 </script>
 </head>
 <body>
@@ -78,7 +115,7 @@ $(document).ready(function() {
 	<div id="col3">
 		<div style="width:200px;margin: 0 auto; border:1px solid black;overflow:hidden;">
 			Yes, Sir!
-			<div id="yessirer" title="Scroll here!" style="width:200%;height:200px;border:1px solid black;overflow-x:hidden;overflow-y:scroll">
+			<div id="yessirer" title="Scroll here!" style="width:200%;height:200px;border:1px solid black;overflow-x:hidden;overflow-y:scroll;cursor:n-resize;">
 			<br />
 			<br />
 			<br />
@@ -152,6 +189,9 @@ $(document).ready(function() {
 	
 	<div id="menu">
 	</div>
+</div>
+<!-- Cloners! -->
+<div id="effortclone">
 </div>
 </body>
 </html>
