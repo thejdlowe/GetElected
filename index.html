@@ -14,24 +14,59 @@ var fps = 30;	//starting at 10 Frames Per Second, then stepping it up to make su
 var efforttoggle = 1;
 //max int: 9,007,199,254,740,992
 var Game = {};
+Game.goalIndex = 0;
+
 /*
 	Game.Goal
 		id:				String ID to be used to generate the list of goals; when the goal is clicked on, we use the li's ID to science.
 		name:			String name of the goal
-		reqArr:			Object of the requirements to hit the goal.
+		reqObj:			Object of the requirements to hit the goal.
 			Format:		{effort: 0, paperwork: 0, yessir: 0}
 		unlocks:		function that executes when requirements are met. Use this to show next requirements; do NOT use this to show/hide goals
 */
-Game.Goal = function(id, name, reqArr, unlocks) {
-	this.id = id;
+Game.Goal = function(name, reqObj, unlocks) {
+	//this.id = id;
 	this.name = name;
-	this.reqArr = reqArr;
+	this.reqObj = reqObj;
 	this.unlocks = unlocks;
 	return this;
 }
-Game.Goals = {
-};
+Game.Goals = [
+	new Game.Goal("Class Clown", {effort: 10, paperwork: 10, yessir: 0}, function() {
+	}),
+	new Game.Goal("Class Clown2", {effort: 20, paperwork: 0, yessir: 0}, function() {
+	})
+];
 Game.Initialize = function() {
+	/*var currGoal = Game.Goals[Game.goalIndex];
+	var li = $("<li>");
+	$("#currentGoal").append(li);
+	li.html(currGoal.name);
+	li.click(function() {
+		return function() {
+			alert(currGoal.reqObj.effort);
+		}
+	}());
+	*/
+	for(var i = 0;i<Game.Goals.length;i++) {
+		var currGoal = Game.Goals[i];
+		var li = $("<li>");
+		$("#currentGoal").append(li);
+		var q = $("<q>");
+		var html = "";
+		html += (currGoal.reqObj.effort !== 0 ? "E: " + currGoal.reqObj.effort : "") + " ";
+		html += (currGoal.reqObj.paperwork !== 0 ? "P: " + currGoal.reqObj.paperwork : "") + " ";
+		html += (currGoal.reqObj.yessir !== 0 ? "Y: " + currGoal.reqObj.yessir : "");
+		q.html(html);
+		li.html(currGoal.name);
+		li.append(q);
+		li.click(function(goal) {
+			return function() {
+				alert(goal.reqObj.effort);
+			}
+		}(currGoal));
+	}
+	
 	$("#yessirer").scrollTop(scrollerBase);
 	$("#efforter").click(function(e) {
 		efforttally++;
@@ -144,8 +179,10 @@ $(document).ready(Game.Initialize);
 		<div style="width:200px;margin: 0 auto; border:1px solid black">
 			Goals
 		</div>
-		<ol>
-			<li>Class Clown</li>
+		<ol id="pastGoals">
+		</ol>
+		<ol id="currentGoal">
+			<!--li>Class Clown</li>
 			<li>Hall Monitor</li>
 			<li>Class Treasurer</li>
 			<li>Class Vice President</li>
@@ -183,7 +220,7 @@ $(document).ready(Game.Initialize);
 			<li>President of The Multiverse</li>
 			<li>President of Time</li>
 			<li>Vice God</li>
-			<li>God</li>
+			<li>God</li -->
 		</ol>
 	</div>
 	

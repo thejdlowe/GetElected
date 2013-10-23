@@ -15,6 +15,27 @@ html,body {
 	height:100%;
 }
 
+li {
+	border: 1px solid #696;
+	width:98%;
+	padding: 20px 0;
+	text-align: center;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: #666 0px 2px 3px;
+	-moz-box-shadow: #666 0px 2px 3px;
+	box-shadow: #666 0px 2px 3px;
+	background: #EEFF99;
+	position: relative;
+}
+
+q {
+	position: absolute;
+	bottom:0px;
+	right: 0px;
+}
+
 #navbar {
 	position: absolute;
 	left: 0px;
