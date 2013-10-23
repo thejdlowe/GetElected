@@ -64,9 +64,10 @@ q {
 
 #col1 {
 	left: 0px;
-	width: 25%;
+	width: 75%;
 	min-width: 256px;
 	background-color: red;
+	z-index: 4;
 }
 
 #col2 {
@@ -74,6 +75,8 @@ q {
 	width: 25%;
 	min-width: 256px;
 	background-color: blue;
+	z-index: 3;
+	display: none;
 }
 
 #col3 {
@@ -81,6 +84,8 @@ q {
 	width: 25%;
 	min-width: 256px;
 	background-color: green;
+	z-index: 2;
+	display: none;
 }
 
 #col4 {
@@ -88,6 +93,7 @@ q {
 	width: 25%;
 	min-width: 256px;
 	background-color: orange;
+	z-index: 99;
 }
 
 #menu {

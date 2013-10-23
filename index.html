@@ -7,14 +7,29 @@
 <link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
-var efforttally = paperworktally = yessirtally = 0;
-var scrollerBase = 10;
-var scrollStatus = "";
-var fps = 30;	//starting at 10 Frames Per Second, then stepping it up to make sure no slow down; goal is at least 30
-var efforttoggle = 1;
+function twoCol() {
+	$("#col1").animate({"width": "75%"}, 500, function(){});
+	$("#col2").hide();
+	$("#col3").hide();
+}
+
+function threeCol() {
+	$("#col1").animate({"width": "35%"}, 500, function(){});
+	$("#col2").animate({"width": "42%", "left": "35%"}, 500, function(){});
+	$("#col2").show();
+	$("#col3").hide();
+}
+
+function fourCol() {
+	$("#col1").animate({"width": "25%"}, 500, function(){});
+	$("#col2").animate({"width": "25%", "left": "25%"}, 500, function(){});
+	$("#col3").animate({"width": "25%", "left": "50%"}, 500, function(){});
+	$("#col2").show();
+	$("#col3").show();
+}
+
 //max int: 9,007,199,254,740,992
 var Game = {};
-Game.goalIndex = 0;
 
 /*
 	Game.Goal
@@ -24,6 +39,7 @@ Game.goalIndex = 0;
 			Format:		{effort: 0, paperwork: 0, yessir: 0}
 		unlocks:		function that executes when requirements are met. Use this to show next requirements; do NOT use this to show/hide goals
 */
+
 Game.Goal = function(name, reqObj, unlocks) {
 	//this.id = id;
 	this.name = name;
@@ -31,13 +47,37 @@ Game.Goal = function(name, reqObj, unlocks) {
 	this.unlocks = unlocks;
 	return this;
 }
+
 Game.Goals = [
-	new Game.Goal("Class Clown", {effort: 10, paperwork: 10, yessir: 0}, function() {
+	new Game.Goal("Two Column", {effort: 10, paperwork: 0, yessir: 0}, function() {
+		twoCol();
+		Game.listPowerUp("effort1");
 	}),
-	new Game.Goal("Class Clown2", {effort: 20, paperwork: 0, yessir: 0}, function() {
+	new Game.Goal("Three Column", {effort: 20, paperwork: 0, yessir: 0}, function() {
+		threeCol();
+	}),
+	new Game.Goal("Four Column", {effort: 30, paperwork: 0, yessir: 0}, function() {
+		fourCol();
 	})
 ];
+
 Game.Initialize = function() {
+	var efforttally = paperworktally = yessirtally = 0;
+	var currentGoalIndex = 0;
+	var scrollerBase = 10;
+	var scrollStatus = "";
+	var fps = 10;	//starting at 10 Frames Per Second, then stepping it up to make sure no slow down; goal is at least 30
+	var efforttoggle = 1;
+	
+	Game.incrementEffort = function(num) {
+		efforttally += num;
+	}
+	Game.incrementPaperwork = function(num) {
+		paperworktally += num;
+	}
+	Game.incrementYessir = function(num) {
+		yessirtally += num;
+	}
 	/*var currGoal = Game.Goals[Game.goalIndex];
 	var li = $("<li>");
 	$("#currentGoal").append(li);
@@ -48,10 +88,28 @@ Game.Initialize = function() {
 		}
 	}());
 	*/
-	for(var i = 0;i<Game.Goals.length;i++) {
-		var currGoal = Game.Goals[i];
+	Game.updatePastGoals = function() {
+		$("#pastGoals").empty();
+		for(var i = 0;i<currentGoalIndex && i < Game.Goals.length;i++) {
+			var currGoal = Game.Goals[i];
+			var li = $("<li>");
+			$("#pastGoals").append(li);
+			var q = $("<q>");
+			var html = "";
+			html += (currGoal.reqObj.effort !== 0 ? "E: " + currGoal.reqObj.effort : "") + " ";
+			html += (currGoal.reqObj.paperwork !== 0 ? "P: " + currGoal.reqObj.paperwork : "") + " ";
+			html += (currGoal.reqObj.yessir !== 0 ? "Y: " + currGoal.reqObj.yessir : "");
+			q.html(html);
+			li.html(currGoal.name);
+			li.append(q);
+			currGoal.unlocks();
+		}
+	}
+	Game.updatePastGoals();
+	
+	Game.addPastGoal = function(currGoal) {
 		var li = $("<li>");
-		$("#currentGoal").append(li);
+		$("#pastGoals").append(li);
 		var q = $("<q>");
 		var html = "";
 		html += (currGoal.reqObj.effort !== 0 ? "E: " + currGoal.reqObj.effort : "") + " ";
@@ -60,16 +118,52 @@ Game.Initialize = function() {
 		q.html(html);
 		li.html(currGoal.name);
 		li.append(q);
-		li.click(function(goal) {
-			return function() {
-				alert(goal.reqObj.effort);
-			}
-		}(currGoal));
 	}
+	
+	Game.updateCurrentGoals = function() {
+		$("#currentGoal").empty();
+		var currGoal = Game.Goals[currentGoalIndex];
+		if(!currGoal) {
+			var li = $("<li>");
+			$("#currentGoal").append(li);
+			var html = "End Game";
+			li.html(html);
+		}
+		else {
+			var li = $("<li>");
+			$("#currentGoal").append(li);
+			var q = $("<q>");
+			var html = "";
+			html += (currGoal.reqObj.effort !== 0 ? "E: " + currGoal.reqObj.effort : "") + " ";
+			html += (currGoal.reqObj.paperwork !== 0 ? "P: " + currGoal.reqObj.paperwork : "") + " ";
+			html += (currGoal.reqObj.yessir !== 0 ? "Y: " + currGoal.reqObj.yessir : "");
+			q.html(html);
+			li.html(currGoal.name);
+			li.append(q);
+			li.click(function(goal) {
+				return function() {
+					//alert(goal.reqObj.effort);
+					if(efforttally >= goal.reqObj.effort &&
+						paperworktally >= goal.reqObj.paperwork &&
+						yessirtally >= goal.reqObj.yessir) {
+							goal.unlocks();
+							currentGoalIndex++;
+							efforttally -= goal.reqObj.effort;
+							paperworktally -= goal.reqObj.paperwork;
+							yessirtally -= goal.reqObj.yessir;
+							Game.addPastGoal(goal);
+							Game.updateCurrentGoals();
+					}
+				}
+			}(currGoal));
+		}
+	}
+	
+	Game.updateCurrentGoals();
 	
 	$("#yessirer").scrollTop(scrollerBase);
 	$("#efforter").click(function(e) {
-		efforttally++;
+		Game.incrementEffort(1);
 		
 		/*
 			PRETTY PRETTY ANIMATIONS, DAMMIT
@@ -87,43 +181,126 @@ Game.Initialize = function() {
 	});
 	
 	$("#paperworker").mousemove(function() {
-		paperworktally++;
+		Game.incrementPaperwork(1/20);
 	});
 	
 	$("#yessirer").scroll( function(e) {
 		var scrollerLoc = $(this).scrollTop();
 		if(scrollStatus === "") {	//Status not yet set! SUCCESS, BITCHES
-			yessirtally++;
+			Game.incrementYessir(1);
 			if (scrollerLoc < scrollerBase) scrollStatus = "U";
 			else scrollStatus = "D";
 		}
 		else {
 			if(scrollerLoc !== scrollerBase) {	//If current location is not equal to the base that it should always be reset to, THEEEEEENNNN...
 				if(scrollerLoc < scrollerBase && scrollStatus === "D") {	//If location is "lower" (i.e. higher...it's weird) and the last status is down, then tally up and switch status to up!
-					yessirtally++;
+					Game.incrementYessir(1);
 					scrollStatus = "U";
 				}
 				else if(scrollerLoc > scrollerBase && scrollStatus === "U") {	//See comment above, but opposite it!...No, not the "Status not yet set" comment. Sheesh.
-					yessirtally++;
+					Game.incrementYessir(1);
 					scrollStatus = "D";
 				}
 			}
 		}
 		$(this).scrollTop(scrollerBase);
 	});
+	
+	Game.myFunc = function(id, count, func) {
+		this.id = id;
+		this.count = count;
+		this.func = func;
+		return this;
+	}
+	
+	/*var funcObj = [new Game.myFunc("effort1", 1, function(num) {
+		return {
+			"effort": 1*num,
+			"paperwork": 0*num,
+			"yessir": 0*num
+		};
+	})];*/
+	
+	var powerups = {};			//this is the one that will be saved! THIS ONE! It will contain an id, and the number of how many of each power up the player has.
+	var powerupsfuncs = {};		//this is what will hold the id of the powerup, the cost(s?), the label, what section it goes to, and the function that will execute every frame during Game.Update().
+	
+	/*
+		id:				id of the power up
+		cost:			object, in the format of {effort: 10, paperwork: 0, yessir: 0}
+		lable:			Primary Label of the Power Up
+		description:	Secondary description of power up.
+		section:		Where it will go to. Either effortPowerUp, paperworkPowerUp, or yessirPowerUp
+	*/
+	var addPowerUp = function(id, cost, label, description, section, func) {
+		powerups[id] = 0;
+		powerupsfuncs[id] = {
+			"cost": cost,
+			"label": label,
+			"section": section,
+			"description": description,
+			"func": func
+		};
+	}
+	
+	addPowerUp("effort1", {effort: 10, paperwork: 0, yessir: 0}, "Acquaintance", "+1 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort": 1*num,
+			"paperwork": 0*num,
+			"yessir": 0*num
+		};
+	});
+	
+	Game.listPowerUp = function(id) {
+		//powerups[id]++;
+		if($("#" + id).length === 0) {
+			var func = powerupsfuncs[id];
+			var target = $("#" + func["section"]);
+			var li = $("<li>");
+			li.attr("id", id);
+			li.html(func["label"]);
+			//li.html();
+			target.append(li);
+		}
+	}
+	/*
+	Game.AddPowerUp = function(id, func) {
+		for(var i in funcObj) {
+			if(funcObj[i].id === id) return funcObj[i].count++;
+		}
+		funcObj.push(new Game.myFunc(id, 1, func));
+	}
+	Game.AddPowerUp("effort1", function(num) {
+		return {
+			"effort": 1*num,
+			"paperwork": 0*num,
+			"yessir": 0*num
+		};
+	});
+	Game.AddPowerUp("effort1", function(num) {
+		return {
+			"effort": 1*num,
+			"paperwork": 0*num,
+			"yessir": 0*num
+		};
+	});*/
+	Game.Update = function() {
+		/*for(var i in funcObj) {
+			var currFunc = funcObj[i];
+			var results = currFunc.func(currFunc.count);
+			Game.incrementEffort(results["effort"] / fps);
+		}*/
+	}
+	Game.Draw = function() {
+		$("#efforttally").html(Math.floor(efforttally) + " Effort");
+		$("#paperworktally").html(Math.floor(paperworktally) + " Paperwork");
+		$("#yessirtally").html(Math.floor(yessirtally) + " Yes, Sir!");
+	}
+	Game.Loop = function() {
+		Game.Update();
+		Game.Draw();
+		setTimeout(Game.Loop, 1000/fps);
+	}
 	Game.Loop();
-}
-Game.Update = function() {
-}
-Game.Draw = function() {
-	$("#efforttally").html(efforttally + " Effort");
-	$("#paperworktally").html(paperworktally + " Paperwork");
-	$("#yessirtally").html(yessirtally + " Yes, Sir!");
-}
-Game.Loop = function() {
-	Game.Update();
-	Game.Draw();
-	setTimeout(Game.Loop, 1000/fps);
 }
 
 $(document).ready(Game.Initialize);
@@ -136,21 +313,27 @@ $(document).ready(Game.Initialize);
 	<div id="col1">
 		<div style="width:200px;margin: 0 auto; border:1px solid black">
 			Effort
-			<div id="efforter" title="Click here!" style="width:100%;height:200px;border:1px solid black"></div>
+			<div id="efforter" style="width:100%;height:200px;border:1px solid black"></div>
 			<div id="efforttally">0 Effort</div>
 		</div>
+		Power Ups:
+		<ol id="effortPowerUp">
+		</ol>
 	</div>
 	<div id="col2">
 		<div style="width:200px;margin: 0 auto; border:1px solid black">
 			Paperwork
-			<div id="paperworker" title="Wiggle here!" style="width:100%;height:200px;border:1px solid black"></div>
+			<div id="paperworker" style="width:100%;height:200px;border:1px solid black"></div>
 			<div id="paperworktally">0 Paperwork</div>
 		</div>
+		Power Ups
+		<ol id="paperworkPowerUp">
+		</ol>
 	</div>
 	<div id="col3">
 		<div style="width:200px;margin: 0 auto; border:1px solid black;overflow:hidden;">
 			Yes, Sir!
-			<div id="yessirer" title="Scroll here!" style="width:200%;height:200px;border:1px solid black;overflow-x:hidden;overflow-y:scroll;cursor:n-resize;">
+			<div id="yessirer" style="width:200%;height:200px;border:1px solid black;overflow-x:hidden;overflow-y:scroll;cursor:n-resize;">
 			<br />
 			<br />
 			<br />
@@ -165,7 +348,6 @@ $(document).ready(Game.Initialize);
 			<br />
 			<br />
 			<br />
-
 			<br />
 			<br />
 			<br />
@@ -174,13 +356,18 @@ $(document).ready(Game.Initialize);
 			</div>
 			<div id="yessirtally">0 Yes, Sir!</div>
 		</div>
+		Power Ups
+		<ol id="yessirPowerUp">
+		</ol>
 	</div>
 	<div id="col4">
 		<div style="width:200px;margin: 0 auto; border:1px solid black">
 			Goals
 		</div>
+		Past Goals:
 		<ol id="pastGoals">
 		</ol>
+		Current Goal:
 		<ol id="currentGoal">
 			<!--li>Class Clown</li>
 			<li>Hall Monitor</li>
@@ -228,7 +415,7 @@ $(document).ready(Game.Initialize);
 	</div>
 </div>
 <!-- Cloners! -->
-<div id="effortclone">
+<div id="effortclone" style="z-index:50">
 </div>
 </body>
 </html>
