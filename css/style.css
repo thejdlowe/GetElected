@@ -18,7 +18,7 @@ html,body {
 li {
 	border: 1px solid #696;
 	width:98%;
-	padding: 20px 0;
+	padding: 40px 0;
 	text-align: center;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
@@ -33,7 +33,14 @@ li {
 q {
 	position: absolute;
 	bottom:0px;
-	right: 0px;
+	right: 3px;
+	font-size: 10px;
+}
+
+pre {
+	position: absolute;
+	left: 0px;
+	top: 0px;
 }
 
 #navbar {
