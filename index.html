@@ -70,6 +70,19 @@ Game.Goals = [
 ];
 
 Game.Initialize = function() {
+	//Function care of http://diveintohtml5.info/storage.html
+	function supports_html5_storage() {
+		try {
+			return ('localStorage' in window && window['localStorage'] !== null);
+		} catch (e) {
+			return false;
+		}
+	}
+	
+	if(!supports_html5_storage()) {
+		$("#nosupport").html("We're sorry, but your browser does not support . Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
+		return;
+	}
 	var efforttally = paperworktally = yessirtally = 0;
 	var currentGoalIndex = 50;
 	var scrollerBase = 10;
@@ -144,7 +157,6 @@ Game.Initialize = function() {
 			li.append(q);
 			li.click(function(goal) {
 				return function() {
-					//alert(goal.reqObj.effort);
 					if(efforttally >= goal.reqObj.effort &&
 						paperworktally >= goal.reqObj.paperwork &&
 						yessirtally >= goal.reqObj.yessir) {
@@ -213,14 +225,6 @@ Game.Initialize = function() {
 		this.func = func;
 		return this;
 	}
-	
-	/*var funcObj = [new Game.myFunc("effort1", 1, function(num) {
-		return {
-			"effort": 1*num,
-			"paperwork": 0*num,
-			"yessir": 0*num
-		};
-	})];*/
 	
 	var powerups = {};			//this is the one that will be saved! THIS ONE! It will contain an id, and the number of how many of each power up the player has.
 	var powerupsfuncs = {};		//this is what will hold the id of the powerup, the cost(s?), the label, what section it goes to, and the function that will execute every frame during Game.Update().
@@ -322,27 +326,29 @@ Game.Initialize = function() {
 			}(func, id));
 		}
 	}
-	/*
-	Game.AddPowerUp = function(id, func) {
-		for(var i in funcObj) {
-			if(funcObj[i].id === id) return funcObj[i].count++;
-		}
-		funcObj.push(new Game.myFunc(id, 1, func));
+	
+	Game.Load = function() {
 	}
-	Game.AddPowerUp("effort1", function(num) {
-		return {
-			"effort": 1*num,
-			"paperwork": 0*num,
-			"yessir": 0*num
-		};
-	});
-	Game.AddPowerUp("effort1", function(num) {
-		return {
-			"effort": 1*num,
-			"paperwork": 0*num,
-			"yessir": 0*num
-		};
-	});*/
+	
+	Game.Save = function() {
+		/*
+			OK, let's declare the variables we NEED to save:
+			powerups
+			efforttally
+			paperworktally
+			yessirtally
+			currentGoalIndex
+		*/
+		var arr = {};
+		arr["powerups"] = powerups;
+		arr["efforttally"] =  efforttally;
+		arr["paperworktally"] = paperworktally;
+		arr["yessirtally"] = yessirtally;
+		arr["currentGoalIndex"] = currentGoalIndex;
+		console.log(JSON.stringify(arr));
+		//localStorage["Slot1"] = JSON
+	}
+
 	Game.Update = function() {
 		for(var i in powerups) {
 			if(powerups[i] > 0) {
@@ -359,15 +365,19 @@ Game.Initialize = function() {
 		$("#paperworktally").html(numberWithCommas(Math.floor(paperworktally)) + " Paperwork");
 		$("#yessirtally").html(numberWithCommas(Math.floor(yessirtally)) + " Yes, Sir!");
 	}
+	
 	Game.Loop = function() {
 		Game.Update();
 		Game.Draw();
-		setTimeout(Game.Loop, 1000/fps);
+		setTimeout(Game.Loop, 1000/fps);	
+		
 	}
 	
 	//call the two functions below AFTER loading from localStorage
+	$("#nosupport").hide();
 	Game.updatePastGoals();
 	Game.updateCurrentGoals();
+	setInterval(Game.Save, 1000*10);	//Save every 60 seconds
 	Game.Loop();
 }
 
@@ -375,6 +385,9 @@ $(document).ready(Game.Initialize);
 </script>
 </head>
 <body>
+<div id="nosupport">
+Loading
+</div>
 <div id="navbar">
 </div>
 <div id="game">

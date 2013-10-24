@@ -43,6 +43,18 @@ pre {
 	top: 0px;
 }
 
+#nosupport {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 99999999;
+	background-color: black;
+	padding: 0px auto;
+	color: white;
+}
+
 #navbar {
 	position: absolute;
 	left: 0px;
@@ -100,7 +112,7 @@ pre {
 	width: 25%;
 	min-width: 256px;
 	background-color: orange;
-	z-index: 99;
+	z-index: 10;
 }
 
 #menu {
