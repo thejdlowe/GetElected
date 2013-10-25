@@ -328,6 +328,15 @@ Game.Initialize = function() {
 	}
 	
 	Game.Load = function() {
+		if(localStorage["efforttally"] && localStorage["efforttally"] !== "") {
+			efforttally = ~~localStorage["efforttally"];
+			paperworktally = ~~localStorage["paperworktally"];
+			yessirtally = ~~localStorage["yessirtally"];
+			currentGoalIndex = ~~localStorage["currentGoalIndex"];
+			for(var i in powerups) {
+				if(localStorage[i]) powerups[i] = ~~localStorage[i];
+			}
+		}
 	}
 	
 	Game.Save = function() {
@@ -339,14 +348,13 @@ Game.Initialize = function() {
 			yessirtally
 			currentGoalIndex
 		*/
-		var arr = {};
-		arr["powerups"] = powerups;
-		arr["efforttally"] =  efforttally;
-		arr["paperworktally"] = paperworktally;
-		arr["yessirtally"] = yessirtally;
-		arr["currentGoalIndex"] = currentGoalIndex;
-		console.log(JSON.stringify(arr));
-		//localStorage["Slot1"] = JSON
+		for(var i in powerups) {
+			localStorage[i] = powerups[i];
+		}
+		localStorage["efforttally"] = Math.round(efforttally);
+		localStorage["paperworktally"] = Math.round(paperworktally);
+		localStorage["yessirtally"] = Math.round(yessirtally);
+		localStorage["currentGoalIndex"] = currentGoalIndex;
 	}
 
 	Game.Update = function() {
@@ -369,12 +377,12 @@ Game.Initialize = function() {
 	Game.Loop = function() {
 		Game.Update();
 		Game.Draw();
-		setTimeout(Game.Loop, 1000/fps);	
-		
+		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
 	}
 	
 	//call the two functions below AFTER loading from localStorage
 	$("#nosupport").hide();
+	Game.Load();
 	Game.updatePastGoals();
 	Game.updateCurrentGoals();
 	setInterval(Game.Save, 1000*10);	//Save every 60 seconds
