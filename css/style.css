@@ -10,6 +10,9 @@ body {
 	font-family: 'Cabin', sans-serif;
 }
 
+* {
+	cursor: default;
+}
 html,body {
 	width:100%;
 	height:100%;
@@ -18,7 +21,7 @@ html,body {
 li {
 	border: 1px solid #696;
 	width:98%;
-	padding: 40px 0;
+	padding: 20px 0;
 	text-align: center;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
@@ -42,6 +45,13 @@ pre {
 	left: 0px;
 	top: 0px;
 }
+
+.ui-tooltip {
+    padding: 10px 20px;
+    border-radius: 20px;
+	font-size: 12px;
+    box-shadow: 0 0 7px black;
+  }
 
 #nosupport {
 	position: absolute;
@@ -122,4 +132,28 @@ pre {
 	right: 0px;
 	height: 40px;
 	background-color: white;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#efforter {
+	-webkit-border-radius: 999px;
+    -moz-border-radius: 999px;
+    border-radius: 999px;
+	height:200px;
+	border:1px solid black;
+	text-align: center;
+	line-height:200px;
+	font-family: 'Coda';
+	font-size:42px;
+	font-weight: bold;
+	color: #F0EAD6;
+}
+
+#efforter:hover {
+	cursor: pointer;
+}
+
+.effortup {
+	box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.3);
 }

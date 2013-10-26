@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>New Project</title>
+<title>GetElected!</title>
 <link href="css/reset.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <link href="css/style.css" rel="stylesheet" type="text/css">
 <link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Coda:400,800' rel='stylesheet' type='text/css'>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script type="text/javascript">
 function twoCol() {
 	$("#col1").animate({"width": "75%"}, 500, function(){});
@@ -80,7 +84,7 @@ Game.Initialize = function() {
 	}
 	
 	if(!supports_html5_storage()) {
-		$("#nosupport").html("We're sorry, but your browser does not support . Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
+		$("#nosupport").html("We're sorry, but your browser does not support GetElected!. Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
 		return;
 	}
 	var efforttally = paperworktally = yessirtally = 0;
@@ -193,6 +197,14 @@ Game.Initialize = function() {
 		});
 	});
 	
+	$("#efforter").mousedown(function(e) {
+		$(this).removeClass("effortup");
+	});
+	
+	$("#efforter").mouseup(function(e) {
+		$(this).addClass("effortup");
+	});
+	
 	$("#paperworker").mousemove(function() {
 		Game.incrementPaperwork(1/20);
 	});
@@ -233,7 +245,7 @@ Game.Initialize = function() {
 		id:				id of the power up
 		cost:			object, in the format of {effort: 10, paperwork: 0, yessir: 0}
 		lable:			Primary Label of the Power Up
-		description:	Secondary description of power up.
+		description:	Secondary description of power up (Flavor text!)
 		section:		Where it will go to. Either effortPowerUp, paperworkPowerUp, or yessirPowerUp
 		func:			function that executes every 1000/fps ms. MUST ALWAYS RETURN OBJECT IN THE FOLLOWING FORMAT:	
 			{
@@ -287,6 +299,7 @@ Game.Initialize = function() {
 			var target = $("#" + func["section"]);
 			var li = $("<li>");
 			li.attr("id", id);
+			li.attr("title", func["description"]);
 			li.html(func["label"]);
 			//li.html();
 			target.append(li);
@@ -324,6 +337,7 @@ Game.Initialize = function() {
 					}
 				}
 			}(func, id));
+			li.tooltip({track: true});
 		}
 	}
 	
@@ -400,10 +414,12 @@ Loading
 </div>
 <div id="game">
 	<div id="col1">
-		<div style="width:200px;margin: 0 auto; border:1px solid black">
-			Effort
-			<div id="efforter" style="width:100%;height:200px;border:1px solid black"></div>
+		<div style="width:200px;margin: 0 auto;">
+			<div id="efforter" class="effortup">EFFORT!</div>
 			<div id="efforttally">0 Effort</div>
+		</div>
+		<div id="effortdescribe" style="width:80%;margin: 2px">
+		To get where you want to go, you gotta work for it! Push yourself! Click the button! And other positive self-motivating descriptors!
 		</div>
 		Power Ups:
 		<ol id="effortPowerUp">
@@ -501,6 +517,9 @@ Loading
 	</div>
 	
 	<div id="menu">
+		A
+		<div style="position:absolute;left:0px;bottom:0px">HI THERE</div>
+		</div>
 	</div>
 </div>
 <!-- Cloners! -->
