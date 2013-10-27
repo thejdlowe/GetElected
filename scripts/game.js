@@ -51,7 +51,7 @@ Game.Initialize = function() {
 	var currentGoalIndex = 50;
 	var scrollerBase = 10;
 	var scrollStatus = "";
-	var fps = 10;	//starting at 10 Frames Per Second, then stepping it up to make sure no slow down; goal is at least 30
+	var fps = 30;	//starting at 10 Frames Per Second, then stepping it up to make sure no slow down; goal is at least 30
 	var efforttoggle = 1;
 	var effortFlag1 = 0;
 	var interest = 0.35;	//Be sure to tip your costs, and drive home safe!
@@ -347,7 +347,6 @@ Game.Initialize = function() {
 				Game.incrementYessir(results["yessir"] / fps);
 			}
 		}
-
 	}
 	Game.Draw = function() {
 		$("#efforttally").html(numberWithCommas(Math.floor(efforttally)) + " Effort");
@@ -358,6 +357,11 @@ Game.Initialize = function() {
 	Game.Loop = function() {
 		Game.Update();
 		Game.Draw();
+		//YAY THE FRAME IS DONE! Let's make sure we're staying close to our FPS goal
+		var delta = (new Date().getTime() - lastRun) / 1000;
+		lastRun = new Date().getTime();
+		var currFPS = ~~(1/delta);
+		$("#fps").html(currFPS + " fps");
 		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
 	}
 	
@@ -367,5 +371,8 @@ Game.Initialize = function() {
 	Game.updatePastGoals();
 	Game.updateCurrentGoals();
 	setInterval(Game.Save, 1000*10);	//Save every 60 seconds
+	
+	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
+	var lastRun = new Date().getTime();
 	Game.Loop();
 }
