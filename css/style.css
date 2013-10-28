@@ -160,6 +160,9 @@ pre {
 	width: 35%;
 	overflow: hidden;
 	height: 40px;
-	
 	margin: 2px auto;
+}
+
+.disabled {
+	opacity: 0.6;
 }

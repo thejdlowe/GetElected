@@ -74,6 +74,7 @@ Game.Initialize = function() {
 			var currGoal = Game.Goals[i];
 			var li = $("<li>");
 			$("#pastGoals").append(li);
+			li.addClass("disabled");
 			var q = $("<q>");
 			var html = "";
 			html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort) : "") + " ";
@@ -97,6 +98,7 @@ Game.Initialize = function() {
 		q.html(html);
 		li.html(currGoal.name);
 		li.append(q);
+		li.addClass("disabled");
 	}
 	
 	Game.updateCurrentGoals = function() {
@@ -349,6 +351,20 @@ Game.Initialize = function() {
 		}
 	}
 	Game.Draw = function() {
+		for(var i in powerups) {
+			if($("#" + i).length) {
+				//console.log($("#" + i).html());
+				var func = powerupsfuncs[i];
+				var effortVal = Game.compInt(func["cost"].effort, powerups[i]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[i]), yessirVal = Game.compInt(func["cost"].yessir, powerups[i]);
+				if(efforttally >= effortVal &&
+					paperworktally >= paperworkVal &&
+					yessirtally >= yessirVal) {
+						if(func["onetime"] === true && powerups[i] > 0) {$("#" + i).addClass("disabled");}
+						else $("#" + i).removeClass("disabled");
+				}
+				else $("#" + i).addClass("disabled");
+			}
+		}
 		$("#efforttally").html(numberWithCommas(Math.floor(efforttally)) + " Effort");
 		$("#paperworktally").html(numberWithCommas(Math.floor(paperworktally)) + " Paperwork");
 		$("#yessirtally").html(numberWithCommas(Math.floor(yessirtally)) + " Yes, Sir!");
