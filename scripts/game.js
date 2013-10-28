@@ -49,9 +49,9 @@ Game.Initialize = function() {
 	}
 	var efforttally = paperworktally = yessirtally = 0;
 	var currentGoalIndex = 50;
-	var scrollerBase = 10;
+	var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.
 	var scrollStatus = "";
-	var fps = 30;	//starting at 10 Frames Per Second, then stepping it up to make sure no slow down; goal is at least 30
+	var fps = 30;
 	var efforttoggle = 1;
 	var effortFlag1 = 0;
 	var interest = 0.35;	//Be sure to tip your costs, and drive home safe!
@@ -162,17 +162,6 @@ Game.Initialize = function() {
 	$("#ticker").css("opacity", 0).slideDown(2000).animate({opacity: 1}, {
 		queue: false, duration: 2000
 	});
-	
-	$("#efforter").mousedown(function(e) {
-		//$(this).stop().removeClass("effortup");
-		$(this).stop().animate({boxShadow: '3px 3px 3px', top: 3}, 'fast');
-	});
-	
-	$("#efforter").mouseup(function(e) {
-		$(this).stop().animate({boxShadow: "5px 5px 2px rgba(0, 0, 0, 0.3)"}, 'fast');
-		//$(this).stop().addClass("effortup");
-	});
-	
 	
 	$("#paperworker").mousemove(function() {
 		Game.incrementPaperwork(1/20);
