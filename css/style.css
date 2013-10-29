@@ -231,6 +231,46 @@ pre {
     top: 6px;
 }
 
+#paperworker {
+/*http://www.sitepoint.com/pure-css3-paper-curls/*/
+	position: relative;
+	background-color: #fff;
+-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
+}
+
+#paperworker:before, #paperworker:after
+{
+	position: absolute;
+	width: 40%;
+	height: 10px;
+	content: ' ';
+	left: 12px;
+	bottom: 12px;
+	background: transparent;
+	-webkit-transform: skew(-5deg) rotate(-5deg);
+	-moz-transform: skew(-5deg) rotate(-5deg);
+	-ms-transform: skew(-5deg) rotate(-5deg);
+	-o-transform: skew(-5deg) rotate(-5deg);
+	transform: skew(-5deg) rotate(-5deg);
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+	z-index: -1;
+} 
+
+#paperworker:after
+{
+	left: auto;
+	right: 12px;
+	-webkit-transform: skew(5deg) rotate(5deg);
+	-moz-transform: skew(5deg) rotate(5deg);
+	-ms-transform: skew(5deg) rotate(5deg);
+	-o-transform: skew(5deg) rotate(5deg);
+	transform: skew(5deg) rotate(5deg);
+}
+
 #ticker {
 	display: none;
 	width: 35%;

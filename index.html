@@ -3,7 +3,6 @@
 <head>
 <title>ALPHA GetElected!</title>
 <link href="css/reset.css" rel="stylesheet" type="text/css">
-
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <link href="css/style.css" rel="stylesheet" type="text/css">
 <link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
@@ -14,7 +13,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="scripts/funcs.js"></script>
 <script src="scripts/game.js"></script>
-<script type="text/javascript">
+<script>
 $(document).ready(Game.Initialize);
 </script>
 </head>
@@ -31,7 +30,6 @@ ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a h
 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </form -->
-
 </div>
 <div id="game">
 	<div id="col1">
@@ -49,10 +47,13 @@ ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a h
 		</ol>
 	</div>
 	<div id="col2">
-		<div style="width:200px;margin: 0 auto; border:1px solid black">
+		<div style="width:200px;margin: 0 auto;">
 			Paperwork
-			<div id="paperworker" style="width:100%;height:200px;border:1px solid black"></div>
+			<div id="paperworker" style="width:100%;height:200px;"></div>
 			<div id="paperworktally">0 Paperwork</div>
+		</div>
+		<div id="paperworkdescribe" style="width:80%;margin: 2px">
+		Ah, and now the paperwork! Move your mouse over the paper above to do paperwork to get ahead in life!
 		</div>
 		Power Ups
 		<ol id="paperworkPowerUp">
@@ -83,59 +84,21 @@ ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a h
 			&nbsp;
 			</div>
 			<div id="yessirtally">0 Yes, Sir!</div>
+			
 		</div>
+		<div id="yessirdescribe" style="width:80%;margin: 2px">
+			Most important: Empty promises! Keep making promises to your voters by clicking the above box and scrolling (either with your mouse wheel, with the up and down arrows, or Page Up/Page Down) both up AND down!
+			</div>
 		Power Ups
 		<ol id="yessirPowerUp">
 		</ol>
 	</div>
 	<div id="col4">
-		<div style="width:200px;margin: 0 auto; border:1px solid black">
-			Goals
-		</div>
-		Past Goals:
-		<ol id="pastGoals">
-		</ol>
 		Current Goal:
 		<ol id="currentGoal">
-			<!--li>Class Clown</li>
-			<li>Hall Monitor</li>
-			<li>Class Treasurer</li>
-			<li>Class Vice President</li>
-			<li>Class President</li>
-			<li>Prom Royalty</li>
-			<li>Sports Captain</li>
-			<li>Fry Cook</li>
-			<li>Assistant Assistant Manager</li>
-			<li>Assistant Manager</li>
-			<li>General Manager</li>
-			<li>District Manager</li>
-			<li>PTA Treasurer</li>
-			<li>PTA Vice President</li>
-			<li>PTA President</li>
-			<li>City Council</li>
-			<li>Deputy Mayor</li>
-			<li>Mayor</li>
-			<li>Judge</li>
-			<li>Lieutenant Governor</li>
-			<li>Governor</li>
-			<li>Senator</li>
-			<li>Vice President</li>
-			<li>President of the United States</li>
-			<li>Head of United Nations</li>
-			<li>President of the Western Hemisphere</li>
-			<li>President of Earth</li>
-			<li>President of the Solar System</li>
-			<li>President of the Solar Interstellar Neighborhood</li>
-			<li>President of the Milky Way Galaxy</li>
-			<li>President of the Local Galactic Group</li>
-			<li>President of the Virgo Supercluster</li>
-			<li>President of all Local Superclusters</li>
-			<li>President of the Observable Universe</li>
-			<li>President of Universe, Observable or Not</li>
-			<li>President of The Multiverse</li>
-			<li>President of Time</li>
-			<li>Vice God</li>
-			<li>God</li -->
+		</ol>
+		Past Goals:
+		<ol id="pastGoals">
 		</ol>
 	</div>
 	

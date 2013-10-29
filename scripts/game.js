@@ -18,12 +18,63 @@ Game.Goal = function(name, reqObj, unlocks) {
 	this.unlocks = unlocks;
 	return this;
 }
+/*
+<!--li>Class Clown</li>
+<li>Hall Monitor</li>
+<li>Class Treasurer</li>
+<li>Class Vice President</li>
+<li>Class President</li>
+<li>Prom Royalty</li>
+<li>Sports Captain</li>
+<li>Fry Cook</li>
+<li>Assistant Assistant Manager</li>
+<li>Assistant Manager</li>
+<li>General Manager</li>
+<li>District Manager</li>
+<li>PTA Treasurer</li>
+<li>PTA Vice President</li>
+<li>PTA President</li>
+<li>City Council</li>
+<li>Deputy Mayor</li>
+<li>Mayor</li>
+<li>Judge</li>
+<li>Lieutenant Governor</li>
+<li>Governor</li>
+<li>Senator</li>
+<li>Vice President</li>
+<li>President of the United States</li>
+<li>Head of United Nations</li>
+<li>President of the Western Hemisphere</li>
+<li>President of Earth</li>
+<li>President of the Solar System</li>
+<li>President of the Solar Interstellar Neighborhood</li>
+<li>President of the Milky Way Galaxy</li>
+<li>President of the Local Galactic Group</li>
+<li>President of the Virgo Supercluster</li>
+<li>President of all Local Superclusters</li>
+<li>President of the Observable Universe</li>
+<li>President of Universe, Observable or Not</li>
+<li>President of The Multiverse</li>
+<li>President of Time</li>
+<li>Vice God</li>
+<li>God</li -->
+*/
 
 Game.Goals = [
-	new Game.Goal("Two Column", {effort: 10, paperwork: 0, yessir: 0}, function() {
-		twoCol();
-		Game.listPowerUp("effort1");
+	new Game.Goal("Class Clown", {effort: 10, paperwork: 0, yessir: 0}, function() {
+		fourCol();
+		$("#effortdescribe").hide();
 	}),
+	new Game.Goal("Hall Monitor", {effort: 25, paperwork: 0, yessir: 0}, function() {
+		Game.listPowerUp("effort1");
+		Game.listPowerUp("effort2");
+		Game.listPowerUp("effort3");
+		Game.listPowerUp("effort4");
+		Game.listPowerUp("effort5");
+	}),
+	new Game.Goal("Class Treasurer", {effort: 100, paperwork: 0, yessir: 0}, function() {
+	})
+	/*,
 	new Game.Goal("Three Column", {effort: 9007199254740990, paperwork: 9007199254740990, yessir: 9007199254740990}, function() {
 		threeCol();
 		Game.listPowerUp("effort2");
@@ -31,7 +82,7 @@ Game.Goals = [
 	}),
 	new Game.Goal("Four Column", {effort: 30, paperwork: 0, yessir: 0}, function() {
 		fourCol();
-	})
+	})*/
 ];
 
 Game.Initialize = function() {
@@ -56,6 +107,7 @@ Game.Initialize = function() {
 	var efforttoggle = 1;
 	var effortFlag1 = 0;
 	var interest = 0.35;	//Be sure to tip your costs, and drive home safe!
+	var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
 	Game.compInt = function(base, times) {
 		return Math.floor(base * Math.pow(1+interest, times));
 	}
@@ -144,6 +196,7 @@ Game.Initialize = function() {
 	$("#efforter").click(function(e) {
 		var howmuch = 1 + (effortFlag1 === true ? 5 : 0);
 		Game.incrementEffort(howmuch);
+		console.log(howmuch);
 		
 		/*
 			PRETTY PRETTY ANIMATIONS, DAMMIT
@@ -244,17 +297,17 @@ Game.Initialize = function() {
 		};
 	}
 	
-	addPowerUp("effort1", {effort: 10, paperwork: 0, yessir: 0}, "Acquaintance", "+1 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("effort1", {effort: 20, paperwork: 0, yessir: 0}, "Acquaintance", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort": 1*num,
+			"effort": 0.1*num,
 			"paperwork": 0*num,
 			"yessir": 0*num
 		};
 	}, false);
 	
-	addPowerUp("effort2", {effort: 50, paperwork: 0, yessir: 0}, "Friend", "+5 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("effort2", {effort: 100, paperwork: 0, yessir: 0}, "Friend", "+0.5 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort":	5*num,
+			"effort":	0.5*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
@@ -268,6 +321,23 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, true);
+	
+	addPowerUp("effort4", {effort: 1000, paperwork: 0, yessir: 0}, "Best Friend", "+10 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	10*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		};
+		
+	}, false);
+	
+	addPowerUp("effort5", {effort: 10000, paperwork: 0, yessir: 0}, "Awesome Coworker", "+50 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	50*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
 	
 	Game.listPowerUp = function(id) {
 		//powerups[id]++;
@@ -339,7 +409,6 @@ Game.Initialize = function() {
 			yessirtally
 			currentGoalIndex
 		*/
-		console.log("Saved");
 		for(var i in powerups) {
 			localStorage[i] = powerups[i];
 		}
@@ -353,7 +422,7 @@ Game.Initialize = function() {
         },1000).delay(5000).animate({
             height:"toggle",
             opacity:"toggle"
-        },1000);
+        },1000).delay(1000).hide();
 	}
 	
 	Game.Reset = function() {
@@ -364,6 +433,10 @@ Game.Initialize = function() {
 		paperworktally = 0;
 		yessirtally = 0;
 		currentGoalIndex = 0;
+		effortFlag1 = 0;
+		$("#effortdescribe").show();
+		$("#paperworkdescribe").show();
+		$("#yessirdescribe").show();
 	}
 
 	Game.Update = function() {
@@ -398,12 +471,19 @@ Game.Initialize = function() {
 	
 	Game.Loop = function() {
 		Game.Update();
+		missedFrames += (new Date().getTime() - lastRun) - (1000/fps);
+		missedFrames = Math.min(missedFrames, 1000*5);	//admittedly, I like this logic from Cookie Clicker; catch up on up to 5 seconds worth of frame data if there is latency.
+		while(missedFrames > 0) {
+			Game.Update();
+			missedFrames -= 1000/fps;
+		}
 		Game.Draw();
 		//YAY THE FRAME IS DONE! Let's make sure we're staying close to our FPS goal
 		var delta = (new Date().getTime() - lastRun) / 1000;
 		lastRun = new Date().getTime();
 		var currFPS = ~~(1/delta);
 		$("#fps").html(currFPS + " fps");
+		
 		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
 	}
 	
@@ -413,6 +493,7 @@ Game.Initialize = function() {
 	Game.updatePastGoals();
 	Game.updateCurrentGoals();
 	setInterval(Game.Save, 1000*10);	//Save every 60 seconds
+	
 	
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
