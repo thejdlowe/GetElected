@@ -15,6 +15,7 @@ Game.Goal = function(name, reqObj, unlocks) {
 	this.name = name;
 	this.reqObj = reqObj;
 	this.unlocks = unlocks;
+	this.unlocks = unlocks;
 	return this;
 }
 
@@ -48,7 +49,7 @@ Game.Initialize = function() {
 		return;
 	}
 	var efforttally = paperworktally = yessirtally = 0;
-	var currentGoalIndex = 50;
+	var currentGoalIndex = 0;
 	var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.
 	var scrollStatus = "";
 	var fps = 30;
@@ -189,6 +190,24 @@ Game.Initialize = function() {
 		$(this).scrollTop(scrollerBase);
 	});
 	
+	$("#save").click(function() {
+		Game.Save();
+	});
+	
+	$("#reset").click(function() {
+		if(confirm("Are you sure you want to reset?")) {
+			Game.Reset();
+			Game.Save();
+			Game.Load();
+			Game.updatePastGoals();
+			Game.updateCurrentGoals();
+			for(var i in powerups) {
+				$("#" + i).remove();
+			}
+			twoCol();
+		}
+	});
+	
 	Game.myFunc = function(id, count, func) {
 		this.id = id;
 		this.count = count;
@@ -320,6 +339,7 @@ Game.Initialize = function() {
 			yessirtally
 			currentGoalIndex
 		*/
+		console.log("Saved");
 		for(var i in powerups) {
 			localStorage[i] = powerups[i];
 		}
@@ -327,6 +347,23 @@ Game.Initialize = function() {
 		localStorage["paperworktally"] = Math.round(paperworktally);
 		localStorage["yessirtally"] = Math.round(yessirtally);
 		localStorage["currentGoalIndex"] = currentGoalIndex;
+		$("#saved").stop(true, true).animate({
+            height:"toggle",
+            opacity:"toggle"
+        },1000).delay(5000).animate({
+            height:"toggle",
+            opacity:"toggle"
+        },1000);
+	}
+	
+	Game.Reset = function() {
+		for(var i in powerups) {
+			powerups[i] = 0;
+		}
+		efforttally = 0;
+		paperworktally = 0;
+		yessirtally = 0;
+		currentGoalIndex = 0;
 	}
 
 	Game.Update = function() {

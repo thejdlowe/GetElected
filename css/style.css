@@ -18,6 +18,10 @@ a:hover {
 	cursor: pointer;
 }
 
+form {
+	display:inline;
+}
+
 html,body {
 	width:100%;
 	height:100%;
@@ -75,12 +79,19 @@ pre {
 	left: 0px;
 	top: 0px;
 	width: 100%;
-	height: 32px;
-	line-height:32px;
+	height: 31px;
+	line-height:31px;
 	box-shadow: rgba(0,0,0,0.2) 0px 2px 3px, inset rgba(0,0,0,0.2) 0px -1px 2px;
 		/*Background care of http://subtlepatterns.com/ */
 	background-image: url("../images/tweed.png");
+	font-size:13px;
+	color: #B0B0B0;
 	vertical-align: middle;
+}
+
+#navbar a {
+	color: white;
+	font-size:15px;
 }
 
 #game {
@@ -145,6 +156,21 @@ pre {
 	background-color: white;
 	text-align: center;
 	vertical-align: middle;
+}
+
+#saved {
+	position: absolute;
+	bottom: 40px;
+	text-align: center;
+	line-height: 32px;
+	height: 32px;
+	font-size: 32px;
+	z-index: 20;
+	left: 0px;
+	right: 0px;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	display: none;
 }
 
 /*
