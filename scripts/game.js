@@ -63,7 +63,7 @@ Game.Goal = function(name, reqObj, unlocks) {
 Game.Goals = [
 	new Game.Goal("Class Clown", {effort: 10, paperwork: 0, yessir: 0}, function() {
 		fourCol();
-		$("#effortdescribe").hide();
+		$("#effortdescribe").hide("slow");
 	}),
 	new Game.Goal("Hall Monitor", {effort: 25, paperwork: 0, yessir: 0}, function() {
 		Game.listPowerUp("effort1");
@@ -95,10 +95,33 @@ Game.Initialize = function() {
 		}
 	}
 	
-	if(!supports_html5_storage()) {
+	if(!supports_html5_storage() || !document.getElementById("paperworkBuffer").getContext) {
 		$("#nosupport").html("We're sorry, but your browser does not support GetElected!. Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
 		return;
 	}
+	/*
+	var link = document.createElement('link');
+	link.rel = 'stylesheet';
+	link.type = 'text/css';
+	link.href = 'http://fonts.googleapis.com/css?family=Special+Elite';
+	document.getElementsByTagName('head')[0].appendChild(link);
+	var image = new Image();
+	image.src = link;
+	image.onerror = function() {
+	
+		var canvas = document.getElementById("paperworkBuffer");
+		var context = canvas.getContext("2d");
+		var maxWidth = 500;
+		var lineHeight = 25;
+		var x = (canvas.width - maxWidth) / 2;
+		var y = 60;
+
+
+		context.font = '50px "Special Elite" cursive';
+		context.fillStyle = '#333';
+
+		wrapText(context, paperwork, x, y, maxWidth, lineHeight);
+	}*/
 	var efforttally = paperworktally = yessirtally = 0;
 	var currentGoalIndex = 0;
 	var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.
@@ -416,13 +439,14 @@ Game.Initialize = function() {
 		localStorage["paperworktally"] = Math.round(paperworktally);
 		localStorage["yessirtally"] = Math.round(yessirtally);
 		localStorage["currentGoalIndex"] = currentGoalIndex;
-		$("#saved").stop(true, true).animate({
+		/*$("#saved").stop(true, true).animate({
             height:"toggle",
             opacity:"toggle"
         },1000).delay(5000).animate({
             height:"toggle",
             opacity:"toggle"
-        },1000).delay(1000).hide();
+        },1000).delay(1000).hide();*/
+		$("#saved").fadeIn(1000).delay(5000).fadeOut(1000);
 	}
 	
 	Game.Reset = function() {
@@ -452,13 +476,12 @@ Game.Initialize = function() {
 	Game.Draw = function() {
 		for(var i in powerups) {
 			if($("#" + i).length) {
-				//console.log($("#" + i).html());
 				var func = powerupsfuncs[i];
 				var effortVal = Game.compInt(func["cost"].effort, powerups[i]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[i]), yessirVal = Game.compInt(func["cost"].yessir, powerups[i]);
 				if(efforttally >= effortVal &&
 					paperworktally >= paperworkVal &&
 					yessirtally >= yessirVal) {
-						if(func["onetime"] === true && powerups[i] > 0) {$("#" + i).addClass("disabled");}
+						if(func["onetime"] === true && powerups[i] > 0) $("#" + i).addClass("disabled");
 						else $("#" + i).removeClass("disabled");
 				}
 				else $("#" + i).addClass("disabled");
