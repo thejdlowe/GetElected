@@ -15,6 +15,8 @@
 <script src="scripts/funcs.js"></script>
 <script src="scripts/game.js"></script>
 <script src="scripts/paperwork.js"></script>
+<script src="scripts/jquery.animate-shadow-min.js"></script>
+
 <script>
 $(document).ready(Game.Initialize);
 </script>
@@ -38,7 +40,7 @@ ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a h
 	<div id="col1">
 		<div style="width:200px;margin: 0 auto;">
 			<br />
-			<a href="javascript:void(0)" id="efforter">EFFORT</a>
+			<div id="efforter">EFFORT</div>
 			<br />
 			<div id="efforttally">0 Effort</div>
 		</div>
@@ -118,6 +120,6 @@ ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a h
 <div id="saved">
 Game Saved
 </div>
-<canvas id="paperworkBuffer" style="position: absolute; top: 400px;left:300px;z-index:500" width="678" height="400"></canvas>
+<canvas id="paperworkBuffer" style="position: absolute; top: 00px;left:00px;z-index:1" width="0" height="0"></canvas>
 </body>
 </html>

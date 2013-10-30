@@ -18,50 +18,104 @@ Game.Goal = function(name, reqObj, unlocks) {
 	this.unlocks = unlocks;
 	return this;
 }
-/*
-<!--li>Class Clown</li>
-<li>Hall Monitor</li>
-<li>Class Treasurer</li>
-<li>Class Vice President</li>
-<li>Class President</li>
-<li>Prom Royalty</li>
-<li>Sports Captain</li>
-<li>Fry Cook</li>
-<li>Assistant Assistant Manager</li>
-<li>Assistant Manager</li>
-<li>General Manager</li>
-<li>District Manager</li>
-<li>PTA Treasurer</li>
-<li>PTA Vice President</li>
-<li>PTA President</li>
-<li>City Council</li>
-<li>Deputy Mayor</li>
-<li>Mayor</li>
-<li>Judge</li>
-<li>Lieutenant Governor</li>
-<li>Governor</li>
-<li>Senator</li>
-<li>Vice President</li>
-<li>President of the United States</li>
-<li>Head of United Nations</li>
-<li>President of the Western Hemisphere</li>
-<li>President of Earth</li>
-<li>President of the Solar System</li>
-<li>President of the Solar Interstellar Neighborhood</li>
-<li>President of the Milky Way Galaxy</li>
-<li>President of the Local Galactic Group</li>
-<li>President of the Virgo Supercluster</li>
-<li>President of all Local Superclusters</li>
-<li>President of the Observable Universe</li>
-<li>President of Universe, Observable or Not</li>
-<li>President of The Multiverse</li>
-<li>President of Time</li>
-<li>Vice God</li>
-<li>God</li -->
-*/
 
 Game.Goals = [
 	new Game.Goal("Class Clown", {effort: 10, paperwork: 0, yessir: 0}, function() {
+		$("#effortdescribe").hide("slow");
+		Game.listPowerUp("effort1");
+	}),
+	new Game.Goal("Hall Monitor", {effort: 100, paperwork: 0, yessir: 0}, function() {
+	}),
+	new Game.Goal("Class Treasurer", {effort: 500, paperwork: 0, yessir: 0}, function() {
+		Game.listPowerUp("effort2");
+	}),
+	new Game.Goal("Class Vice President", {effort: 1000, paperwork: 0, yessir: 0}, function() {
+		Game.listPowerUp("effort3");
+	}),
+	new Game.Goal("Class President", {effort: 2500, paperwork: 0, yessir: 0}, function() {}),
+	new Game.Goal("Prom Royalty", {effort: 5000, paperwork: 0, yessir: 0}, function() {
+		Game.listPowerUp("effort4");
+	}),
+	new Game.Goal("Sports Captain", {effort: 10000, paperwork: 0, yessir: 0}, function() {
+		threeCol();
+	}),
+	new Game.Goal("Fry Cook", {effort: 12500, paperwork: 10, yessir: 0}, function() {
+		$("#paperworkdescribe").hide("slow");
+	}),
+	new Game.Goal("Assistant Assistant Manager", {effort: 17500, paperwork: 100, yessir: 0}, function() {}),
+	new Game.Goal("Assistant Manager", {effort: 22500, paperwork: 500, yessir: 0}, function() {}),
+	new Game.Goal("General Manager", {effort: 30000, paperwork: 2000, yessir: 0}, function() {}),
+	new Game.Goal("District Manager", {effort: 40000, paperwork: 5000, yessir: 0}, function() {}),
+	new Game.Goal("PTA Treasurer", {effort: 50000, paperwork: 7500, yessir: 0}, function() {}),
+	new Game.Goal("PTA Vice President", {effort: 60000, paperwork: 10000, yessir: 0}, function() {}),
+	new Game.Goal("PTA President", {effort: 75000, paperwork: 12500, yessir: 0}, function() {}),
+	new Game.Goal("City Council", {effort: 100000, paperwork: 17500, yessir: 0}, function() {}),
+	new Game.Goal("Deputy Mayor", {effort: 125000, paperwork: 22500, yessir: 0}, function() {}),
+	new Game.Goal("Mayor", {effort: 150000, paperwork: 30000, yessir: 10}, function() {}),
+	new Game.Goal("Judge", {effort: 200000, paperwork: 40000, yessir: 100}, function() {}),
+	new Game.Goal("Lieutenant Governor", {effort: 250000, paperwork: 50000, yessir: 500}, function() {}),
+	new Game.Goal("Governor", {effort: 300000, paperwork: 60000, yessir: 2000}, function() {}),
+	new Game.Goal("Senator", {effort: 500000, paperwork: 75000, yessir: 5000}, function() {}),
+	new Game.Goal("Vice President", {effort: 750000, paperwork: 100000, yessir: 7500}, function() {}),
+	new Game.Goal("President of the United States", {effort: 1000000, paperwork: 125000, yessir: 10000}, function() {}),
+	new Game.Goal("Head of United Nations", {effort: 1500000, paperwork: 150000, yessir: 12500}, function() {}),
+	new Game.Goal("President of the Western Hemisphere", {effort: 2000000, paperwork: 200000, yessir: 17500}, function() {}),
+	new Game.Goal("President of Earth", {effort: 3333360, paperwork: 250000, yessir: 22500}, function() {}),
+	new Game.Goal("President of the Solar System", {effort: 5000000, paperwork: 300000, yessir: 30000}, function() {}),
+	new Game.Goal("President of the Solar Interstellar Neighborhood", {effort: 7500000, paperwork: 500000, yessir: 40000}, function() {}),
+	new Game.Goal("President of the Milky Way Galaxy", {effort: 10000000, paperwork: 750000, yessir: 50000}, function() {}),
+	new Game.Goal("President of the Local Galactic Group", {effort: 20000000, paperwork: 1000000, yessir: 60000}, function() {}),
+	new Game.Goal("President of the Virgo Supercluster", {effort: 40000000, paperwork: 1500000, yessir: 75000}, function() {}),
+	new Game.Goal("President of all Local Superclusters", {effort: 80000000, paperwork: 2000000, yessir: 100000}, function() {}),
+	new Game.Goal("President of the Observable Universe", {effort: 160000000, paperwork: 3333360, yessir: 125000}, function() {}),
+	new Game.Goal("President of Universe, Observable or Not", {effort: 240000000, paperwork: 5000000, yessir: 150000}, function() {}),
+	new Game.Goal("President of The Multiverse", {effort: 320000000, paperwork: 7500000, yessir: 200000}, function() {}),
+	new Game.Goal("President of Time", {effort: 500000000, paperwork: 10000000, yessir: 250000}, function() {}),
+	new Game.Goal("Vice God", {effort: 750000000, paperwork: 20000000, yessir: 300000}, function() {}),
+	new Game.Goal("God", {effort: 1000000000, paperwork: 40000000, yessir: 500000}, function() {}),
+	new Game.Goal("Unlock TVHM GetElected!", {effort: 2000000000, paperwork: 80000000, yessir: 750000}, function() {}),
+	new Game.Goal("TVHM Class Clown", {effort: 3000000000, paperwork: 160000000, yessir: 1000000}, function() {}),
+	new Game.Goal("TVHM Hall Monitor", {effort: 5000000000, paperwork: 240000000, yessir: 1500000}, function() {}),
+	new Game.Goal("TVHM Class Treasurer", {effort: 8000000000, paperwork: 320000000, yessir: 2000000}, function() {}),
+	new Game.Goal("TVHM Class Vice President", {effort: 11500000000, paperwork: 500000000, yessir: 3333360}, function() {}),
+	new Game.Goal("TVHM Class President", {effort: 15000000000, paperwork: 750000000, yessir: 5000000}, function() {}),
+	new Game.Goal("TVHM Prom Royalty", {effort: 25000000000, paperwork: 1000000000, yessir: 7500000}, function() {}),
+	new Game.Goal("TVHM Sports Captain", {effort: 50000000000, paperwork: 2000000000, yessir: 10000000}, function() {}),
+	new Game.Goal("TVHM Fry Cook", {effort: 75500000000, paperwork: 3000000000, yessir: 20000000}, function() {}),
+	new Game.Goal("TVHM Assistant Assistant Manager", {effort: 110000000000, paperwork: 5000000000, yessir: 40000000}, function() {}),
+	new Game.Goal("TVHM Assistant Manager", {effort: 200000000000, paperwork: 8000000000, yessir: 80000000}, function() {}),
+	new Game.Goal("TVHM General Manager", {effort: 330000000000, paperwork: 11500000000, yessir: 160000000}, function() {}),
+	new Game.Goal("TVHM District Manager", {effort: 500000000000, paperwork: 15000000000, yessir: 240000000}, function() {}),
+	new Game.Goal("TVHM PTA Treasurer", {effort: 780000000000, paperwork: 25000000000, yessir: 320000000}, function() {}),
+	new Game.Goal("TVHM PTA Vice President", {effort: 1000000000000, paperwork: 50000000000, yessir: 500000000}, function() {}),
+	new Game.Goal("TVHM PTA President", {effort: 1200000000000, paperwork: 75500000000, yessir: 750000000}, function() {}),
+	new Game.Goal("TVHM City Council", {effort: 1600000000000, paperwork: 110000000000, yessir: 1000000000}, function() {}),
+	new Game.Goal("TVHM Deputy Mayor", {effort: 2500000000000, paperwork: 200000000000, yessir: 2000000000}, function() {}),
+	new Game.Goal("TVHM Mayor", {effort: 3600000000000, paperwork: 330000000000, yessir: 3000000000}, function() {}),
+	new Game.Goal("TVHM Judge", {effort: 5000000000000, paperwork: 500000000000, yessir: 5000000000}, function() {}),
+	new Game.Goal("TVHM Lieutenant Governor", {effort: 7500000000000, paperwork: 780000000000, yessir: 8000000000}, function() {}),
+	new Game.Goal("TVHM Governor", {effort: 10000000000000, paperwork: 1000000000000, yessir: 11500000000}, function() {}),
+	new Game.Goal("TVHM Senator", {effort: 20000000000000, paperwork: 1200000000000, yessir: 15000000000}, function() {}),
+	new Game.Goal("TVHM Vice President", {effort: 30000000000000, paperwork: 1600000000000, yessir: 25000000000}, function() {}),
+	new Game.Goal("TVHM President of the United States", {effort: 40000000000000, paperwork: 2500000000000, yessir: 50000000000}, function() {}),
+	new Game.Goal("TVHM Head of United Nations", {effort: 50000000000000, paperwork: 3600000000000, yessir: 75500000000}, function() {}),
+	new Game.Goal("TVHM President of the Western Hemisphere", {effort: 60000000000000, paperwork: 5000000000000, yessir: 110000000000}, function() {}),
+	new Game.Goal("TVHM President of Earth", {effort: 70000000000000, paperwork: 7500000000000, yessir: 200000000000}, function() {}),
+	new Game.Goal("TVHM President of the Solar System", {effort: 80000000000000, paperwork: 10000000000000, yessir: 330000000000}, function() {}),
+	new Game.Goal("TVHM President of the Solar Interstellar Neighborhood", {effort: 90000000000000, paperwork: 20000000000000, yessir: 500000000000}, function() {}),
+	new Game.Goal("TVHM President of the Milky Way Galaxy", {effort: 100000000000000, paperwork: 30000000000000, yessir: 780000000000}, function() {}),
+	new Game.Goal("TVHM President of the Local Galactic Group", {effort: 200000000000000, paperwork: 40000000000000, yessir: 1000000000000}, function() {}),
+	new Game.Goal("TVHM President of the Virgo Supercluster", {effort: 300000000000000, paperwork: 50000000000000, yessir: 1200000000000}, function() {}),
+	new Game.Goal("TVHM President of all Local Superclusters", {effort: 400000000000000, paperwork: 60000000000000, yessir: 1600000000000}, function() {}),
+	new Game.Goal("TVHM President of the Observable Universe", {effort: 500000000000000, paperwork: 70000000000000, yessir: 2500000000000}, function() {}),
+	new Game.Goal("TVHM President of Universe, Observable or Not", {effort: 600000000000000, paperwork: 80000000000000, yessir: 3600000000000}, function() {}),
+	new Game.Goal("TVHM President of The Multiverse", {effort: 700000000000000, paperwork: 90000000000000, yessir: 5000000000000}, function() {}),
+	new Game.Goal("TVHM President of Time", {effort: 800000000000000, paperwork: 100000000000000, yessir: 7500000000000}, function() {}),
+	new Game.Goal("TVHM Vice God", {effort: 900000000000000, paperwork: 200000000000000, yessir: 10000000000000}, function() {}),
+	new Game.Goal("TVHM God", {effort: 1000000000000000, paperwork: 300000000000000, yessir: 20000000000000}, function() {}),
+	new Game.Goal("Game Over", {effort: 5000000000000000, paperwork: 5000000000000000, yessir: 5000000000000000}, function() {}),
+	new Game.Goal("…Or Is It?", {effort: 1, paperwork: 1, yessir: 1}, function() {})
+	/*new Game.Goal("Class Clown", {effort: 10, paperwork: 0, yessir: 0}, function() {
 		fourCol();
 		$("#effortdescribe").hide("slow");
 	}),
@@ -73,7 +127,7 @@ Game.Goals = [
 		Game.listPowerUp("effort5");
 	}),
 	new Game.Goal("Class Treasurer", {effort: 100, paperwork: 0, yessir: 0}, function() {
-	})
+	})*/
 	/*,
 	new Game.Goal("Three Column", {effort: 9007199254740990, paperwork: 9007199254740990, yessir: 9007199254740990}, function() {
 		threeCol();
@@ -217,9 +271,9 @@ Game.Initialize = function() {
 	
 	$("#yessirer").scrollTop(scrollerBase);
 	$("#efforter").click(function(e) {
+		e.preventDefault();
 		var howmuch = 1 + (effortFlag1 === true ? 5 : 0);
 		Game.incrementEffort(howmuch);
-		console.log(howmuch);
 		
 		/*
 			PRETTY PRETTY ANIMATIONS, DAMMIT
@@ -234,6 +288,14 @@ Game.Initialize = function() {
 		obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
 			$(this).remove();
 		});
+	});
+	
+	$("#efforter").mousedown(function(e) {
+		$(this).stop().animate({boxShadow: '3px 3px 3px', top: 6}, "fast")
+	});
+	
+	$("#efforter").mouseup(function(e) {
+		$(this).stop().animate({boxShadow: '0px 9px 0px rgba(219,31,5,1)', top: 0}, "fast")
 	});
 	
 	$("#ticker").css("opacity", 0).slideDown(2000).animate({opacity: 1}, {
@@ -345,18 +407,18 @@ Game.Initialize = function() {
 		}
 	}, true);
 	
-	addPowerUp("effort4", {effort: 1000, paperwork: 0, yessir: 0}, "Best Friend", "+10 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("effort4", {effort: 1000, paperwork: 0, yessir: 0}, "Best Friend", "+1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort":	10*num,
+			"effort":	1*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		};
 		
 	}, false);
 	
-	addPowerUp("effort5", {effort: 10000, paperwork: 0, yessir: 0}, "Awesome Coworker", "+50 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("effort5", {effort: 10000, paperwork: 0, yessir: 0}, "Awesome Coworker", "+5 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort":	50*num,
+			"effort":	5*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
@@ -522,3 +584,7 @@ Game.Initialize = function() {
 	var lastRun = new Date().getTime();
 	Game.Loop();
 }
+
+$(document).click(function(e) {
+	console.log(new Date().getTime() + " " + (e || "PUPPIES"));
+});
