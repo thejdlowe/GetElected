@@ -94,7 +94,7 @@ pre {
 	font-size:15px;
 }
 
-#game {
+#game, #stats, #update {
 	position: absolute;
 	left: 0px;
 	top: 32px;
@@ -102,6 +102,10 @@ pre {
 	right: 0px;
 	overflow: hidden;
 	width: 100%;
+}
+
+#stats, #update {
+	display: none;
 }
 
 #col1, #col2, #col3, #col4 {
@@ -275,7 +279,6 @@ pre {
 }
 
 #ticker {
-	display: none;
 	width: 35%;
 	overflow: hidden;
 	height: 40px;

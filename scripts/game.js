@@ -171,9 +171,10 @@ Game.Initialize = function() {
 		$(this).stop().animate({boxShadow: '0px 9px 0px rgba(219,31,5,1)', top: 0}, "fast")
 	});
 	
+	/*
 	$("#ticker").css("opacity", 0).slideDown(2000).animate({opacity: 1}, {
 		queue: false, duration: 2000
-	});
+	});*/
 	
 	$("#paperworker").mousemove(function() {
 		Game.incrementPaperwork(1/20);
@@ -259,10 +260,36 @@ Game.Initialize = function() {
 		this.unlocks = unlocks;
 		return this;
 	}
+	
+	//var ids = [];
+	
+	var ticker = ["This is a test", "This is also a test", "Yep more tests!"];
+	var tickerIndex = 0;
+	
+	var ticketReset = function() {
+		tickerIndex = 0;
+	}
+	
+	var tickerChange = function() {
+		if(tickerIndex >= ticker.length) tickerIndex = 0;
+		var whichTick = ticker[tickerIndex];
+		$("#ticker").html(whichTick);
+		
+		tickerIndex++;
+		if(tickerIndex >= ticker.length) tickerIndex = 0;
+	}
+	
+	tickerChange();
+	
+	setInterval(tickerChange, 1000*15);
 
 	var goals = [
 		new Game.Goal("Class Clown", {effort: 10, paperwork: 0, yessir: 0}, function() {
 			$("#effortdescribe").hide("slow");
+			/*Below code used to stress test
+			for(var i = 0;i<ids.length;i++) {
+				Game.listPowerUp(ids[i]);
+			}*/
 			Game.listPowerUp("acquaintance");
 		}),
 		new Game.Goal("Hall Monitor", {effort: 100, paperwork: 0, yessir: 0}, function() {
@@ -316,7 +343,14 @@ Game.Initialize = function() {
 		new Game.Goal("President of Time", {effort: 500000000, paperwork: 10000000, yessir: 250000}, function() {}),
 		new Game.Goal("Vice God", {effort: 750000000, paperwork: 20000000, yessir: 300000}, function() {}),
 		new Game.Goal("God", {effort: 1000000000, paperwork: 40000000, yessir: 500000}, function() {})
-		//Everything below? "DLC". Awww yeah.
+		
+		
+		
+		
+		
+		
+		
+		//Everything below? "DLC". Awww yeah. And no, I won't actually charge for it. DLC will include new powerups that actually take away from other columns.
 		/*,
 		new Game.Goal("Unlock TVHM GetElected!", {effort: 2000000000, paperwork: 80000000, yessir: 750000}, function() {}),
 		new Game.Goal("TVHM Class Clown", {effort: 3000000000, paperwork: 160000000, yessir: 1000000}, function() {}),
@@ -362,7 +396,21 @@ Game.Initialize = function() {
 		new Game.Goal("…Or Is It?", {effort: 1, paperwork: 1, yessir: 1}, function() {})*/
 	];
 	
-	addPowerUp("acquaintance", {effort: 20, paperwork: 0, yessir: 0}, "Acquaintance", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
+	/*
+	Below code used to stress test.
+	for(var i = 0;i<200;i++) {
+		var myID = randString(8);
+		addPowerUp(myID, {effort: 1, paperwork: 0, yessir: 0}, "Stuff", "Stuff", "effortPowerUp", function(num) {
+			return {
+				"effort": 1*num,
+				"paperwork": 0*num,
+				"yessir": 0*num
+			}
+		}, false);
+		ids[ids.length] = myID;
+	}*/
+	
+	addPowerUp("acquaintance", {effort: 15, paperwork: 0, yessir: 0}, "Acquaintance", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort": 0.1*num,
 			"paperwork": 0*num,
@@ -378,7 +426,7 @@ Game.Initialize = function() {
 		}
 	}, false);
 	
-	addPowerUp("effort3", {effort: 100, paperwork: 0, yessir: 0}, "Try Harder", "+5 Effort Per Click", "effortPowerUp", function(num) {
+	addPowerUp("effort3", {effort: 500, paperwork: 0, yessir: 0}, "Try Harder", "+5 Effort Per Click", "effortPowerUp", function(num) {
 		effortFlag1 = true;
 		return {
 			"effort":	0*num,
@@ -387,7 +435,7 @@ Game.Initialize = function() {
 		}
 	}, true);
 	
-	addPowerUp("effort4", {effort: 1000, paperwork: 0, yessir: 0}, "Your Bro, Yo!", "+3 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("effort4", {effort: 1000, paperwork: 0, yessir: 0}, "Bro", "+3 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	3*num,
 			"paperwork":	0*num,
@@ -399,6 +447,14 @@ Game.Initialize = function() {
 	addPowerUp("effort5", {effort: 5000, paperwork: 0, yessir: 0}, "Best Friend", "+10 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	10*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	
+	addPowerUp("effort6", {effort: 50000, paperwork: 0, yessir: 0}, "Significant Other", "+100 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	100*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
@@ -541,7 +597,6 @@ Game.Initialize = function() {
 		lastRun = new Date().getTime();
 		var currFPS = ~~(1/delta);
 		$("#fps").html(currFPS + " fps");
-		currentGoalIndex = 50;
 		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
 	}
 	
