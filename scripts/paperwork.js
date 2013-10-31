@@ -7,6 +7,7 @@ var paperwork = "According to Chapter One, Sub-Chapter Eight, Paragraph Four, Li
 
 //wrapText care of http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
 
+/*
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
 	var words = text.split(' ');
 	var line = '';
@@ -26,3 +27,4 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
 	}
 	context.fillText(line, x, y);
 }
+*/
