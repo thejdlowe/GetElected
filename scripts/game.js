@@ -578,13 +578,15 @@ Game.Initialize = function() {
 	Game.updatePastGoals();
 	Game.updateCurrentGoals();
 	setInterval(Game.Save, 1000*10);	//Save every 60 seconds
+	var lastEff = 0;
+	
+	setInterval(function() {
+		console.log("Last: " + lastEff + " Current: " + efforttally + " Diff: " + (efforttally - lastEff));
+		lastEff = efforttally;
+	}, 1000);
 	
 	
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
 	Game.Loop();
 }
-
-$(document).click(function(e) {
-	console.log(new Date().getTime() + " " + (e || "PUPPIES"));
-});
