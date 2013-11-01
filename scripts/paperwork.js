@@ -5,28 +5,8 @@ var paperwork = "According to Chapter One, Sub-Chapter Eight, Paragraph Four, Li
 "anddo, fordo, forgo, fortnight, A Hard Day's Night, The Dark Knight, or anyone else who looks funny will immediately render everything in this chapter moot and will invoke martial law upon " +
 "the wetlands of Notre Dame. If any attempts are made to supercede, subcede, or Sub-Con this non-anti-un-not-nope-nuh-uh negotiable \"contract\", any and all participants will be subject to " +
 "a harsh criticism of John Leguizamo's \"Jerk\". Now, if you will please turn to Act VI, Psalm 22, verse C, this will determine the length of which one must hold on to \"it\" before dropping " +
-"as if it were hot. All rights reserved, must contain a number in your age to partake in this game, offer void in any country whose primary export is spite, longevity,";
-
-//wrapText care of http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
-
-/*
-function wrapText(context, text, x, y, maxWidth, lineHeight) {
-	var words = text.split(' ');
-	var line = '';
-
-	for(var n = 0; n < words.length; n++) {
-		var testLine = line + words[n] + ' ';
-		var metrics = context.measureText(testLine);
-		var testWidth = metrics.width;
-		if (testWidth > maxWidth && n > 0) {
-			context.fillText(line, x, y);
-			line = words[n] + ' ';
-			y += lineHeight;
-		}
-		else {
-		line = testLine;
-		}
-	}
-	context.fillText(line, x, y);
-}
-*/
+"as if it were hot. All rights reserved, must contain a number in your age to partake in this game, offer void in any country whose primary export is spite or longevity. Hey, I could really go " +
+"for a bouncy castle. If the plaintiff, who is dressed very plainly, hence being called \"the plaintiff\", wishes to use one of his or her or they or them or of or be the three wishes granted by " + 
+"the court appointed genie, the plaintiff must profess any and all desires regarding cicadas. If the plaintiff does not have any deep-rooted desires for them, then the genie is to be tied to a " + 
+"raft and made to serve the plaintiff's time in prison. If this is not about prison, then man, just, like, ignore all of this. It's cool. For any and all rapid fire movements on the game \"Track " +
+"& Field\", please make sure to use an electric toothbrush. This web page may include references to pop culture. Please do not drop the bass around this document.";

@@ -40,7 +40,7 @@ Game.Initialize = function() {
 		var width = 0, i, j;
 		var result;
 		var color = fontColor || "white";
-		var font = '16px "Special Elite", cursive';
+		var font = '20px "Special Elite", cursive';
 		// Font and size is required for context.measureText()
 		 context.font = font
 
@@ -71,8 +71,12 @@ Game.Initialize = function() {
 			context.fillText( lines[i], 8, 5 + fontSize + (fontSize+5) * i );
 		}
 		
-		var data = context.getImageData(0, 0, 200, 200);
+		var x = getRandomInt(0, context.canvas.width - 200);
+		var y = getRandomInt(0, context.canvas.height - 200);
+		var data = context.getImageData(x, y, 200, 200);
 		var canv2 = document.createElement("canvas");
+		canv2.width = 200;
+		canv2.height = 200;
 		var context2 = canv2.getContext("2d");
 		context2.putImageData(data, 0, 0);
 		
@@ -83,6 +87,7 @@ Game.Initialize = function() {
 		newImg.style.zIndex = "50";
 		newImg.style.top = "50%";
 		//document.getElementsByTagName('body')[0].appendChild(newImg);
+		document.getElementById("paperworker").style.backgroundImage = "url(" + img + ")";
 	}
 	
 	var link = document.createElement('link');
