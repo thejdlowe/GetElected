@@ -18,12 +18,14 @@
 <script src="scripts/jquery.animate-shadow-min.js"></script>
 
 <script>
-$(document).ready(Game.Initialize);
+$(document).ready(Game.preLoad);
 </script>
 </head>
 <body>
 <div id="nosupport">
 Loading
+<br />
+<progress id="progress" value="0" max="100"></progress><span id="progressPercent">0</span>%
 </div>
 <div id="navbar">
 ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a href="https://github.com/jdllama/GetElected" target="_blank">Github</a>

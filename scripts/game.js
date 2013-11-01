@@ -10,137 +10,21 @@ var Game = {};
 		unlocks:		function that executes when requirements are met. Use this to show next requirements; do NOT use this to show/hide goals
 */
 
-Game.Initialize = function() {
-	//Function care of http://diveintohtml5.info/storage.html
-	function supports_html5_storage() {
-		try {
-			return ('localStorage' in window && window['localStorage'] !== null);
-		} catch (e) {
-			return false;
-		}
-	}
-	
-	if(!supports_html5_storage()) {
-		$("#nosupport").html("We're sorry, but your browser does not support GetElected!. Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
-		return;
-	}
-	
-	var canvas = document.createElement('canvas');
-	var ctx    = canvas.getContext('2d');
-	canvas.style.border = "1px solid black";
-	canvas.style.position = "absolute";
-	canvas.style.zIndex = "50";
-	canvas.style.top = "50%";
-	//document.body.appendChild(canvas);
-
-	function todo(context, text, fontSize, fontColor) {
-		var max_width  = 600;
-		var fontSize   =  12;
-		var lines      =  new Array();
-		var width = 0, i, j;
-		var result;
-		var color = fontColor || "white";
-		var font = '20px "Special Elite", cursive';
-		// Font and size is required for context.measureText()
-		 context.font = font
-
-		
-		// Start calculation
-		while ( text.length ) {
-			for( i=text.length; context.measureText(text.substr(0,i)).width > max_width; i-- );
-		
-			result = text.substr(0,i);
-		
-			if ( i !== text.length )
-				for( j=0; result.indexOf(" ",j) !== -1; j=result.indexOf(" ",j)+1 );
-			
-			lines.push( result.substr(0, j|| result.length) );
-			width = Math.max( width, context.measureText(lines[ lines.length-1 ]).width );
-			text  = text.substr( lines[ lines.length-1 ].length, text.length );
-		}
-		
-		
-		// Calculate canvas size, add margin
-		context.canvas.width  = 14 + width;
-		context.canvas.height =  8 + ( fontSize + 5 ) * lines.length;
-		context.font   = font;
-
-		// Render
-		context.fillStyle = color;
-		for ( i=0, j=lines.length; i<j; ++i ) {
-			context.fillText( lines[i], 8, 5 + fontSize + (fontSize+5) * i );
-		}
-		
-		var x = getRandomInt(0, context.canvas.width - 200);
-		var y = getRandomInt(0, context.canvas.height - 200);
-		var data = context.getImageData(x, y, 200, 200);
-		var canv2 = document.createElement("canvas");
-		canv2.width = 200;
-		canv2.height = 200;
-		var context2 = canv2.getContext("2d");
-		context2.putImageData(data, 0, 0);
-		
-		var img = canv2.toDataURL();
-		var newImg = new Image;
-		newImg.src = img;
-		newImg.style.position = "absolute";
-		newImg.style.zIndex = "50";
-		newImg.style.top = "50%";
-		//document.getElementsByTagName('body')[0].appendChild(newImg);
-		document.getElementById("paperworker").style.backgroundImage = "url(" + img + ")";
-	}
-	
-	var link = document.createElement('link');
-	link.rel = 'stylesheet';
-	link.type = 'text/css';
-	link.href = 'http://fonts.googleapis.com/css?family=Special+Elite';
-	document.getElementsByTagName('head')[0].appendChild(link);
-
-	// Trick from http://stackoverflow.com/questions/2635814/
-	var image = new Image;
-	image.src = link.href;
-	image.onerror = function() {
-		setTimeout(function() {
-			todo(ctx, paperwork, 12, "black");
-		}, 1000);
-	}
-	
-	//console.log(div.height());
-	//$("#paperworker").css("clip", "rect(0px, 200px, 200px, 0px)");
-	/*
-	var link = document.createElement('link');
-	link.rel = 'stylesheet';
-	link.type = 'text/css';
-	link.href = 'http://fonts.googleapis.com/css?family=Special+Elite';
-	document.getElementsByTagName('head')[0].appendChild(link);
-	var image = new Image();
-	image.src = link;
-	image.onerror = function() {
-	
-		var canvas = document.getElementById("paperworkBuffer");
-		var context = canvas.getContext("2d");
-		var maxWidth = 500;
-		var lineHeight = 25;
-		var x = (canvas.width - maxWidth) / 2;
-		var y = 60;
-
-
-		context.font = '50px "Special Elite" cursive';
-		context.fillStyle = '#333';
-
-		wrapText(context, paperwork, x, y, maxWidth, lineHeight);
-	}*/
+Game.Initialize = function() {	
 	var efforttally = paperworktally = yessirtally = 0;
 	var currentGoalIndex = 0;
 	var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.
 	var scrollStatus = "";
 	var fps = 30;
 	var efforttoggle = 1;
-	var effortFlag1 = 0;
+	var effortFlag1 = effortFlag2 = effortFlag3 = false;
 	var interest = 0.35;	//Be sure to tip your costs, and drive home safe!
 	var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
 	Game.compInt = function(base, times) {
 		return Math.floor(base * Math.pow(1+interest, times));
+	}
+	Game.reverseCompInt = function(base, times) {
+		return Math.floor(base / Math.pow(1+interest, times));
 	}
 	Game.incrementEffort = function(num) {
 		efforttally += num;
@@ -226,7 +110,7 @@ Game.Initialize = function() {
 	$("#yessirer").scrollTop(scrollerBase);
 	$("#efforter").click(function(e) {
 		e.preventDefault();
-		var howmuch = 1 + (effortFlag1 === true ? 5 : 0);
+		var howmuch = 1 + (effortFlag1 === true ? 5 : 0) + (effortFlag2 === true ? 100 : 0);
 		Game.incrementEffort(howmuch);
 		
 		/*
@@ -265,18 +149,26 @@ Game.Initialize = function() {
 		var scrollerLoc = $(this).scrollTop();
 		if(scrollStatus === "") {	//Status not yet set! SUCCESS, BITCHES
 			Game.incrementYessir(1);
-			if (scrollerLoc < scrollerBase) scrollStatus = "U";
-			else scrollStatus = "D";
+			if (scrollerLoc < scrollerBase) {
+				$(this).css('background-image', 'url("images/up.png")');
+				scrollStatus = "U";
+			}
+			else {
+				$(this).css('background-image', 'url("images/down.png")');
+				scrollStatus = "D";
+			}
 		}
 		else {
 			if(scrollerLoc !== scrollerBase) {	//If current location is not equal to the base that it should always be reset to, THEEEEEENNNN...
 				if(scrollerLoc < scrollerBase && scrollStatus === "D") {	//If location is "lower" (i.e. higher...it's weird) and the last status is down, then tally up and switch status to up!
 					Game.incrementYessir(1);
 					scrollStatus = "U";
+					$(this).css('background-image', 'url("images/up.png")');
 				}
 				else if(scrollerLoc > scrollerBase && scrollStatus === "U") {	//See comment above, but opposite it!...No, not the "Status not yet set" comment. Sheesh.
 					Game.incrementYessir(1);
 					scrollStatus = "D";
+					$(this).css('background-image', 'url("images/down.png")');
 				}
 			}
 		}
@@ -318,7 +210,7 @@ Game.Initialize = function() {
 			};
 		onetime:		Can the player use this only one time? true if...well, true. False if nope.
 	*/
-	var addPowerUp = function(id, cost, label, description, section, func, onetime) {
+	var addPowerUp = function(id, cost, label, description, section, func, onetime, sell) {
 		powerups[id] = 0;
 		powerupsfuncs[id] = {
 			"cost": cost,
@@ -326,7 +218,8 @@ Game.Initialize = function() {
 			"section": section,
 			"description": description,
 			"func": func,
-			"onetime": onetime
+			"onetime": onetime,
+			"sell": sell || null
 		};
 	}
 	
@@ -341,8 +234,6 @@ Game.Initialize = function() {
 		this.unlocks = unlocks;
 		return this;
 	}
-	
-	//var ids = [];
 	
 	var ticker = ["This is a test", "This is also a test", "Yep more tests!"];
 	var tickerIndex = 0;
@@ -367,10 +258,12 @@ Game.Initialize = function() {
 	var goals = [
 		new Game.Goal("Class Clown", {effort: 10, paperwork: 0, yessir: 0}, function() {
 			$("#effortdescribe").hide("slow");
-			/*Below code used to stress test
-			for(var i = 0;i<ids.length;i++) {
+			//Below code used to stress test
+			/*for(var i = 0;i<ids.length;i++) {
 				Game.listPowerUp(ids[i]);
+				powerups[ids[i]]++;
 			}*/
+			
 			Game.listPowerUp("acquaintance");
 		}),
 		new Game.Goal("Hall Monitor", {effort: 100, paperwork: 0, yessir: 0}, function() {
@@ -402,7 +295,9 @@ Game.Initialize = function() {
 		new Game.Goal("Deputy Mayor", {effort: 125000, paperwork: 22500, yessir: 0}, function() {
 			fourCol();
 		}),
-		new Game.Goal("Mayor", {effort: 150000, paperwork: 30000, yessir: 10}, function() {}),
+		new Game.Goal("Mayor", {effort: 150000, paperwork: 30000, yessir: 10}, function() {
+			$("#yessirdescribe").hide("slow");
+		}),
 		new Game.Goal("Judge", {effort: 200000, paperwork: 40000, yessir: 100}, function() {}),
 		new Game.Goal("Lieutenant Governor", {effort: 250000, paperwork: 50000, yessir: 500}, function() {}),
 		new Game.Goal("Governor", {effort: 300000, paperwork: 60000, yessir: 2000}, function() {}),
@@ -477,8 +372,10 @@ Game.Initialize = function() {
 		new Game.Goal("…Or Is It?", {effort: 1, paperwork: 1, yessir: 1}, function() {})*/
 	];
 	
+	
+	//Below code used to stress test.
 	/*
-	Below code used to stress test.
+	var ids = [];
 	for(var i = 0;i<200;i++) {
 		var myID = randString(8);
 		addPowerUp(myID, {effort: 1, paperwork: 0, yessir: 0}, "Stuff", "Stuff", "effortPowerUp", function(num) {
@@ -493,7 +390,7 @@ Game.Initialize = function() {
 	
 	addPowerUp("acquaintance", {effort: 15, paperwork: 0, yessir: 0}, "Acquaintance", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort": 0.1*num,
+			"effort": (0.1 + (effortFlag3 === true ? 2 : 0))*num,
 			"paperwork": 0*num,
 			"yessir": 0*num
 		};
@@ -514,7 +411,7 @@ Game.Initialize = function() {
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true);
+	}, true, function() {effortFlag1 = false});
 	
 	addPowerUp("effort4", {effort: 1000, paperwork: 0, yessir: 0}, "Bro", "+3 Effort Per Second", "effortPowerUp", function(num) {
 		return {
@@ -525,17 +422,51 @@ Game.Initialize = function() {
 		
 	}, false);
 	
-	addPowerUp("effort5", {effort: 5000, paperwork: 0, yessir: 0}, "Best Friend", "+10 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("effort5", {effort: 5000, paperwork: 0, yessir: 0}, "Stronger Acquaintance Bond", "Each Acquaintaince Gains +2 Effort", "effortPowerUp", function(num) {
+		effortFlag3 = true;
 		return {
-			"effort":	10*num,
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, true, function() {effortFlag3 = false});
+	
+	addPowerUp("effort6", {effort: 50000, paperwork: 0, yessir: 0}, "Significant Other", "+100 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	100*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
 	}, false);
 	
-	addPowerUp("effort6", {effort: 50000, paperwork: 0, yessir: 0}, "Significant Other", "+100 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("lawyer", {effort: 150000, paperwork: 0, yessir: 0}, "Personal Lawyer", "+500 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort":	100*num,
+			"effort":	500*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	
+	addPowerUp("grindstone", {effort: 250000, paperwork: 0, yessir: 0}, "Nose To The Grindstone", "+100 Effort Per Click", "effortPowerUp", function(num) {
+		effortFlag2 = true;
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, true, function() {effortFlag2 = false});
+	
+	addPowerUp("uberlawyer", {effort: 500000, paperwork: 0, yessir: 0}, "Über Lawyer", "+1000 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	1000*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	
+	addPowerUp("superso", {effort: 1000000, paperwork: 0, yessir: 0}, "Super Significant Other", "+10000 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	10000*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
@@ -563,6 +494,41 @@ Game.Initialize = function() {
 			pre.attr("id", id + "_pre");
 			pre.html("Total: " + powerups[id]);
 			li.append(pre);
+			var sell = $("<button>Sell</button>");
+			sell.attr("myPow", id);
+			li.append(sell);
+			sell.click(function(e) {
+				e.stopPropagation();
+				var id = $(this).attr("myPow");
+				if(powerups[id] > 0) {
+					powerups[id]--;
+					var effortVal = Game.compInt(func["cost"].effort, powerups[id]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[id]), yessirVal = Game.compInt(func["cost"].yessir, powerups[id]);
+					efforttally += (effortVal * 0.5);
+					paperworktally += (paperworkVal * 0.5);
+					yessirtally  += (yessirVal * 0.5);
+					var q = $("#" + id + "_q");
+					var html = "";
+					html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(Game.compInt(func["cost"].effort, powerups[id])) : "") + " ";
+					html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(Game.compInt(func["cost"].paperwork, powerups[id])) : "") + " ";
+					html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(Game.compInt(func["cost"].yessir, powerups[id])) : "");
+					q.html(html);
+					var pre = $("#" + id + "_pre");
+					pre.html("Total: " + powerups[id]);
+				}
+				//alert($(this).attr("myPow"));
+			});
+			/*
+			sell.appendTo($("body"));
+			sell.css("z-index", "50");
+			sell.css("position", "absolute");
+			sell.hide();
+			sell.css(li.offset());
+			$(li, sell).hover(function() {
+				sell.show();
+			}, function() {
+				sell.hide();
+			});
+			*/
 			li.click(function(goal, id) {
 				return function() {
 					var effortVal = Game.compInt(func["cost"].effort, powerups[id]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[id]), yessirVal = Game.compInt(func["cost"].yessir, powerups[id]);
@@ -629,7 +595,7 @@ Game.Initialize = function() {
 		paperworktally = 0;
 		yessirtally = 0;
 		currentGoalIndex = 0;
-		effortFlag1 = 0;
+		effortFlag1 = effortFlag2 = effortFlag3 = false;
 		$("#effortdescribe").show();
 		$("#paperworkdescribe").show();
 		$("#yessirdescribe").show();
@@ -679,7 +645,8 @@ Game.Initialize = function() {
 		var currFPS = ~~(1/delta);
 		$("#fps").html(currFPS + " fps");
 		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
-		currentGoalIndex = 500;
+		currentGoalIndex = 50000;			//BETA THING PLEASE IGNORE
+		
 	}
 	
 	//call the two functions below AFTER loading from localStorage
@@ -702,4 +669,118 @@ Game.Initialize = function() {
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
 	Game.Loop();
+}
+
+Game.loadList = {};
+
+Game.addLoader = function(id) {
+	Game.loadList[id] = false;
+}
+
+Game.finishLoader = function(id) {
+	Game.loadList[id] = true;
+}
+
+Game.checkLoad = function() {
+	var loaded = true;
+	var val = 0;
+	var len = 0;
+	for(var i in Game.loadList) {
+		len++;
+		if(Game.loadList[i] === false) loaded = false;
+		else val++;
+	}
+	val = (val / len) * 100;
+	document.getElementById("progress").value = val;
+	$("#progressPercent").html(val);
+	if(loaded === false) setTimeout(Game.checkLoad, 1000);
+	else Game.Initialize();
+}
+
+Game.preLoad = function() {
+	//Function care of http://diveintohtml5.info/storage.html
+	function supports_html5_storage() {
+		try {
+			return ('localStorage' in window && window['localStorage'] !== null);
+		} catch (e) {
+			return false;
+		}
+	}
+	
+	var canvas = document.createElement('canvas');
+	
+	if(!supports_html5_storage() || !canvas.getContext) {
+		$("#nosupport").html("We're sorry, but your browser does not support GetElected!. Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
+		return;
+	}
+	Game.addLoader("paperworker");
+	var ctx    = canvas.getContext('2d');
+
+	function todo(context, text, fontSize, fontColor) {
+		var max_width  = 600;
+		var fontSize   =  12;
+		var lines      =  new Array();
+		var width = 0, i, j;
+		var result;
+		var color = fontColor || "white";
+		var font = '20px "Special Elite", cursive';
+		// Font and size is required for context.measureText()
+		 context.font = font
+
+		
+		// Start calculation
+		while ( text.length ) {
+			for( i=text.length; context.measureText(text.substr(0,i)).width > max_width; i-- );
+		
+			result = text.substr(0,i);
+		
+			if ( i !== text.length )
+				for( j=0; result.indexOf(" ",j) !== -1; j=result.indexOf(" ",j)+1 );
+			
+			lines.push( result.substr(0, j|| result.length) );
+			width = Math.max( width, context.measureText(lines[ lines.length-1 ]).width );
+			text  = text.substr( lines[ lines.length-1 ].length, text.length );
+		}
+		
+		
+		// Calculate canvas size, add margin
+		context.canvas.width  = 14 + width;
+		context.canvas.height =  8 + ( fontSize + 5 ) * lines.length;
+		context.font   = font;
+
+		// Render
+		context.fillStyle = color;
+		for ( i=0, j=lines.length; i<j; ++i ) {
+			context.fillText( lines[i], 8, 5 + fontSize + (fontSize+5) * i );
+		}
+		
+		var x = getRandomInt(0, context.canvas.width - 200);
+		var y = getRandomInt(0, context.canvas.height - 200);
+		var data = context.getImageData(x, y, 200, 200);
+		var canv2 = document.createElement("canvas");
+		canv2.width = 200;
+		canv2.height = 200;
+		var context2 = canv2.getContext("2d");
+		context2.putImageData(data, 0, 0);
+		
+		var img = canv2.toDataURL();
+		document.getElementById("paperworker").style.backgroundImage = "url(" + img + ")";
+		Game.finishLoader("paperworker");
+	}
+	
+	var link = document.createElement('link');
+	link.rel = 'stylesheet';
+	link.type = 'text/css';
+	link.href = 'http://fonts.googleapis.com/css?family=Special+Elite';
+	document.getElementsByTagName('head')[0].appendChild(link);
+
+	// Trick from http://stackoverflow.com/questions/2635814/
+	var image = new Image;
+	image.src = link.href;
+	image.onerror = function() {
+		setTimeout(function() {
+			todo(ctx, paperwork, 12, "black");
+		}, 1000);
+	}
+	Game.checkLoad();
 }

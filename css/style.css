@@ -278,6 +278,10 @@ pre {
 	transform: skew(5deg) rotate(5deg);
 }
 
+#yessirer {
+	background-image: url("../images/neutral.png");
+}
+
 #ticker {
 	width: 35%;
 	overflow: hidden;
