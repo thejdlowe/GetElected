@@ -24,7 +24,83 @@ Game.Initialize = function() {
 		$("#nosupport").html("We're sorry, but your browser does not support GetElected!. Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
 		return;
 	}
-	//$("#paperworker").html(paperwork);
+	
+	var canvas = document.createElement('canvas');
+	var ctx    = canvas.getContext('2d');
+	canvas.style.border = "1px solid black";
+	canvas.style.position = "absolute";
+	canvas.style.zIndex = "50";
+	canvas.style.top = "50%";
+	//document.body.appendChild(canvas);
+
+	function todo(context, text, fontSize, fontColor) {
+		var max_width  = 600;
+		var fontSize   =  12;
+		var lines      =  new Array();
+		var width = 0, i, j;
+		var result;
+		var color = fontColor || "white";
+		var font = '16px "Special Elite", cursive';
+		// Font and size is required for context.measureText()
+		 context.font = font
+
+		
+		// Start calculation
+		while ( text.length ) {
+			for( i=text.length; context.measureText(text.substr(0,i)).width > max_width; i-- );
+		
+			result = text.substr(0,i);
+		
+			if ( i !== text.length )
+				for( j=0; result.indexOf(" ",j) !== -1; j=result.indexOf(" ",j)+1 );
+			
+			lines.push( result.substr(0, j|| result.length) );
+			width = Math.max( width, context.measureText(lines[ lines.length-1 ]).width );
+			text  = text.substr( lines[ lines.length-1 ].length, text.length );
+		}
+		
+		
+		// Calculate canvas size, add margin
+		context.canvas.width  = 14 + width;
+		context.canvas.height =  8 + ( fontSize + 5 ) * lines.length;
+		context.font   = font;
+
+		// Render
+		context.fillStyle = color;
+		for ( i=0, j=lines.length; i<j; ++i ) {
+			context.fillText( lines[i], 8, 5 + fontSize + (fontSize+5) * i );
+		}
+		
+		var data = context.getImageData(0, 0, 200, 200);
+		var canv2 = document.createElement("canvas");
+		var context2 = canv2.getContext("2d");
+		context2.putImageData(data, 0, 0);
+		
+		var img = canv2.toDataURL();
+		var newImg = new Image;
+		newImg.src = img;
+		newImg.style.position = "absolute";
+		newImg.style.zIndex = "50";
+		newImg.style.top = "50%";
+		//document.getElementsByTagName('body')[0].appendChild(newImg);
+	}
+	
+	var link = document.createElement('link');
+	link.rel = 'stylesheet';
+	link.type = 'text/css';
+	link.href = 'http://fonts.googleapis.com/css?family=Special+Elite';
+	document.getElementsByTagName('head')[0].appendChild(link);
+
+	// Trick from http://stackoverflow.com/questions/2635814/
+	var image = new Image;
+	image.src = link.href;
+	image.onerror = function() {
+		setTimeout(function() {
+			todo(ctx, paperwork, 12, "black");
+		}, 1000);
+	}
+	
+	//console.log(div.height());
 	//$("#paperworker").css("clip", "rect(0px, 200px, 200px, 0px)");
 	/*
 	var link = document.createElement('link');
@@ -598,6 +674,7 @@ Game.Initialize = function() {
 		var currFPS = ~~(1/delta);
 		$("#fps").html(currFPS + " fps");
 		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
+		currentGoalIndex = 500;
 	}
 	
 	//call the two functions below AFTER loading from localStorage
