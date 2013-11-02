@@ -17,7 +17,27 @@ Game.Initialize = function() {
 	var scrollStatus = "";
 	var fps = 30;
 	var efforttoggle = 1;
-	var effortFlag1 = effortFlag2 = effortFlag3 = false;
+	var flags = {
+		list: {},
+		set: function(id) {
+			return this.list[id] = false;
+		},
+		resetAll: function() {
+			for(var i in this.list) {
+				this.set(i);
+			}
+		},
+		activate: function(id) {
+			return this.list[id] = true;
+		},
+		get:	function(id) {
+			return this.list[id];
+		}
+	}
+	//console.log(flags.set("stuff"));
+	flags.set("fiveEffortPerClick");
+	flags.set("noseToTheGrindstone");
+	flags.set("strongerAcquaintanceBond");
 	var interest = 0.35;	//Be sure to tip your costs, and drive home safe!
 	var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
 	Game.compInt = function(base, times) {
@@ -110,7 +130,7 @@ Game.Initialize = function() {
 	$("#yessirer").scrollTop(scrollerBase);
 	$("#efforter").click(function(e) {
 		e.preventDefault();
-		var howmuch = 1 + (effortFlag1 === true ? 5 : 0) + (effortFlag2 === true ? 100 : 0);
+		var howmuch = 1 + (flags.get("fiveEffortPerClick") === true ? 5 : 0) + (flags.get("noseToTheGrindstone") === true ? 100 : 0);
 		Game.incrementEffort(howmuch);
 		
 		/*
@@ -269,14 +289,14 @@ Game.Initialize = function() {
 		new Game.Goal("Hall Monitor", {effort: 100, paperwork: 0, yessir: 0}, function() {
 		}),
 		new Game.Goal("Class Treasurer", {effort: 500, paperwork: 0, yessir: 0}, function() {
-			Game.listPowerUp("effort2");
+			//Game.listPowerUp("effort2");
 		}),
 		new Game.Goal("Class Vice President", {effort: 1000, paperwork: 0, yessir: 0}, function() {
-			Game.listPowerUp("effort3");
+			//Game.listPowerUp("effort3");
 		}),
 		new Game.Goal("Class President", {effort: 2500, paperwork: 0, yessir: 0}, function() {}),
 		new Game.Goal("Prom Royalty", {effort: 5000, paperwork: 0, yessir: 0}, function() {
-			Game.listPowerUp("effort4");
+			//Game.listPowerUp("effort4");
 		}),
 		new Game.Goal("Sports Captain", {effort: 10000, paperwork: 0, yessir: 0}, function() {
 			threeCol();
@@ -390,13 +410,13 @@ Game.Initialize = function() {
 	
 	addPowerUp("acquaintance", {effort: 15, paperwork: 0, yessir: 0}, "Acquaintance", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort": (0.1 + (effortFlag3 === true ? 2 : 0))*num,
+			"effort": (0.1 + (flags.get("strongerAcquaintanceBond") === true ? 2 : 0) + parseFloat(9007199254740992000))*num,
 			"paperwork": 0*num,
 			"yessir": 0*num
 		};
 	}, false);
 	
-	addPowerUp("effort2", {effort: 100, paperwork: 0, yessir: 0}, "Friend", "+0.5 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("friend", {effort: 100, paperwork: 0, yessir: 0}, "Friend", "+0.5 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	0.5*num,
 			"paperwork":	0*num,
@@ -405,15 +425,15 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("effort3", {effort: 500, paperwork: 0, yessir: 0}, "Try Harder", "+5 Effort Per Click", "effortPowerUp", function(num) {
-		effortFlag1 = true;
+		flags.activate("fiveEffortPerClick");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {effortFlag1 = false});
+	}, true, function() {flags.set("fiveEffortPerClick");});
 	
-	addPowerUp("effort4", {effort: 1000, paperwork: 0, yessir: 0}, "Bro", "+3 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("bro", {effort: 1000, paperwork: 0, yessir: 0}, "Bro", "+3 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	3*num,
 			"paperwork":	0*num,
@@ -423,15 +443,15 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("effort5", {effort: 5000, paperwork: 0, yessir: 0}, "Stronger Acquaintance Bond", "Each Acquaintaince Gains +2 Effort", "effortPowerUp", function(num) {
-		effortFlag3 = true;
+		flags.activate("strongerAcquaintanceBond");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {effortFlag3 = false});
+	}, true, function() {flags.set("strongerAcquaintanceBond")});
 	
-	addPowerUp("effort6", {effort: 50000, paperwork: 0, yessir: 0}, "Significant Other", "+100 Effort Per Second", "effortPowerUp", function(num) {
+	addPowerUp("so", {effort: 50000, paperwork: 0, yessir: 0}, "Significant Other", "+100 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	100*num,
 			"paperwork":	0*num,
@@ -448,13 +468,13 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("grindstone", {effort: 250000, paperwork: 0, yessir: 0}, "Nose To The Grindstone", "+100 Effort Per Click", "effortPowerUp", function(num) {
-		effortFlag2 = true;
+		flags.activate("noseToTheGrindstone")
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {effortFlag2 = false});
+	}, true, function() {flags.set("noseToTheGrindstone")});
 	
 	addPowerUp("uberlawyer", {effort: 500000, paperwork: 0, yessir: 0}, "Über Lawyer", "+1000 Effort Per Second", "effortPowerUp", function(num) {
 		return {
@@ -480,7 +500,6 @@ Game.Initialize = function() {
 			li.attr("id", id);
 			li.attr("title", func["description"]);
 			li.html(func["label"]);
-			//li.html();
 			target.append(li);
 			var q = $("<q>");
 			var html = "";
@@ -511,11 +530,12 @@ Game.Initialize = function() {
 					html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(Game.compInt(func["cost"].effort, powerups[id])) : "") + " ";
 					html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(Game.compInt(func["cost"].paperwork, powerups[id])) : "") + " ";
 					html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(Game.compInt(func["cost"].yessir, powerups[id])) : "");
+					
 					q.html(html);
 					var pre = $("#" + id + "_pre");
 					pre.html("Total: " + powerups[id]);
+					if(func["sell"] !== null) func["sell"]();
 				}
-				//alert($(this).attr("myPow"));
 			});
 			/*
 			sell.appendTo($("body"));
@@ -595,7 +615,7 @@ Game.Initialize = function() {
 		paperworktally = 0;
 		yessirtally = 0;
 		currentGoalIndex = 0;
-		effortFlag1 = effortFlag2 = effortFlag3 = false;
+		flags.resetAll();
 		$("#effortdescribe").show();
 		$("#paperworkdescribe").show();
 		$("#yessirdescribe").show();
@@ -692,8 +712,8 @@ Game.checkLoad = function() {
 	}
 	val = (val / len) * 100;
 	document.getElementById("progress").value = val;
-	$("#progressPercent").html(val);
-	if(loaded === false) setTimeout(Game.checkLoad, 1000);
+	$("#progressPercent").html(val.toFixed(1));
+	if(loaded === false) setTimeout(Game.checkLoad, 1000/fps);
 	else Game.Initialize();
 }
 
@@ -723,7 +743,7 @@ Game.preLoad = function() {
 		var width = 0, i, j;
 		var result;
 		var color = fontColor || "white";
-		var font = '20px "Special Elite", cursive';
+		var font = '22px "Special Elite", cursive';
 		// Font and size is required for context.measureText()
 		 context.font = font
 
@@ -781,6 +801,20 @@ Game.preLoad = function() {
 		setTimeout(function() {
 			todo(ctx, paperwork, 12, "black");
 		}, 1000);
+	}
+	
+	Game.addLoader("yessirup");
+	var img = new Image;
+	img.src = "images/up.png";
+	img.onload = function() {
+		Game.finishLoader("yessirup");
+	}
+	
+	Game.addLoader("yessirdown");
+	var img2 = new Image;
+	img2.src = "images/down.png";
+	img2.onload = function() {
+		Game.finishLoader("yessirdown");
 	}
 	Game.checkLoad();
 }
