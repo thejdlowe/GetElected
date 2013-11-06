@@ -279,7 +279,7 @@ pre {
 }
 
 #yessirer {
-	background-image: url("../images/neutral.png");
+	background-image: url("../images/yessir.png");
 }
 
 #ticker {
@@ -291,4 +291,16 @@ pre {
 
 .disabled {
 	opacity: 0.4;
+}
+
+.neutral {
+	background-position: 0 0;
+}
+
+.up {
+	background-position: 0px 200px;
+}
+
+.down {
+	background-position: 0px 400px;
 }
