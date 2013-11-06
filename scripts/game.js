@@ -493,30 +493,30 @@ Game.Initialize = function() {
 	}, false);
 	*/
 	
-	addPowerUps("fakeid", {effort: 15, paperwork: 0, yessir: 0}, "Stranger", "Fake Flavor Text", "effortPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 100, paperwork: 0, yessir: 0}, "Acquaintance", "Fake Flavor Text", "effortPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "Fake Flavor Text", "effortPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 25437, paperwork: 0, yessir: 0}, "Bro", "Fake Flavor Text", "effortPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 150000, paperwork: 5000, yessir: 0}, "Best Friend", "Fake Flavor Text", "effortPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "Fake Flavor Text", "effortPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 1000000, paperwork: 675000, yessir: 10000}, "Personal Lawyer", "Fake Flavor Text", "effortPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 11235813, paperwork: 3333360, yessir: 270000}, "Significant Other", "Fake Flavor Text", "effortPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 0, paperwork: 15, yessir: 0}, "Pencil", "Fake Flavor Text", "paperworkPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 0, paperwork: 100, yessir: 0}, "Pen", "Fake Flavor Text", "paperworkPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 0, paperwork: 900, yessir: 0}, "Typewriter", "Fake Flavor Text", "paperworkPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 0, paperwork: 25437, yessir: 0}, "Printer", "Fake Flavor Text", "paperworkPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 540000, paperwork: 150000, yessir: 0}, "Scanner", "Fake Flavor Text", "paperworkPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 4850000, paperwork: 314159, yessir: 0}, "An email address (Perhaps AOL? Perhaps CompuCom?)", "Fake Flavor Text", "paperworkPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 25600000, paperwork: 1000000, yessir: 80000}, "Flock of orphans with the same handwriting", "Fake Flavor Text", "paperworkPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 512000000, paperwork: 11235813, yessir: 670000}, "Robots. God damned robots.", "Fake Flavor Text", "paperworkPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 0, paperwork: 0, yessir: 15}, ""Tippecanoe and Tyler Too!"", "Fake Flavor Text", "yessirPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 0, paperwork: 0, yessir: 100}, ""Give 'Em Hell, Harry!"", "Fake Flavor Text", "yessirPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 0, paperwork: 0, yessir: 900}, ""I Like Ike!"", "Fake Flavor Text", "yessirPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 0, paperwork: 0, yessir: 25437}, ""A Time For Greatness"", "Fake Flavor Text", "yessirPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 9110000, paperwork: 647000, yessir: 150000}, ""No New Taxes"", "Fake Flavor Text", "yessirPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 44400000, paperwork: 1234567, yessir: 314159}, ""Tear down this wall!"", "Fake Flavor Text", "yessirPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 322222222, paperwork: 12345678, yessir: 1000000}, ""Change"", "Fake Flavor Text", "yessirPowerUp", function(num) {}, false);
-	addPowerUps("fakeid", {effort: 5000000000, paperwork: 123456789, yessir: 11235813}, ""Free Sexual Favors For Everyone!"", "Fake Flavor Text", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 15, paperwork: 0, yessir: 0}, "Stranger", "+0.1 Effort Per Second", "effortPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 100, paperwork: 0, yessir: 0}, "Acquaintance", "+0.5 Effort Per Second", "effortPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "+3 Effort Per Second", "effortPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 25437, paperwork: 0, yessir: 0}, "Bro", "+50 Effort Per Second", "effortPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 150000, paperwork: 5000, yessir: 0}, "Best Friend", "+300 Effort Per Second", "effortPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "+1111 Effort Per Second", "effortPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 1000000, paperwork: 675000, yessir: 10000}, "Personal Lawyer", "+9999 Effort Per Second", "effortPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 11235813, paperwork: 3333360, yessir: 270000}, "Significant Other", "+70000 Effort Per Second", "effortPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 0, paperwork: 15, yessir: 0}, "Pencil", "+0.1 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 0, paperwork: 100, yessir: 0}, "Pen", "+0.5 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 0, paperwork: 900, yessir: 0}, "Typewriter", "+3 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 0, paperwork: 25437, yessir: 0}, "Printer", "+50 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 540000, paperwork: 150000, yessir: 0}, "Scanner", "+300 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 4850000, paperwork: 314159, yessir: 0}, "An email address (Perhaps AOL? Perhaps CompuCom?)", "+1111 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 25600000, paperwork: 1000000, yessir: 80000}, "Flock of orphans with the same handwriting", "+9999 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 512000000, paperwork: 11235813, yessir: 670000}, "Robots. God damned robots.", "+70000 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 0, paperwork: 0, yessir: 15}, "Tippecanoe and Tyler Too!", "+0.1 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 0, paperwork: 0, yessir: 100}, "Give 'Em Hell, Harry!", "+0.5 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 0, paperwork: 0, yessir: 900}, "I Like Ike!", "+3 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 0, paperwork: 0, yessir: 25437}, "A Time For Greatness", "+50 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 9110000, paperwork: 647000, yessir: 150000}, "No New Taxes", "+300 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 44400000, paperwork: 1234567, yessir: 314159}, "Tear down this wall!", "+1111 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 322222222, paperwork: 12345678, yessir: 1000000}, "Change", "+9999 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("fakeid", {effort: 5000000000, paperwork: 123456789, yessir: 11235813}, "Free Sexual Favors For Everyone!", "+70000 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
 	
 	Game.listPowerUp = function(id) {
 		if($("#" + id).length === 0) {
