@@ -34,11 +34,12 @@ Game.Initialize = function() {
 			return this.list[id];
 		}
 	}
-	//console.log(flags.set("stuff"));
-	flags.set("fiveEffortPerClick");
+	
+	/*flags.set("fiveEffortPerClick");
 	flags.set("noseToTheGrindstone");
 	flags.set("strongerAcquaintanceBond");
-	var interest = 0.35;	//Be sure to tip your costs, and drive home safe!
+	*/
+	var interest = 0.27;	//Be sure to tip your costs, and drive home safe!
 	var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
 	Game.compInt = function(base, times) {
 		return Math.floor(base * Math.pow(1+interest, times));
@@ -409,6 +410,7 @@ Game.Initialize = function() {
 	
 	/* + parseFloat(9007199254740992000)*/
 	
+	/*
 	addPowerUp("acquaintance", {effort: 15, paperwork: 0, yessir: 0}, "Acquaintance", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort": (0.1 + (flags.get("strongerAcquaintanceBond") === true ? 2 : 0))*num,
@@ -416,6 +418,7 @@ Game.Initialize = function() {
 			"yessir": 0*num
 		};
 	}, false);
+	*/
 	/*
 	addPowerUp("friend", {effort: 100, paperwork: 0, yessir: 0}, "Friend", "+0.5 Effort Per Second", "effortPowerUp", function(num) {
 		return {
@@ -496,25 +499,82 @@ Game.Initialize = function() {
 	
 	addPowerUp("stranger", {effort: 15, paperwork: 0, yessir: 0}, "Stranger", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort":	0*num,
+			"effort": (0.1 + (flags.get("perfectStrangers") === true ? 2 : 0) + (flags.get("perfectStrangers2") === true ? 50 : 0))*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
 	}, false);
+	
+	addPowerUp("perfectStrangers", {effort: 500, paperwork: 0, yessir: 0}, "Perfect Strangers", "+2 Effort For Every Stranger", "effortPowerUp", function(num) {
+		flags.activate("perfectStrangers");
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, true, function() {flags.set("perfectStrangers");});
+	
+	addPowerUp("perfectStrangers2", {effort: 450000, paperwork: 0, yessir: 0}, "Perfect Strangers Mk. II", "+50 Effort For Every Stranger", "effortPowerUp", function(num) {
+		flags.activate("perfectStrangers2");
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, true, function() {flags.set("perfectStrangers2");});
+	
 	addPowerUp("acquaintance", {effort: 100, paperwork: 0, yessir: 0}, "Acquaintance", "+0.5 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort":	0*num,
+			"effort":	(0.5 + (flags.get("gettingtoknowyou") === true ? 5 : 0)+ (flags.get("gettingtoknowallaboutyou") === true ? 70 : 0))*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
 	}, false);
-	addPowerUp("friend", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "+3 Effort Per Second", "effortPowerUp", function(num) {
+	
+	addPowerUp("gettingtoknowyou", {effort: 24000, paperwork: 0, yessir: 0}, "Getting To Know You", "+5 Effort For Every Acquaintance", "effortPowerUp", function(num) {
+		flags.activate("gettingtoknowyou");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
+	}, true, function() {flags.set("gettingtoknowyou");});
+	
+	addPowerUp("gettingtoknowallaboutyou", {effort: 620000, paperwork: 0, yessir: 0}, "Getting To Know All About You", "+70 Effort For Every Acquaintance", "effortPowerUp", function(num) {
+		flags.activate("gettingtoknowallaboutyou");
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, true, function() {flags.set("gettingtoknowallaboutyou");});
+	
+	addPowerUp("friend", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "+3 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	(3 + (flags.get("joey") === true ? 10 : 0) + (flags.get("chandler") === true ? 115 : 0))*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
 	}, false);
+	
+	addPowerUp("joey", {effort: 120000, paperwork: 0, yessir: 0}, "Joey", "+10 Effort For Every Friend", "effortPowerUp", function(num) {
+		flags.activate("joey");
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, true, function() {flags.set("joey");});
+	
+	addPowerUp("chandler", {effort: 920000, paperwork: 0, yessir: 0}, "Chandler", "+115 Effort For Every Friend", "effortPowerUp", function(num) {
+		flags.activate("chandler");
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, true, function() {flags.set("chandler");});
+	
 	addPowerUp("bro", {effort: 25437, paperwork: 0, yessir: 0}, "Bro", "+50 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -522,6 +582,16 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
+	addPowerUp("budlight", {effort: 920000, paperwork: 0, yessir: 0}, "Bud Light", "+115 Effort For Every Friend", "effortPowerUp", function(num) {
+		flags.activate("budlight");
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, true, function() {flags.set("budlight");});
+	
 	addPowerUp("bestfriend", {effort: 150000, paperwork: 5000, yessir: 0}, "Best Friend", "+300 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -529,6 +599,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("bff", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "+1111 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -536,6 +607,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("personallawyer", {effort: 1000000, paperwork: 675000, yessir: 10000}, "Personal Lawyer", "+9999 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -543,6 +615,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("sigother", {effort: 11235813, paperwork: 3333360, yessir: 270000}, "Significant Other", "+70000 Effort Per Second", "effortPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -550,6 +623,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("pencil", {effort: 0, paperwork: 15, yessir: 0}, "Pencil", "+0.1 Paperwork Per Second", "paperworkPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -557,6 +631,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("pencil", {effort: 0, paperwork: 100, yessir: 0}, "Pen", "+0.5 Paperwork Per Second", "paperworkPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -564,6 +639,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("typewriter", {effort: 0, paperwork: 900, yessir: 0}, "Typewriter", "+3 Paperwork Per Second", "paperworkPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -571,6 +647,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("printer", {effort: 0, paperwork: 25437, yessir: 0}, "Printer", "+50 Paperwork Per Second", "paperworkPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -578,6 +655,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("scanner", {effort: 540000, paperwork: 150000, yessir: 0}, "Scanner", "+300 Paperwork Per Second", "paperworkPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -585,13 +663,15 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
-	addPowerUp("altavista", {effort: 4850000, paperwork: 314159, yessir: 0}, "An email address (Perhaps AOL? Perhaps CompuCom?)", "+1111 Paperwork Per Second", "paperworkPowerUp", function(num) {
+	
+	addPowerUp("altavista", {effort: 4850000, paperwork: 314159, yessir: 0}, "An email address (Perhaps AOL? Perhaps CompuServ?)", "+1111 Paperwork Per Second", "paperworkPowerUp", function(num) {
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("orphans", {effort: 25600000, paperwork: 1000000, yessir: 80000}, "Flock of orphans with the same handwriting", "+9999 Paperwork Per Second", "paperworkPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -599,6 +679,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("robots", {effort: 512000000, paperwork: 11235813, yessir: 670000}, "Robots. God damned robots.", "+70000 Paperwork Per Second", "paperworkPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -606,6 +687,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("tippiecanoe", {effort: 0, paperwork: 0, yessir: 15}, "\"Tippecanoe and Tyler Too!\"", "+0.1 Yes Sir Per Second", "yessirPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -613,6 +695,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("harry", {effort: 0, paperwork: 0, yessir: 100}, "\"Give 'Em Hell, Harry!\"", "+0.5 Yes Sir Per Second", "yessirPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -620,6 +703,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("ike", {effort: 0, paperwork: 0, yessir: 900}, "\"I Like Ike!\"", "+3 Yes Sir Per Second", "yessirPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -627,6 +711,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("great", {effort: 0, paperwork: 0, yessir: 25437}, "\"A Time For Greatness\"", "+50 Yes Sir Per Second", "yessirPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -634,6 +719,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("taxes", {effort: 9110000, paperwork: 647000, yessir: 150000}, "\"No New Taxes\"", "+300 Yes Sir Per Second", "yessirPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -641,6 +727,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("wall", {effort: 44400000, paperwork: 1234567, yessir: 314159}, "\"Tear down this wall!\"", "+1111 Yes Sir Per Second", "yessirPowerUp", function(num) {
 		return {
 			"effort":	0*num,
@@ -648,6 +735,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	
 	addPowerUp("change", {effort: 322222222, paperwork: 12345678, yessir: 1000000}, "\"Change\"", "+9999 Yes Sir Per Second", "yessirPowerUp", function(num) {
 		return {
 			"effort":	0*num,
