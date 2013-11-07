@@ -166,16 +166,19 @@ Game.Initialize = function() {
 	});
 	
 	$("#yessirer").scroll( function(e) {
+		$(this).removeClass("neutral");
 		var scrollerLoc = $(this).scrollTop();
 		if(scrollStatus === "") {	//Status not yet set! SUCCESS, BITCHES
 			Game.incrementYessir(1);
 			if (scrollerLoc < scrollerBase) {
-				$(this).css('background-image', 'url("images/up.png")');
 				scrollStatus = "U";
+				$(this).removeClass("down");
+				$(this).addClass("up");
 			}
 			else {
-				$(this).css('background-image', 'url("images/down.png")');
 				scrollStatus = "D";
+				$(this).removeClass("up");
+				$(this).addClass("down");
 			}
 		}
 		else {
@@ -183,12 +186,14 @@ Game.Initialize = function() {
 				if(scrollerLoc < scrollerBase && scrollStatus === "D") {	//If location is "lower" (i.e. higher...it's weird) and the last status is down, then tally up and switch status to up!
 					Game.incrementYessir(1);
 					scrollStatus = "U";
-					$(this).css('background-image', 'url("images/up.png")');
+					$(this).removeClass("down");
+					$(this).addClass("up");
 				}
 				else if(scrollerLoc > scrollerBase && scrollStatus === "U") {	//See comment above, but opposite it!...No, not the "Status not yet set" comment. Sheesh.
 					Game.incrementYessir(1);
 					scrollStatus = "D";
-					$(this).css('background-image', 'url("images/down.png")');
+					$(this).removeClass("up");
+					$(this).addClass("down");
 				}
 			}
 		}
@@ -340,12 +345,6 @@ Game.Initialize = function() {
 		new Game.Goal("Vice God", {effort: 750000000, paperwork: 20000000, yessir: 300000}, function() {}),
 		new Game.Goal("God", {effort: 1000000000, paperwork: 40000000, yessir: 500000}, function() {})
 		
-		
-		
-		
-		
-		
-		
 		//Everything below? "DLC". Awww yeah. And no, I won't actually charge for it. DLC will include new powerups that actually take away from other columns.
 		/*,
 		new Game.Goal("Unlock TVHM GetElected!", {effort: 2000000000, paperwork: 80000000, yessir: 750000}, function() {}),
@@ -408,9 +407,11 @@ Game.Initialize = function() {
 		ids[ids.length] = myID;
 	}*/
 	
+	/* + parseFloat(9007199254740992000)*/
+	
 	addPowerUp("acquaintance", {effort: 15, paperwork: 0, yessir: 0}, "Acquaintance", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort": (0.1 + (flags.get("strongerAcquaintanceBond") === true ? 2 : 0)/* + parseFloat(9007199254740992000)*/)*num,
+			"effort": (0.1 + (flags.get("strongerAcquaintanceBond") === true ? 2 : 0))*num,
 			"paperwork": 0*num,
 			"yessir": 0*num
 		};
@@ -493,30 +494,174 @@ Game.Initialize = function() {
 	}, false);
 	*/
 	
-	addPowerUp("fakeid", {effort: 15, paperwork: 0, yessir: 0}, "Stranger", "+0.1 Effort Per Second", "effortPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 100, paperwork: 0, yessir: 0}, "Acquaintance", "+0.5 Effort Per Second", "effortPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "+3 Effort Per Second", "effortPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 25437, paperwork: 0, yessir: 0}, "Bro", "+50 Effort Per Second", "effortPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 150000, paperwork: 5000, yessir: 0}, "Best Friend", "+300 Effort Per Second", "effortPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "+1111 Effort Per Second", "effortPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 1000000, paperwork: 675000, yessir: 10000}, "Personal Lawyer", "+9999 Effort Per Second", "effortPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 11235813, paperwork: 3333360, yessir: 270000}, "Significant Other", "+70000 Effort Per Second", "effortPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 0, paperwork: 15, yessir: 0}, "Pencil", "+0.1 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 0, paperwork: 100, yessir: 0}, "Pen", "+0.5 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 0, paperwork: 900, yessir: 0}, "Typewriter", "+3 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 0, paperwork: 25437, yessir: 0}, "Printer", "+50 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 540000, paperwork: 150000, yessir: 0}, "Scanner", "+300 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 4850000, paperwork: 314159, yessir: 0}, "An email address (Perhaps AOL? Perhaps CompuCom?)", "+1111 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 25600000, paperwork: 1000000, yessir: 80000}, "Flock of orphans with the same handwriting", "+9999 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 512000000, paperwork: 11235813, yessir: 670000}, "Robots. God damned robots.", "+70000 Paperwork Per Second", "paperworkPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 0, paperwork: 0, yessir: 15}, "Tippecanoe and Tyler Too!", "+0.1 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 0, paperwork: 0, yessir: 100}, "Give 'Em Hell, Harry!", "+0.5 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 0, paperwork: 0, yessir: 900}, "I Like Ike!", "+3 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 0, paperwork: 0, yessir: 25437}, "A Time For Greatness", "+50 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 9110000, paperwork: 647000, yessir: 150000}, "No New Taxes", "+300 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 44400000, paperwork: 1234567, yessir: 314159}, "Tear down this wall!", "+1111 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 322222222, paperwork: 12345678, yessir: 1000000}, "Change", "+9999 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
-	addPowerUp("fakeid", {effort: 5000000000, paperwork: 123456789, yessir: 11235813}, "Free Sexual Favors For Everyone!", "+70000 Yes Sir Per Second", "yessirPowerUp", function(num) {}, false);
+	addPowerUp("stranger", {effort: 15, paperwork: 0, yessir: 0}, "Stranger", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("acquaintance", {effort: 100, paperwork: 0, yessir: 0}, "Acquaintance", "+0.5 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("friend", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "+3 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("bro", {effort: 25437, paperwork: 0, yessir: 0}, "Bro", "+50 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("bestfriend", {effort: 150000, paperwork: 5000, yessir: 0}, "Best Friend", "+300 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("bff", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "+1111 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("personallawyer", {effort: 1000000, paperwork: 675000, yessir: 10000}, "Personal Lawyer", "+9999 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("sigother", {effort: 11235813, paperwork: 3333360, yessir: 270000}, "Significant Other", "+70000 Effort Per Second", "effortPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("pencil", {effort: 0, paperwork: 15, yessir: 0}, "Pencil", "+0.1 Paperwork Per Second", "paperworkPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("pencil", {effort: 0, paperwork: 100, yessir: 0}, "Pen", "+0.5 Paperwork Per Second", "paperworkPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("typewriter", {effort: 0, paperwork: 900, yessir: 0}, "Typewriter", "+3 Paperwork Per Second", "paperworkPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("printer", {effort: 0, paperwork: 25437, yessir: 0}, "Printer", "+50 Paperwork Per Second", "paperworkPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("scanner", {effort: 540000, paperwork: 150000, yessir: 0}, "Scanner", "+300 Paperwork Per Second", "paperworkPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("altavista", {effort: 4850000, paperwork: 314159, yessir: 0}, "An email address (Perhaps AOL? Perhaps CompuCom?)", "+1111 Paperwork Per Second", "paperworkPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("orphans", {effort: 25600000, paperwork: 1000000, yessir: 80000}, "Flock of orphans with the same handwriting", "+9999 Paperwork Per Second", "paperworkPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("robots", {effort: 512000000, paperwork: 11235813, yessir: 670000}, "Robots. God damned robots.", "+70000 Paperwork Per Second", "paperworkPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("tippiecanoe", {effort: 0, paperwork: 0, yessir: 15}, "\"Tippecanoe and Tyler Too!\"", "+0.1 Yes Sir Per Second", "yessirPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("harry", {effort: 0, paperwork: 0, yessir: 100}, "\"Give 'Em Hell, Harry!\"", "+0.5 Yes Sir Per Second", "yessirPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("ike", {effort: 0, paperwork: 0, yessir: 900}, "\"I Like Ike!\"", "+3 Yes Sir Per Second", "yessirPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("great", {effort: 0, paperwork: 0, yessir: 25437}, "\"A Time For Greatness\"", "+50 Yes Sir Per Second", "yessirPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("taxes", {effort: 9110000, paperwork: 647000, yessir: 150000}, "\"No New Taxes\"", "+300 Yes Sir Per Second", "yessirPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("wall", {effort: 44400000, paperwork: 1234567, yessir: 314159}, "\"Tear down this wall!\"", "+1111 Yes Sir Per Second", "yessirPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("change", {effort: 322222222, paperwork: 12345678, yessir: 1000000}, "\"Change\"", "+9999 Yes Sir Per Second", "yessirPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
+	addPowerUp("handseverywhere", {effort: 5000000000, paperwork: 123456789, yessir: 11235813}, "\"Free Sexual Favors For Everyone!\"", "+70000 Yes Sir Per Second", "yessirPowerUp", function(num) {
+		return {
+			"effort":	0*num,
+			"paperwork":	0*num,
+			"yessir":		0*num
+		}
+	}, false);
 	
 	Game.listPowerUp = function(id) {
 		if($("#" + id).length === 0) {
@@ -829,6 +974,7 @@ Game.preLoad = function() {
 		}, 1000);
 	}
 	
+	/*
 	Game.addLoader("yessirup");
 	var img = new Image;
 	img.src = "images/up.png";
@@ -841,6 +987,14 @@ Game.preLoad = function() {
 	img2.src = "images/down.png";
 	img2.onload = function() {
 		Game.finishLoader("yessirdown");
+	}
+	*/
+	
+	Game.addLoader("yessir");
+	var img = new Image;
+	img.src = "images/yessir.png";
+	img.onload = function() {
+		Game.finishLoader("yessir");
 	}
 	Game.checkLoad();
 }

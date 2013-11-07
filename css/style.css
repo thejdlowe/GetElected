@@ -279,7 +279,13 @@ pre {
 }
 
 #yessirer {
-	background-image: url("../images/yessir.png");
+	background: url("../images/yessir.png") 0 0 no-repeat;
+	width:200%;
+	height:200px;
+	border:1px solid black;
+	overflow-x:hidden;
+	overflow-y:scroll;
+	cursor:n-resize;
 }
 
 #ticker {
@@ -297,10 +303,10 @@ pre {
 	background-position: 0 0;
 }
 
-.up {
-	background-position: 0px 200px;
+#yessirer.up {
+	background-position: 0px -200px;
 }
 
-.down {
-	background-position: 0px 400px;
+#yessirer.down {
+background-position: 0px -400px;
 }
