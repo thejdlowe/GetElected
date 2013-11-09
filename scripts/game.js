@@ -17,28 +17,7 @@ Game.Initialize = function() {
 	var scrollStatus = "";
 	var fps = 30;
 	var efforttoggle = 1;
-	var flags = {
-		list: {},
-		set: function(id) {
-			return this.list[id] = false;
-		},
-		resetAll: function() {
-			for(var i in this.list) {
-				this.set(i);
-			}
-		},
-		activate: function(id) {
-			return this.list[id] = true;
-		},
-		get:	function(id) {
-			return this.list[id];
-		}
-	}
-	
-	/*flags.set("fiveEffortPerClick");
-	flags.set("noseToTheGrindstone");
-	flags.set("strongerAcquaintanceBond");
-	*/
+
 	var interest = 0.27;	//Be sure to tip your costs, and drive home safe!
 	var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
 	Game.compInt = function(base, times) {
@@ -218,36 +197,6 @@ Game.Initialize = function() {
 			twoCol();
 		}
 	});
-
-	var powerups = {};			//this is the one that will be saved! THIS ONE! It will contain an id, and the number of how many of each power up the player has.
-	var powerupsfuncs = {};		//this is what will hold the id of the powerup, the cost(s?), the label, what section it goes to, and the function that will execute every frame during Game.Update().
-	
-	/*
-		id:				id of the power up
-		cost:			object, in the format of {effort: 10, paperwork: 0, yessir: 0}
-		lable:			Primary Label of the Power Up
-		description:	Secondary description of power up (Flavor text!)
-		section:		Where it will go to. Either effortPowerUp, paperworkPowerUp, or yessirPowerUp
-		func:			function that executes every 1000/fps ms. MUST ALWAYS RETURN OBJECT IN THE FOLLOWING FORMAT:	
-			{
-				"effort": 1*num,
-				"paperwork": 0*num,
-				"yessir": 0*num
-			};
-		onetime:		Can the player use this only one time? true if...well, true. False if nope.
-	*/
-	var addPowerUp = function(id, cost, label, description, section, func, onetime, sell) {
-		powerups[id] = 0;
-		powerupsfuncs[id] = {
-			"cost": cost,
-			"label": label,
-			"section": section,
-			"description": description,
-			"func": func,
-			"onetime": onetime,
-			"sell": sell || null
-		};
-	}
 	
 	var addGoal = function(name, reqObj, unlocks) {
 		goals[goals.length] = new Game.Goal(name, reqObj, unlocks);
@@ -419,109 +368,75 @@ Game.Initialize = function() {
 		};
 	}, false);
 	*/
+	
+	var powerups = {};			//this is the one that will be saved! THIS ONE! It will contain an id, and the number of how many of each power up the player has.
+	var powerupsfuncs = {};		//this is what will hold the id of the powerup, the cost(s?), the label, what section it goes to, and the function that will execute every frame during Game.Update().
+	
 	/*
-	addPowerUp("friend", {effort: 100, paperwork: 0, yessir: 0}, "Friend", "+0.5 Effort Per Second", "effortPowerUp", function(num) {
-		return {
-			"effort":	0.5*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		}
-	}, false);
-	
-	addPowerUp("effort3", {effort: 500, paperwork: 0, yessir: 0}, "Try Harder", "+5 Effort Per Click", "effortPowerUp", function(num) {
-		flags.activate("fiveEffortPerClick");
-		return {
-			"effort":	0*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		}
-	}, true, function() {flags.set("fiveEffortPerClick");});
-	
-	addPowerUp("bro", {effort: 1000, paperwork: 0, yessir: 0}, "Bro", "+3 Effort Per Second", "effortPowerUp", function(num) {
-		return {
-			"effort":	3*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		};
-		
-	}, false);
-	
-	addPowerUp("effort5", {effort: 5000, paperwork: 0, yessir: 0}, "Stronger Acquaintance Bond", "Each Acquaintaince Gains +2 Effort", "effortPowerUp", function(num) {
-		flags.activate("strongerAcquaintanceBond");
-		return {
-			"effort":	0*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		}
-	}, true, function() {flags.set("strongerAcquaintanceBond")});
-	
-	addPowerUp("so", {effort: 50000, paperwork: 0, yessir: 0}, "Significant Other", "+100 Effort Per Second", "effortPowerUp", function(num) {
-		return {
-			"effort":	100*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		}
-	}, false);
-	
-	addPowerUp("lawyer", {effort: 150000, paperwork: 0, yessir: 0}, "Personal Lawyer", "+500 Effort Per Second", "effortPowerUp", function(num) {
-		return {
-			"effort":	500*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		}
-	}, false);
-	
-	addPowerUp("grindstone", {effort: 250000, paperwork: 0, yessir: 0}, "Nose To The Grindstone", "+100 Effort Per Click", "effortPowerUp", function(num) {
-		flags.activate("noseToTheGrindstone")
-		return {
-			"effort":	0*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		}
-	}, true, function() {flags.set("noseToTheGrindstone")});
-	
-	addPowerUp("uberlawyer", {effort: 500000, paperwork: 0, yessir: 0}, "Über Lawyer", "+1000 Effort Per Second", "effortPowerUp", function(num) {
-		return {
-			"effort":	1000*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		}
-	}, false);
-	
-	addPowerUp("superso", {effort: 1000000, paperwork: 0, yessir: 0}, "Super Significant Other", "+10000 Effort Per Second", "effortPowerUp", function(num) {
-		return {
-			"effort":	10000*num,
-			"paperwork":	0*num,
-			"yessir":		0*num
-		}
-	}, false);
+		id:				id of the power up
+		cost:			object, in the format of {effort: 10, paperwork: 0, yessir: 0}
+		lable:			Primary Label of the Power Up
+		description:	Secondary description of power up (Flavor text!)
+		section:		Where it will go to. Either effortPowerUp, paperworkPowerUp, or yessirPowerUp
+		func:			function that executes every 1000/fps ms. MUST ALWAYS RETURN OBJECT IN THE FOLLOWING FORMAT:	
+			{
+				"effort": 1*num,
+				"paperwork": 0*num,
+				"yessir": 0*num
+			};
+		onetime:		If this is null, do nothing. Otherwise, it's a function that runs just once.
 	*/
+	var addPowerUp = function(id, cost, label, description, section, func, onetime, sell) {
+		powerups[id] = 0;
+		powerupsfuncs[id] = {
+			"cost": cost,
+			"label": label,
+			"section": section,
+			"description": description,
+			"func": func,
+			"onetime": onetime,
+			"sell": sell || null
+		};
+	}
 	
+	var flags = {
+		list: {},
+		resetAll: function() {
+			for(var i in this.list) {
+				this.flag(i, 0);
+			}
+		},
+		flag:	function(id, val) {
+			if(val) this.list[id] = val;
+			return this.list[id] || 0;
+		}
+	}
+	/*
 	addPowerUp("stranger", {effort: 15, paperwork: 0, yessir: 0}, "Stranger", "+0.1 Effort Per Second", "effortPowerUp", function(num) {
 		return {
-			"effort": (0.1 + (flags.get("perfectStrangers") === true ? 2 : 0) + (flags.get("perfectStrangers2") === true ? 50 : 0))*num,
+			"effort": (0.1 + flags.flag("perfectStrangers") + flags.flag("perfectStrangers2"))*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
 	}, false);
 	
 	addPowerUp("perfectStrangers", {effort: 500, paperwork: 0, yessir: 0}, "Perfect Strangers", "+2 Effort For Every Stranger", "effortPowerUp", function(num) {
-		flags.activate("perfectStrangers");
+		flags.flag("perfectStrangers", 2);
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("perfectStrangers");});
+	}, true, function() {flags.set("perfectStrangers", 0);});
 	
 	addPowerUp("perfectStrangers2", {effort: 450000, paperwork: 0, yessir: 0}, "Perfect Strangers Mk. II", "+50 Effort For Every Stranger", "effortPowerUp", function(num) {
-		flags.activate("perfectStrangers2");
+		flags.flag("perfectStrangers2", 50);
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("perfectStrangers2");});
+	}, true, function() {flags.set("perfectStrangers2", 0);});
 	
 	addPowerUp("acquaintance", {effort: 100, paperwork: 0, yessir: 0}, "Acquaintance", "+0.5 Effort Per Second", "effortPowerUp", function(num) {
 		return {
@@ -532,22 +447,22 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("gettingtoknowyou", {effort: 24000, paperwork: 0, yessir: 0}, "Getting To Know You", "+5 Effort For Every Acquaintance", "effortPowerUp", function(num) {
-		flags.activate("gettingtoknowyou");
+		flags.flag("gettingtoknowyou");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("gettingtoknowyou");});
+	}, true, function() {flags.set("gettingtoknowyou", 0);});
 	
 	addPowerUp("gettingtoknowallaboutyou", {effort: 620000, paperwork: 0, yessir: 0}, "Getting To Know All About You", "+70 Effort For Every Acquaintance", "effortPowerUp", function(num) {
-		flags.activate("gettingtoknowallaboutyou");
+		flags.flag("gettingtoknowallaboutyou");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("gettingtoknowallaboutyou");});
+	}, true, function() {flags.set("gettingtoknowallaboutyou", 0);});
 	
 	addPowerUp("friend", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "+3 Effort Per Second", "effortPowerUp", function(num) {
 		return {
@@ -558,22 +473,22 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("joey", {effort: 12000, paperwork: 0, yessir: 0}, "Joey", "+10 Effort For Every Friend", "effortPowerUp", function(num) {
-		flags.activate("joey");
+		flags.flag("joey");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("joey");});
+	}, true, function() {flags.set("joey", 0);});
 	
 	addPowerUp("chandler", {effort: 222000, paperwork: 0, yessir: 0}, "Chandler", "+115 Effort For Every Friend", "effortPowerUp", function(num) {
-		flags.activate("chandler");
+		flags.flag("chandler");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("chandler");});
+	}, true, function() {flags.set("chandler", 0);});
 	
 	addPowerUp("bro", {effort: 25437, paperwork: 0, yessir: 0}, "Bro", "+50 Effort Per Second", "effortPowerUp", function(num) {
 		return {
@@ -584,22 +499,22 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("budlight", {effort: 920000, paperwork: 0, yessir: 0}, "Bud Light", "+115 Effort For Every Bro", "effortPowerUp", function(num) {
-		flags.activate("budlight");
+		flags.flag("budlight");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("budlight");});
+	}, true, function() {flags.set("budlight", 0);});
 	
 	addPowerUp("collar", {effort: 3200000, paperwork: 0, yessir: 0}, "Popped Collar", "+420 Effort For Every Bro", "effortPowerUp", function(num) {
-		flags.activate("collar");
+		flags.flag("collar");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("collar");});
+	}, true, function() {flags.set("collar", 0);});
 	
 	addPowerUp("bestfriend", {effort: 150000, paperwork: 5000, yessir: 0}, "Best Friend", "+300 Effort Per Second", "effortPowerUp", function(num) {
 		return {
@@ -610,22 +525,22 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("pizza", {effort: 720000, paperwork: 42000, yessir: 0}, "Pizza Party", "+500 Effort For Every Best Friend", "effortPowerUp", function(num) {
-		flags.activate("pizza");
+		flags.flag("pizza");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("pizza");});
+	}, true, function() {flags.set("pizza", 0);});
 	
 	addPowerUp("hideabody", {effort: 3200000, paperwork: 118000, yessir: 0}, "Hide A Body Maybe?", "+900 Effort For Every Best Friend", "effortPowerUp", function(num) {
-		flags.activate("hideabody");
+		flags.flag("hideabody");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
 			"yessir":		0*num
 		}
-	}, true, function() {flags.set("hideabody");});
+	}, true, function() {flags.set("hideabody", 0);});
 	
 	addPowerUp("bff", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "+1111 Effort Per Second", "effortPowerUp", function(num) {
 		return {
@@ -636,7 +551,7 @@ Game.Initialize = function() {
 	}, false);
 
 	addPowerUp("idkmbffj", {effort: 720000, paperwork: 42000, yessir: 0}, "IDK, my BFF Jill?", "+1234 Effort For Every BFF", "effortPowerUp", function(num) {
-		flags.activate("idkmbffj");
+		flags.flag("idkmbffj");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -645,7 +560,7 @@ Game.Initialize = function() {
 	}, true, function() {flags.set("idkmbffj");});
 
 	addPowerUp("instagram", {effort: 3141592, paperwork: 118000, yessir: 0}, "Instagram! <3", "+5000 Effort For Every BFF", "effortPowerUp", function(num) {
-		flags.activate("instagram");
+		flags.flag("instagram");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -662,7 +577,7 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("dunndunn", {effort: 720000, paperwork: 42000, yessir: 0}, "DUNN DUNN!", "+25000 Effort For Every Personal Lawyer", "effortPowerUp", function(num) {
-		flags.activate("dunndunn");
+		flags.flag("dunndunn");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -671,7 +586,7 @@ Game.Initialize = function() {
 	}, true, function() {flags.set("dunndunn");});
 
 	addPowerUp("bettercallsaul", {effort: 3141592, paperwork: 118000, yessir: 0}, "Better Call Saul!", "+50000 Effort For Every Personal Lawyer", "effortPowerUp", function(num) {
-		flags.activate("bettercallsaul");
+		flags.flag("bettercallsaul");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -688,7 +603,7 @@ Game.Initialize = function() {
 	}, false);
 
 	addPowerUp("cohabitate", {effort: 21345589, paperwork: 9999990, yessir: 679000}, "Move In Together", "+150000 Effort For Every Significant Other", "effortPowerUp", function(num) {
-		flags.activate("cohabitate");
+		flags.flag("cohabitate");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -697,7 +612,7 @@ Game.Initialize = function() {
 	}, true, function() {flags.set("cohabitate");});
 
 	addPowerUp("cosign", {effort: 144233377, paperwork: 50000000, yessir: 4110000}, "Buy A House", "+300000 Effort For Every Significant Other", "effortPowerUp", function(num) {
-		flags.activate("cosign");
+		flags.flag("cosign");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -714,7 +629,7 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("sharpenedPencil", {effort: 500, paperwork: 0, yessir: 0}, "Sharpened Pencil", "+2 Paperwork For Every Pencil", "paperworkPowerUp", function(num) {
-		flags.activate("sharpenedPencil");
+		flags.flag("sharpenedPencil");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -723,7 +638,7 @@ Game.Initialize = function() {
 	}, true, function() {flags.set("sharpenedPencil");});
 	
 	addPowerUp("mechanicalpencil", {effort: 450000, paperwork: 0, yessir: 0}, "Mechanical Pencil", "+50 Paperwork For Every Pencil", "paperworkPowerUp", function(num) {
-		flags.activate("mechanicalpencil");
+		flags.flag("mechanicalpencil");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -740,7 +655,7 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("moreink", {effort: 0, paperwork: 500, yessir: 0}, "MORE. INK.", "+5 Paperwork For Every Pen", "paperworkPowerUp", function(num) {
-		flags.activate("moreink");
+		flags.flag("moreink");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -749,7 +664,7 @@ Game.Initialize = function() {
 	}, true, function() {flags.set("moreink");});
 	
 	addPowerUp("cyberpen", {effort: 0, paperwork: 450000, yessir: 0}, "Cybernetic Pen", "+70 Paperwork For Every Pen", "paperworkPowerUp", function(num) {
-		flags.activate("cyberpen");
+		flags.flag("cyberpen");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -766,7 +681,7 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("wordprocessor", {effort: 0, paperwork: 12000, yessir: 0}, "Word Processor", "+5 Paperwork For Every Pen", "paperworkPowerUp", function(num) {
-		flags.activate("wordprocessor");
+		flags.flag("wordprocessor");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -775,7 +690,7 @@ Game.Initialize = function() {
 	}, true, function() {flags.set("wordprocessor");});
 	
 	addPowerUp("talktotext", {effort: 0, paperwork: 222000, yessir: 0}, "Cybernetic Pen", "+70 Paperwork For Every Pen", "paperworkPowerUp", function(num) {
-		flags.activate("talktotext");
+		flags.flag("talktotext");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -792,7 +707,7 @@ Game.Initialize = function() {
 	}, false);
 	
 	addPowerUp("threeinone", {effort: 0, paperwork: 920000, yessir: 0}, "Bud Light", "+115 Effort For Every Printer", "effortPowerUp", function(num) {
-		flags.activate("budlight");
+		flags.flag("budlight");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -801,7 +716,7 @@ Game.Initialize = function() {
 	}, true, function() {flags.set("budlight");});
 	
 	addPowerUp("collar", {effort: 0, paperwork: 3200000, yessir: 0}, "Popped Collar", "+420 Effort For Every Printer", "effortPowerUp", function(num) {
-		flags.activate("collar");
+		flags.flag("collar");
 		return {
 			"effort":	0*num,
 			"paperwork":	0*num,
@@ -904,6 +819,7 @@ Game.Initialize = function() {
 			"yessir":		0*num
 		}
 	}, false);
+	*/
 	
 	Game.listPowerUp = function(id) {
 		if($("#" + id).length === 0) {
