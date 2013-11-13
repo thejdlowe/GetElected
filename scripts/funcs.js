@@ -6,7 +6,7 @@ function twoCol() {
 
 function threeCol() {
 	$("#col1").animate({"width": "35%"}, 500, function(){});
-	$("#col2").animate({"width": "42%", "left": "35%"}, 500, function(){});
+	$("#col2").animate({"width": "40%", "left": "35%"}, 500, function(){});
 	$("#col2").show();
 	$("#col3").hide();
 }

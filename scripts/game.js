@@ -1,5 +1,6 @@
-//max int: 9,007,199,254,740,992
 var Game = {};
+
+Game.version = "Version ALPHA";
 
 /*
 	Game.Goal
@@ -564,14 +565,18 @@ Game.Initialize = function() {
 	Game.listPowerUp("chickenmeanscock");
 	
 	Game.Load = function() {
-		if(localStorage["efforttally"] && localStorage["efforttally"] !== "") {
-			efforttally = ~~localStorage["efforttally"];
-			paperworktally = ~~localStorage["paperworktally"];
-			yessirtally = ~~localStorage["yessirtally"];
-			currentGoalIndex = ~~localStorage["currentGoalIndex"];
-			for(var i in powerups) {
-				if(localStorage[i]) powerups[i] = ~~localStorage[i];
+		try {
+			if(localStorage["efforttally"] && localStorage["efforttally"] !== "") {
+				efforttally = ~~localStorage["efforttally"];
+				paperworktally = ~~localStorage["paperworktally"];
+				yessirtally = ~~localStorage["yessirtally"];
+				currentGoalIndex = ~~localStorage["currentGoalIndex"];
+				for(var i in powerups) {
+					if(localStorage[i]) powerups[i] = ~~localStorage[i];
+				}
 			}
+		}
+		catch(e) {
 		}
 	}
 	
@@ -584,15 +589,19 @@ Game.Initialize = function() {
 			yessirtally
 			currentGoalIndex
 		*/
-		for(var i in powerups) {
-			localStorage[i] = powerups[i];
+		try {
+			for(var i in powerups) {
+				localStorage[i] = powerups[i];
+			}
+			localStorage["efforttally"] = Math.round(efforttally);
+			localStorage["paperworktally"] = Math.round(paperworktally);
+			localStorage["yessirtally"] = Math.round(yessirtally);
+			localStorage["currentGoalIndex"] = currentGoalIndex;
+			
+			$("#saved").fadeIn(1000).delay(5000).fadeOut(1000);
 		}
-		localStorage["efforttally"] = Math.round(efforttally);
-		localStorage["paperworktally"] = Math.round(paperworktally);
-		localStorage["yessirtally"] = Math.round(yessirtally);
-		localStorage["currentGoalIndex"] = currentGoalIndex;
-		
-		$("#saved").fadeIn(1000).delay(5000).fadeOut(1000);
+		catch(e) {
+		}
 	}
 	
 	Game.Reset = function() {
@@ -700,15 +709,19 @@ Game.checkLoad = function() {
 	val = (val / len) * 100;
 	document.getElementById("progress").value = val;
 	$("#progressPercent").html(val.toFixed(1));
+	$("#fps").html(Game.version);
 	if(loaded === false) setTimeout(Game.checkLoad, 1000/fps);
 	else Game.Initialize();
 }
 
 Game.preLoad = function() {
-	//Function care of http://diveintohtml5.info/storage.html
+	//Function care of http://stackoverflow.com/questions/11214404/how-to-detect-if-browser-supports-html5-local-storage
 	function supports_html5_storage() {
 		try {
-			return ('localStorage' in window && window['localStorage'] !== null);
+			//return ('localStorage' in window && window['localStorage'] !== null);
+			localStorage.setItem("test", "test");
+			localStorage.removeItem("test");
+			return true;
 		} catch (e) {
 			return false;
 		}
@@ -716,10 +729,21 @@ Game.preLoad = function() {
 	
 	var canvas = document.createElement('canvas');
 	
-	if(!supports_html5_storage() || !canvas.getContext) {
+	/*if(!supports_html5_storage() || !canvas.getContext) {
 		$("#nosupport").html("We're sorry, but your browser does not support GetElected!. Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
 		return;
+	}*/
+	
+	if(!supports_html5_storage()) {
+		$("#nosupport").html($("#nosupport").html() + "<br/>Your browser does not support the HTML5 functionality of \"Local Storage.\" Saving may not work for you. Please make sure you are using an up to date browser and that cookies are enabled.");
+		//return;
 	}
+	
+	if(!canvas.getContext) {
+		$("#nosupport").html("Your browser does not support the HTML5 functionality of \"Canvas.\"");
+		return;
+	}
+	
 	Game.addLoader("paperworker");
 	var ctx    = canvas.getContext('2d');
 
@@ -778,7 +802,7 @@ Game.preLoad = function() {
 	var link = document.createElement('link');
 	link.rel = 'stylesheet';
 	link.type = 'text/css';
-	link.href = 'http://fonts.googleapis.com/css?family=Special+Elite';
+	link.href = 'https://fonts.googleapis.com/css?family=Special+Elite';
 	document.getElementsByTagName('head')[0].appendChild(link);
 
 	// Trick from http://stackoverflow.com/questions/2635814/
