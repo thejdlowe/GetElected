@@ -415,7 +415,7 @@ Game.Initialize = function() {
 			var target = $("#" + func["section"]);
 			var li = $("<li>");
 			li.attr("id", id);
-			li.attr("title", func["description"]);
+			//li.attr("title", func["description"]);
 			li.html(func["label"]);
 			target.append(li);
 			var q = $("<q>");
@@ -430,8 +430,9 @@ Game.Initialize = function() {
 			pre.attr("id", id + "_pre");
 			pre.html("Total: " + powerups[id]);
 			li.append(pre);
-			var sell = $("<button>Sell</button>");
+			var sell = $("<a href=\"javascript:void(0)\">Sell</a>");
 			sell.attr("myPow", id);
+			sell.css({"position": "absolute", "top": "3px", "right": "3px"});
 			li.append(sell);
 			sell.click(function(e) {
 				e.stopPropagation();
@@ -454,19 +455,11 @@ Game.Initialize = function() {
 					if(func["sell"] !== null) func["sell"]();
 				}
 			});
-			/*
-			sell.appendTo($("body"));
-			sell.css("z-index", "50");
-			sell.css("position", "absolute");
-			sell.hide();
-			sell.css(li.offset());
-			$(li, sell).hover(function() {
-				sell.show();
-			}, function() {
-				sell.hide();
-			});
-			*/
-			li.click(function(goal, id) {
+			
+			var buy = $("<button>Buy 1</button>");
+			buy.attr("id", id + "_buy");
+			li.append(buy);
+			buy.click(function(goal, id) {
 				return function() {
 					var effortVal = Game.compInt(func["cost"].effort, powerups[id]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[id]), yessirVal = Game.compInt(func["cost"].yessir, powerups[id]);
 					if(efforttally >= effortVal &&
@@ -488,7 +481,45 @@ Game.Initialize = function() {
 					}
 				}
 			}(func, id));
-			li.tooltip({track: true});
+			var label = $("<span>");
+			label.html(func["description"]);
+			label.css({"position": "absolute", "left": "3px", "bottom": "3px"});
+			li.append(label);
+			/*
+			sell.appendTo($("body"));
+			sell.css("z-index", "50");
+			sell.css("position", "absolute");
+			sell.hide();
+			sell.css(li.offset());
+			$(li, sell).hover(function() {
+				sell.show();
+			}, function() {
+				sell.hide();
+			});
+			*/
+			/*li.click(function(goal, id) {
+				return function() {
+					var effortVal = Game.compInt(func["cost"].effort, powerups[id]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[id]), yessirVal = Game.compInt(func["cost"].yessir, powerups[id]);
+					if(efforttally >= effortVal &&
+						paperworktally >= paperworkVal &&
+						yessirtally >= yessirVal) {
+							if(func["onetime"] === true && powerups[id] > 0) return;
+							powerups[id]++;
+							efforttally -= effortVal;
+							paperworktally -= paperworkVal;
+							yessirtally -= yessirVal;
+							var q = $("#" + id + "_q");
+							var html = "";
+							html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(Game.compInt(func["cost"].effort, powerups[id]).toFixed(0)) : "") + " ";
+							html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(Game.compInt(func["cost"].paperwork, powerups[id]).toFixed(0)) : "") + " ";
+							html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(Game.compInt(func["cost"].yessir, powerups[id]).toFixed(0)) : "");
+							q.html(html);
+							var pre = $("#" + id + "_pre");
+							pre.html("Total: " + powerups[id]);
+					}
+				}
+			}(func, id));*/
+			//li.tooltip({track: true});
 		}
 	}
 	
@@ -694,10 +725,15 @@ Game.Initialize = function() {
 				if(efforttally >= effortVal &&
 					paperworktally >= paperworkVal &&
 					yessirtally >= yessirVal) {
-						if(func["onetime"] === true && powerups[i] > 0) $("#" + i).addClass("disabled");
-						else $("#" + i).removeClass("disabled");
+						if(func["onetime"] === true && powerups[i] > 0) {
+							$("#" + i + "_buy").html("Power Up Purchased").attr("disabled", "disabled");
+						}
+						else $("#" + i + "_buy").removeAttr("disabled");
+						//$("#" + i).addClass("disabled");
+						//else $("#" + i).removeClass("disabled");
 				}
-				else $("#" + i).addClass("disabled");
+				else $("#" + i + "_buy").attr("disabled", "disabled");
+				//else $("#" + i).addClass("disabled");
 				
 				var q = $("#" + i + "_q");
 				var html = "";
