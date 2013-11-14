@@ -19,6 +19,12 @@ body {
 
 * {
 	cursor: default;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 a:hover {
@@ -117,12 +123,12 @@ pre {
 
 #col1, #col2, #col3, #col4 {
 	position: absolute;
-	overflow-y: scroll;
 	top: 0px;
 	bottom: 40px;
 	/*Background care of http://subtlepatterns.com/ */
 	background-image: url("../images/witewall_3.png");
 	border-right: 1px solid black;
+	overflow-y: auto;
 }
 
 #col1 {
@@ -316,4 +322,9 @@ pre {
 
 #yessirer.down {
 background-position: 0px -400px;
+}
+
+#effortPowerUp, #paperworkPowerUp, #yessirPowerUp {
+	overflow-y: scroll;
+	max-height: 600px;
 }

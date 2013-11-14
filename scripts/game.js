@@ -90,7 +90,7 @@ Game.Initialize = function() {
 			q.html(html);
 			li.html(currGoal.name);
 			li.append(q);
-			li.click(function(goal) {
+			/*li.click(function(goal) {
 				return function() {
 					if(efforttally >= goal.reqObj.effort &&
 						paperworktally >= goal.reqObj.paperwork &&
@@ -105,6 +105,7 @@ Game.Initialize = function() {
 					}
 				}
 			}(currGoal));
+			*/
 		}
 	}
 	
@@ -491,6 +492,7 @@ Game.Initialize = function() {
 		}
 	}
 	
+	/*
 	Game.listPowerUp("stranger");
 	Game.listPowerUp("acquaintance");
 	Game.listPowerUp("friend");
@@ -563,6 +565,32 @@ Game.Initialize = function() {
 	Game.listPowerUp("obama");
 	Game.listPowerUp("morelube");
 	Game.listPowerUp("chickenmeanscock");
+	*/
+	
+	Game.listPowerUp("stranger");	Game.listPowerUp("perfectstrangers");	Game.listPowerUp("perfectstrangers2");
+	Game.listPowerUp("acquaintance");	Game.listPowerUp("gettingtoknowyou");	Game.listPowerUp("gettingtoknowallaboutyou");
+	Game.listPowerUp("friend");	Game.listPowerUp("joey");	Game.listPowerUp("chandler");
+	Game.listPowerUp("bro");	Game.listPowerUp("budlight");	Game.listPowerUp("collar");
+	Game.listPowerUp("bestfriend");	Game.listPowerUp("pizza");	Game.listPowerUp("hideabody");
+	Game.listPowerUp("bff");	Game.listPowerUp("idkmbffj");	Game.listPowerUp("instantgram");
+	Game.listPowerUp("personallawyer");	Game.listPowerUp("objection");	Game.listPowerUp("takethat");
+	Game.listPowerUp("sigother");	Game.listPowerUp("cohabitate");	Game.listPowerUp("cosign");
+	Game.listPowerUp("staples");	Game.listPowerUp("paperclips");	Game.listPowerUp("paperbinders");
+	Game.listPowerUp("pencil");	Game.listPowerUp("sharpenedPencil");	Game.listPowerUp("mechanicalpencil");
+	Game.listPowerUp("pen");	Game.listPowerUp("moreink");	Game.listPowerUp("cyberpen");
+	Game.listPowerUp("typewriter");	Game.listPowerUp("wordprocessor");	Game.listPowerUp("talktotext");
+	Game.listPowerUp("printer");	Game.listPowerUp("laserprinter");	Game.listPowerUp("threeinone");
+	Game.listPowerUp("altavista");	Game.listPowerUp("lycos");	Game.listPowerUp("compuserve");
+	Game.listPowerUp("orphans");	Game.listPowerUp("gruel");	Game.listPowerUp("posters");
+	Game.listPowerUp("robots");	Game.listPowerUp("laserguns");	Game.listPowerUp("sentience");
+	Game.listPowerUp("tippiecanoe");	Game.listPowerUp("tyler");	Game.listPowerUp("harrison");
+	Game.listPowerUp("harry");	Game.listPowerUp("barkley");	Game.listPowerUp("truman");
+	Game.listPowerUp("ike");	Game.listPowerUp("nixon");	Game.listPowerUp("eisenhower");
+	Game.listPowerUp("great");	Game.listPowerUp("johnson");	Game.listPowerUp("kennedy");
+	Game.listPowerUp("taxes");	Game.listPowerUp("quayle");	Game.listPowerUp("bush");
+	Game.listPowerUp("timeforchange");	Game.listPowerUp("gore");	Game.listPowerUp("clinton");
+	Game.listPowerUp("change");	Game.listPowerUp("biden");	Game.listPowerUp("obama");
+	Game.listPowerUp("handsacrossamerica");	Game.listPowerUp("morelube");	Game.listPowerUp("chickenmeanscock");
 	
 	Game.Load = function() {
 		try {
@@ -627,10 +655,40 @@ Game.Initialize = function() {
 				Game.incrementYessir(results["yessir"] / fps);
 			}
 		}
+		var goal = goals[currentGoalIndex];
+		if(efforttally >= goal.reqObj.effort &&
+			paperworktally >= goal.reqObj.paperwork &&
+			yessirtally >= goal.reqObj.yessir) {
+				goal.unlocks();
+				currentGoalIndex++;
+				efforttally -= goal.reqObj.effort;
+				paperworktally -= goal.reqObj.paperwork;
+				yessirtally -= goal.reqObj.yessir;
+				Game.addPastGoal(goal);
+				Game.updateCurrentGoals();
+		}
+		/*
+		function(goal) {
+				return function() {
+					if(efforttally >= goal.reqObj.effort &&
+						paperworktally >= goal.reqObj.paperwork &&
+						yessirtally >= goal.reqObj.yessir) {
+							goal.unlocks();
+							currentGoalIndex++;
+							efforttally -= goal.reqObj.effort;
+							paperworktally -= goal.reqObj.paperwork;
+							yessirtally -= goal.reqObj.yessir;
+							Game.addPastGoal(goal);
+							Game.updateCurrentGoals();
+					}
+				}
+			}(currGoal)
+		*/
 	}
 	Game.Draw = function() {
 		for(var i in powerups) {
 			if($("#" + i).length) {
+				$("#" + i + "_pre").html("Total: " + powerups[i]);
 				var func = powerupsfuncs[i];
 				var effortVal = Game.compInt(func["cost"].effort, powerups[i]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[i]), yessirVal = Game.compInt(func["cost"].yessir, powerups[i]);
 				if(efforttally >= effortVal &&
@@ -640,6 +698,13 @@ Game.Initialize = function() {
 						else $("#" + i).removeClass("disabled");
 				}
 				else $("#" + i).addClass("disabled");
+				
+				var q = $("#" + i + "_q");
+				var html = "";
+				html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(effortVal.toFixed(0)) : "") + " ";
+				html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(paperworkVal.toFixed(0)) : "") + " ";
+				html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(yessirVal.toFixed(0)) : "");
+				q.html(html);
 			}
 		}
 		$("#efforttally").html(numberWithCommas((Math.floor(efforttally * 10) / 10).toFixed(1)) + " Effort");
@@ -813,22 +878,6 @@ Game.preLoad = function() {
 			todo(ctx, paperwork, 12, "black");
 		}, 1000);
 	}
-	
-	/*
-	Game.addLoader("yessirup");
-	var img = new Image;
-	img.src = "images/up.png";
-	img.onload = function() {
-		Game.finishLoader("yessirup");
-	}
-	
-	Game.addLoader("yessirdown");
-	var img2 = new Image;
-	img2.src = "images/down.png";
-	img2.onload = function() {
-		Game.finishLoader("yessirdown");
-	}
-	*/
 	
 	Game.addLoader("yessir");
 	var img = new Image;
