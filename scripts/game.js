@@ -31,21 +31,18 @@ Game.Initialize = function() {
 		efforttally += num;
 		if(efforttally <= 0) {
 			efforttally = 0;
-			console.log("Effort: " + num);
 		}
 	}
 	Game.incrementPaperwork = function(num) {
 		paperworktally += num;
 		if(paperworktally <= 0) {
 			paperworktally = 0;
-			console.log("Paperwork: " + num);
 		}
 	}
 	Game.incrementYessir = function(num) {
 		yessirtally += num;
 		if(yessirtally <= 0) {
 			yessirtally = 0;
-			console.log("Yes Sir: " + num);
 		}
 	}
 
@@ -761,12 +758,12 @@ Game.Initialize = function() {
 			missedFrames -= 1000/fps;
 		}
 		Game.Draw();
-		lastRun = new Date().getTime();
+		//lastRun = new Date().getTime();
 		//YAY THE FRAME IS DONE! Let's make sure we're staying close to our FPS goal
-		/*var delta = (new Date().getTime() - lastRun) / 1000;
+		var delta = (new Date().getTime() - lastRun) / 1000;
 		lastRun = new Date().getTime();
 		var currFPS = ~~(1/delta);
-		$("#fps").html(currFPS + " fps");*/
+		console.log(currFPS + " fps");
 		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
 	}
 	
