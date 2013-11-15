@@ -29,12 +29,15 @@ Game.Initialize = function() {
 	}
 	Game.incrementEffort = function(num) {
 		efforttally += num;
+		if(efforttally <= 0) efforttally = 0;
 	}
 	Game.incrementPaperwork = function(num) {
 		paperworktally += num;
+		if(paperworktally <= 0) paperworktally = 0;
 	}
 	Game.incrementYessir = function(num) {
 		yessirtally += num;
+		if(paperworktally <= 0) paperworktally = 0;
 	}
 
 	Game.updatePastGoals = function() {
