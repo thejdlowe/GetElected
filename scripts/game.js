@@ -437,7 +437,7 @@ Game.Initialize = function() {
 			li.append(q);
 			var pre = $("<pre>");
 			pre.attr("id", id + "_pre");
-			pre.html("Total: " + powerups[id]);
+			pre.html("" + powerups[id]);
 			li.append(pre);
 			/*
 			You know what? As of 11/14/13, 9:54PM:
@@ -493,13 +493,13 @@ Game.Initialize = function() {
 							html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(Game.compInt(func["cost"].yessir, powerups[id]).toFixed(0)) : "");
 							q.html(html);
 							var pre = $("#" + id + "_pre");
-							pre.html("Total: " + powerups[id]);
+							pre.html("" + powerups[id]);
 					}
 				}
 			}(func, id));
 			var label = $("<span>");
 			label.html(func["description"]);
-			label.css({"position": "absolute", "left": "3px", "bottom": "3px", "font-size": "10px"});
+			label.css({"position": "absolute", "right": "3px", "top": "3px", "font-size": "10px"});
 			li.append(label);
 			/*li.click(function(goal, id) {
 				return function() {
@@ -723,7 +723,7 @@ Game.Initialize = function() {
 	Game.Draw = function() {
 		for(var i in powerups) {
 			if($("#" + i).length) {
-				$("#" + i + "_pre").html("Total: " + powerups[i]);
+				$("#" + i + "_pre").html("" + powerups[i]);
 				var func = powerupsfuncs[i];
 				var effortVal = Game.compInt(func["cost"].effort, powerups[i]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[i]), yessirVal = Game.compInt(func["cost"].yessir, powerups[i]);
 				if(efforttally >= effortVal &&
@@ -910,6 +910,7 @@ Game.preLoad = function() {
 	catch(e) {
 		Game.finishLoader("paperworker");
 		Game.finishLoader("yessir");
+		Game.checkLoad();
 	}
 	
 	Game.checkLoad();
