@@ -318,3 +318,10 @@ pre {
 #yessirer.down {
 background-position: 0px -400px;
 }
+
+#effortPowerUp, #paperworkPowerUp, #yessirPowerUp, #pastGoals {
+	overflow-y: scroll;
+	position: relative;
+	height: 400px;
+	bottom: 0px;
+}

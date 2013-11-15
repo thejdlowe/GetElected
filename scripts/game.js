@@ -29,15 +29,24 @@ Game.Initialize = function() {
 	}
 	Game.incrementEffort = function(num) {
 		efforttally += num;
-		if(efforttally <= 0) efforttally = 0;
+		if(efforttally <= 0) {
+			efforttally = 0;
+			console.log("Effort: " + num);
+		}
 	}
 	Game.incrementPaperwork = function(num) {
 		paperworktally += num;
-		if(paperworktally <= 0) paperworktally = 0;
+		if(paperworktally <= 0) {
+			paperworktally = 0;
+			console.log("Paperwork: " + num);
+		}
 	}
 	Game.incrementYessir = function(num) {
 		yessirtally += num;
-		if(paperworktally <= 0) paperworktally = 0;
+		if(yessirtally <= 0) {
+			yessirtally = 0;
+			console.log("Yes Sir: " + num);
+		}
 	}
 
 	Game.updatePastGoals = function() {
@@ -433,6 +442,13 @@ Game.Initialize = function() {
 			pre.attr("id", id + "_pre");
 			pre.html("Total: " + powerups[id]);
 			li.append(pre);
+			/*
+			You know what? As of 11/14/13, 9:54PM:
+			
+			I don't like selling.
+			
+			Seems to be a moot point, if you ask me. And if you're asking me while reading comments, then STOP PROJECTING YOUR THOUGHTS INTO MY HEAD
+			
 			var sell = $("<a href=\"javascript:void(0)\">Sell</a>");
 			sell.attr("myPow", id);
 			sell.css({"position": "absolute", "top": "3px", "right": "3px"});
@@ -457,7 +473,7 @@ Game.Initialize = function() {
 					pre.html("Total: " + powerups[id]);
 					if(func["sell"] !== null) func["sell"]();
 				}
-			});
+			});*/
 			
 			var buy = $("<button>Buy 1</button>");
 			buy.attr("id", id + "_buy");
@@ -486,20 +502,8 @@ Game.Initialize = function() {
 			}(func, id));
 			var label = $("<span>");
 			label.html(func["description"]);
-			label.css({"position": "absolute", "left": "3px", "bottom": "3px"});
+			label.css({"position": "absolute", "left": "3px", "bottom": "3px", "font-size": "10px"});
 			li.append(label);
-			/*
-			sell.appendTo($("body"));
-			sell.css("z-index", "50");
-			sell.css("position", "absolute");
-			sell.hide();
-			sell.css(li.offset());
-			$(li, sell).hover(function() {
-				sell.show();
-			}, function() {
-				sell.hide();
-			});
-			*/
 			/*li.click(function(goal, id) {
 				return function() {
 					var effortVal = Game.compInt(func["cost"].effort, powerups[id]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[id]), yessirVal = Game.compInt(func["cost"].yessir, powerups[id]);
@@ -732,11 +736,8 @@ Game.Initialize = function() {
 							$("#" + i + "_buy").html("Power Up Purchased").attr("disabled", "disabled");
 						}
 						else $("#" + i + "_buy").removeAttr("disabled");
-						//$("#" + i).addClass("disabled");
-						//else $("#" + i).removeClass("disabled");
 				}
 				else $("#" + i + "_buy").attr("disabled", "disabled");
-				//else $("#" + i).addClass("disabled");
 				
 				var q = $("#" + i + "_q");
 				var html = "";
@@ -775,16 +776,7 @@ Game.Initialize = function() {
 	Game.updatePastGoals();
 	Game.updateCurrentGoals();
 	
-	setInterval(Game.Save, 1000*60);	//Save every 60 seconds
-	
-	/*
-	var lastEff = 0;
-	
-	setInterval(function() {
-		console.log("Last: " + lastEff + " Current: " + efforttally + " Diff: " + (efforttally - lastEff));
-		lastEff = efforttally;
-	}, 1000);*/
-	
+	setInterval(Game.Save, 1000*60);	//Save every 60 seconds	
 	
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
@@ -822,7 +814,6 @@ Game.preLoad = function() {
 	//Function care of http://stackoverflow.com/questions/11214404/how-to-detect-if-browser-supports-html5-local-storage
 	function supports_html5_storage() {
 		try {
-			//return ('localStorage' in window && window['localStorage'] !== null);
 			localStorage.setItem("test", "test");
 			localStorage.removeItem("test");
 			return true;
@@ -833,23 +824,14 @@ Game.preLoad = function() {
 	
 	var canvas = document.createElement('canvas');
 	
-	/*if(!supports_html5_storage() || !canvas.getContext) {
-		$("#nosupport").html("We're sorry, but your browser does not support GetElected!. Please consider Google Chrome or Mozilla Firefox for all of your browsing needs.");
-		return;
-	}*/
-	
 	if(!supports_html5_storage()) {
 		$("#nosupport").html($("#nosupport").html() + "<br/>Your browser does not support the HTML5 functionality of \"Local Storage.\" Saving may not work for you. Please make sure you are using an up to date browser and that cookies are enabled.");
 		//return;
 	}
 	
 	if(!canvas.getContext) {
-		$("#nosupport").html("Your browser does not support the HTML5 functionality of \"Canvas.\"");
-		return;
+		$("#nosupport").html("Your browser does not support the HTML5 functionality of \"Canvas.\" Some images may appear weird.");
 	}
-	
-	Game.addLoader("paperworker");
-	var ctx    = canvas.getContext('2d');
 
 	function todo(context, text, fontSize, fontColor) {
 		var max_width  = 600;
@@ -903,26 +885,35 @@ Game.preLoad = function() {
 		Game.finishLoader("paperworker");
 	}
 	
-	var link = document.createElement('link');
-	link.rel = 'stylesheet';
-	link.type = 'text/css';
-	link.href = 'https://fonts.googleapis.com/css?family=Special+Elite';
-	document.getElementsByTagName('head')[0].appendChild(link);
+	try {
+		Game.addLoader("paperworker");
+		var ctx    = canvas.getContext('2d');
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = 'https://fonts.googleapis.com/css?family=Special+Elite';
+		document.getElementsByTagName('head')[0].appendChild(link);
 
-	// Trick from http://stackoverflow.com/questions/2635814/
-	var image = new Image;
-	image.src = link.href;
-	image.onerror = function() {
-		setTimeout(function() {
-			todo(ctx, paperwork, 12, "black");
-		}, 1000);
+		// Trick from http://stackoverflow.com/questions/2635814/
+		var image = new Image;
+		image.src = link.href;
+		image.onerror = function() {
+			setTimeout(function() {
+				todo(ctx, paperwork, 12, "black");
+			}, 1000);
+		}
+		
+		Game.addLoader("yessir");
+		var img = new Image;
+		img.src = "images/yessir.png";
+		img.onload = function() {
+			Game.finishLoader("yessir");
+		}
 	}
-	
-	Game.addLoader("yessir");
-	var img = new Image;
-	img.src = "images/yessir.png";
-	img.onload = function() {
+	catch(e) {
+		Game.finishLoader("paperworker");
 		Game.finishLoader("yessir");
 	}
+	
 	Game.checkLoad();
 }
