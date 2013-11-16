@@ -16,7 +16,7 @@ Game.Initialize = function() {
 	var currentGoalIndex = 0;
 	var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.
 	var scrollStatus = "";
-	var fps = 10;
+	var fps = 30;
 	var efforttoggle = 1;
 
 	var interest = 0.27;	//Be sure to tip your costs, and drive home safe!
@@ -407,11 +407,13 @@ Game.Initialize = function() {
 		list: {},
 		resetAll: function() {
 			for(var i in this.list) {
-				this.flag(i, 0);
+				this.list[i] = 0;
 			}
 		},
 		flag:	function(id, val) {
-			if(val) this.list[id] = val;
+			if(val && val !== "") {
+				this.list[id] = val;
+			}
 			return this.list[id] || 0;
 		}
 	}
@@ -494,6 +496,7 @@ Game.Initialize = function() {
 							q.html(html);
 							var pre = $("#" + id + "_pre");
 							pre.html("" + powerups[id]);
+							Game.recalculate();
 					}
 				}
 			}(func, id));
@@ -676,13 +679,27 @@ Game.Initialize = function() {
 		yessirtally = 0;
 		currentGoalIndex = 0;
 		flags.resetAll();
+		Game.recalculate();
 		$("#effortdescribe").show();
 		$("#paperworkdescribe").show();
 		$("#yessirdescribe").show();
 	}
+	
+	var eps = pps = yps = 0;
+	Game.recalculate = function() {
+		eps = pps = yps = 0;
+		for(var i in powerups) {
+			if(powerups[i] > 0) {
+				var results = powerupsfuncs[i]["func"](powerups[i]);
+				eps += results["effort"];
+				pps += results["paperwork"];
+				yps += results["yessir"];
+			}
+		}
+	}
 
 	Game.Update = function() {
-		for(var i in powerups) {
+		/*for(var i in powerups) {
 			if(powerups[i] > 0) {
 				var results = powerupsfuncs[i]["func"](powerups[i]);
 				Game.incrementEffort(results["effort"] / fps);
@@ -690,6 +707,11 @@ Game.Initialize = function() {
 				Game.incrementYessir(results["yessir"] / fps);
 			}
 		}
+		*/
+		Game.incrementEffort(eps / fps);
+		Game.incrementPaperwork(pps / fps);
+		Game.incrementYessir(yps / fps);
+		
 		var goal = goals[currentGoalIndex];
 		if(efforttally >= goal.reqObj.effort &&
 			paperworktally >= goal.reqObj.paperwork &&
@@ -702,23 +724,6 @@ Game.Initialize = function() {
 				Game.addPastGoal(goal);
 				Game.updateCurrentGoals();
 		}
-		/*
-		function(goal) {
-				return function() {
-					if(efforttally >= goal.reqObj.effort &&
-						paperworktally >= goal.reqObj.paperwork &&
-						yessirtally >= goal.reqObj.yessir) {
-							goal.unlocks();
-							currentGoalIndex++;
-							efforttally -= goal.reqObj.effort;
-							paperworktally -= goal.reqObj.paperwork;
-							yessirtally -= goal.reqObj.yessir;
-							Game.addPastGoal(goal);
-							Game.updateCurrentGoals();
-					}
-				}
-			}(currGoal)
-		*/
 	}
 	Game.Draw = function() {
 		for(var i in powerups) {
@@ -747,6 +752,9 @@ Game.Initialize = function() {
 		$("#efforttally").html(numberWithCommas((Math.floor(efforttally * 10) / 10).toFixed(1)) + " Effort");
 		$("#paperworktally").html(numberWithCommas((Math.floor(paperworktally * 10) / 10).toFixed(1)) + " Paperwork");
 		$("#yessirtally").html(numberWithCommas((Math.floor(yessirtally * 10) / 10).toFixed(1)) + " Yes, Sir!");
+		$("#effortpersec").html(numberWithCommas(eps.toFixed(1)) + " Effort Per Second");
+		$("#paperworkpersec").html(numberWithCommas(pps.toFixed(1)) + " Paperwork Per Second");
+		$("#yessirpersec").html(numberWithCommas(yps.toFixed(1)) + " Yes, Sir! Per Second");
 	}
 	
 	Game.Loop = function() {
@@ -763,7 +771,8 @@ Game.Initialize = function() {
 		var delta = (new Date().getTime() - lastRun) / 1000;
 		lastRun = new Date().getTime();
 		var currFPS = ~~(1/delta);
-		console.log(currFPS + " fps");
+		//console.log(currFPS + " fps");
+		//console.log(eps);
 		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
 	}
 	
@@ -773,7 +782,10 @@ Game.Initialize = function() {
 	Game.updatePastGoals();
 	Game.updateCurrentGoals();
 	
+	Game.recalculate();
+	
 	setInterval(Game.Save, 1000*60);	//Save every 60 seconds	
+	setInterval(Game.recalculate, 1000/100);	//Recalculate EPS/PPS/YPS every 1/10th of a second; it's less stress!
 	
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
