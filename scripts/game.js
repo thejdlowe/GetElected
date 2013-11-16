@@ -370,6 +370,9 @@ Game.Initialize = function() {
 	addPowerUp("takethat", {effort: 10240000, paperwork: 6675000, yessir: 260000}, "TAKE THAT!!", "+50000 Effort For Every Personal Lawyer", "effortPowerUp", function(num) { flags.flag("takethat", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("takethat", 0);});
 	addPowerUp("cohabitate", {effort: 21345589, paperwork: 9999990, yessir: 679000}, "Move In Together", "+150000 Effort For Every Significant Other", "effortPowerUp", function(num) { flags.flag("cohabitate", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cohabitate", 0);});
 	addPowerUp("cosign", {effort: 144233377, paperwork: 50000000, yessir: 4110000}, "Buy A House!", "+300000 Effort For Every Significant Other", "effortPowerUp", function(num) { flags.flag("cosign", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cosign", 0);});
+	addPowerUp("superpac", {effort: 81000000, paperwork: 7598950, yessir: 999000}, "Super PAC", "+500000 Effort Per Second", "effortPowerUp", function(num) {return {"effort": (500000 + flags.flag("babypac") + flags.flag("mspac")) * num,"paperwork": 0,"yessir": 0};}, false);
+	addPowerUp("babypac", {effort: 231777551, paperwork: 32000000, yessir: 1241100}, "Baby PAC", "+1750000 Effort For Every Super PAC", "effortPowerUp", function(num) { flags.flag("babypac", 1750000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("babypac", 0);});
+	addPowerUp("mspac", {effort: 1557773120, paperwork: 68800000, yessir: 9000000}, "Ms. PAC", "+5000000 Effort For Every Super PAC", "effortPowerUp", function(num) { flags.flag("mspac", 5000000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mspac", 0);});
 	addPowerUp("paperclips", {effort: 0, paperwork: 500, yessir: 0}, "Paperclips", "+2 Paperwork For Every Staples", "paperworkPowerUp", function(num) { flags.flag("paperclips", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("paperclips", 0);});
 	addPowerUp("paperbinders", {effort: 0, paperwork: 45000, yessir: 0}, "Paper Binders", "+50 Paperwork For Every Staples", "paperworkPowerUp", function(num) { flags.flag("paperbinders", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("paperbinders", 0);});
 	addPowerUp("sharpenedPencil", {effort: 0, paperwork: 7600, yessir: 0}, "Sharpened Pencil", "+5 Paperwork For Every Pencil", "paperworkPowerUp", function(num) { flags.flag("sharpenedPencil", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("sharpenedPencil", 0);});
@@ -529,82 +532,7 @@ Game.Initialize = function() {
 			//li.tooltip({track: true});
 		}
 	}
-	
-	/*
-	Game.listPowerUp("stranger");
-	Game.listPowerUp("acquaintance");
-	Game.listPowerUp("friend");
-	Game.listPowerUp("bro");
-	Game.listPowerUp("bestfriend");
-	Game.listPowerUp("bff");
-	Game.listPowerUp("personallawyer");
-	Game.listPowerUp("sigother");
-	Game.listPowerUp("staples");
-	Game.listPowerUp("pencil");
-	Game.listPowerUp("pen");
-	Game.listPowerUp("typewriter");
-	Game.listPowerUp("printer");
-	Game.listPowerUp("altavista");
-	Game.listPowerUp("orphans");
-	Game.listPowerUp("robots");
-	Game.listPowerUp("tippiecanoe");
-	Game.listPowerUp("harry");
-	Game.listPowerUp("ike");
-	Game.listPowerUp("great");
-	Game.listPowerUp("taxes");
-	Game.listPowerUp("timeforchange");
-	Game.listPowerUp("change");
-	Game.listPowerUp("handsacrossamerica");
-	Game.listPowerUp("perfectstrangers");
-	Game.listPowerUp("perfectstrangers2");
-	Game.listPowerUp("gettingtoknowyou");
-	Game.listPowerUp("gettingtoknowallaboutyou");
-	Game.listPowerUp("joey");
-	Game.listPowerUp("chandler");
-	Game.listPowerUp("budlight");
-	Game.listPowerUp("collar");
-	Game.listPowerUp("pizza");
-	Game.listPowerUp("hideabody");
-	Game.listPowerUp("idkmbffj");
-	Game.listPowerUp("instantgram");
-	Game.listPowerUp("objection");
-	Game.listPowerUp("takethat");
-	Game.listPowerUp("cohabitate");
-	Game.listPowerUp("cosign");
-	Game.listPowerUp("paperclips");
-	Game.listPowerUp("paperbinders");
-	Game.listPowerUp("sharpenedPencil");
-	Game.listPowerUp("mechanicalpencil");
-	Game.listPowerUp("moreink");
-	Game.listPowerUp("cyberpen");
-	Game.listPowerUp("wordprocessor");
-	Game.listPowerUp("talktotext");
-	Game.listPowerUp("laserprinter");
-	Game.listPowerUp("threeinone");
-	Game.listPowerUp("lycos");
-	Game.listPowerUp("compuserve");
-	Game.listPowerUp("gruel");
-	Game.listPowerUp("posters");
-	Game.listPowerUp("laserguns");
-	Game.listPowerUp("sentience");
-	Game.listPowerUp("tyler");
-	Game.listPowerUp("harrison");
-	Game.listPowerUp("barkley");
-	Game.listPowerUp("truman");
-	Game.listPowerUp("nixon");
-	Game.listPowerUp("eisenhower");
-	Game.listPowerUp("johnson");
-	Game.listPowerUp("kennedy");
-	Game.listPowerUp("quayle");
-	Game.listPowerUp("bush");
-	Game.listPowerUp("gore");
-	Game.listPowerUp("clinton");
-	Game.listPowerUp("biden");
-	Game.listPowerUp("obama");
-	Game.listPowerUp("morelube");
-	Game.listPowerUp("chickenmeanscock");
-	*/
-	
+		
 	Game.listPowerUp("stranger");	Game.listPowerUp("perfectstrangers");	Game.listPowerUp("perfectstrangers2");
 	Game.listPowerUp("acquaintance");	Game.listPowerUp("gettingtoknowyou");	Game.listPowerUp("gettingtoknowallaboutyou");
 	Game.listPowerUp("friend");	Game.listPowerUp("joey");	Game.listPowerUp("chandler");
@@ -613,6 +541,7 @@ Game.Initialize = function() {
 	Game.listPowerUp("bff");	Game.listPowerUp("idkmbffj");	Game.listPowerUp("instantgram");
 	Game.listPowerUp("personallawyer");	Game.listPowerUp("objection");	Game.listPowerUp("takethat");
 	Game.listPowerUp("sigother");	Game.listPowerUp("cohabitate");	Game.listPowerUp("cosign");
+	Game.listPowerUp("superpac");	Game.listPowerUp("babypac");	Game.listPowerUp("mspac");
 	Game.listPowerUp("staples");	Game.listPowerUp("paperclips");	Game.listPowerUp("paperbinders");
 	Game.listPowerUp("pencil");	Game.listPowerUp("sharpenedPencil");	Game.listPowerUp("mechanicalpencil");
 	Game.listPowerUp("pen");	Game.listPowerUp("moreink");	Game.listPowerUp("cyberpen");
