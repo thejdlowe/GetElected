@@ -16,8 +16,11 @@ Game.Initialize = function() {
 	var currentGoalIndex = 0;
 	var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.
 	var scrollStatus = "";
-	var fps = 30;
+	var fps = 5;
+	var lastEffort = 0;
 	var efforttoggle = 1;
+	
+	var autogoal = false;
 
 	var interest = 0.27;	//Be sure to tip your costs, and drive home safe!
 	var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
@@ -99,7 +102,7 @@ Game.Initialize = function() {
 			q.html(html);
 			li.html(currGoal.name);
 			li.append(q);
-			/*li.click(function(goal) {
+			li.click(function(goal) {
 				return function() {
 					if(efforttally >= goal.reqObj.effort &&
 						paperworktally >= goal.reqObj.paperwork &&
@@ -114,7 +117,6 @@ Game.Initialize = function() {
 					}
 				}
 			}(currGoal));
-			*/
 		}
 	}
 	
@@ -569,6 +571,7 @@ Game.Initialize = function() {
 				for(var i in powerups) {
 					if(localStorage[i]) powerups[i] = ~~localStorage[i];
 				}
+				$("#autogoal").prop("checked", localStorage["autogoal"] === "true");
 			}
 		}
 		catch(e) {
@@ -592,6 +595,7 @@ Game.Initialize = function() {
 			localStorage["paperworktally"] = Math.round(paperworktally);
 			localStorage["yessirtally"] = Math.round(yessirtally);
 			localStorage["currentGoalIndex"] = currentGoalIndex;
+			localStorage["autogoal"] = autogoal;
 			
 			$("#saved").fadeIn(1000).delay(5000).fadeOut(1000);
 		}
@@ -628,30 +632,27 @@ Game.Initialize = function() {
 	}
 
 	Game.Update = function() {
-		/*for(var i in powerups) {
-			if(powerups[i] > 0) {
-				var results = powerupsfuncs[i]["func"](powerups[i]);
-				Game.incrementEffort(results["effort"] / fps);
-				Game.incrementPaperwork(results["paperwork"] / fps);
-				Game.incrementYessir(results["yessir"] / fps);
-			}
-		}
-		*/
-		Game.incrementEffort(eps / fps);
-		Game.incrementPaperwork(pps / fps);
-		Game.incrementYessir(yps / fps);
+		var tempEff = Number((eps / fps).toFixed(2));
+		var tempPap = Number((pps / fps).toFixed(2));
+		var tempYes = Number((yps / fps).toFixed(2));
+		Game.incrementEffort(tempEff);
+		Game.incrementPaperwork(tempPap);
+		Game.incrementYessir(tempYes);
 		
 		var goal = goals[currentGoalIndex];
-		if(efforttally >= goal.reqObj.effort &&
-			paperworktally >= goal.reqObj.paperwork &&
-			yessirtally >= goal.reqObj.yessir) {
-				goal.unlocks();
-				currentGoalIndex++;
-				efforttally -= goal.reqObj.effort;
-				paperworktally -= goal.reqObj.paperwork;
-				yessirtally -= goal.reqObj.yessir;
-				Game.addPastGoal(goal);
-				Game.updateCurrentGoals();
+		autogoal = $('#autogoal').prop('checked');
+		if(autogoal === true) {
+			if(efforttally >= goal.reqObj.effort &&
+				paperworktally >= goal.reqObj.paperwork &&
+				yessirtally >= goal.reqObj.yessir) {
+					goal.unlocks();
+					currentGoalIndex++;
+					efforttally -= goal.reqObj.effort;
+					paperworktally -= goal.reqObj.paperwork;
+					yessirtally -= goal.reqObj.yessir;
+					Game.addPastGoal(goal);
+					Game.updateCurrentGoals();
+			}
 		}
 	}
 	Game.Draw = function() {
@@ -688,20 +689,22 @@ Game.Initialize = function() {
 	
 	Game.Loop = function() {
 		Game.Update();
-		missedFrames += (new Date().getTime() - lastRun) - (1000/fps);
+	/*	missedFrames += (new Date().getTime() - lastRun) - (1000/fps);
 		missedFrames = Math.min(missedFrames, 1000*5);	//admittedly, I like this logic from Cookie Clicker; catch up on up to 5 seconds worth of frame data if there is latency.
 		while(missedFrames > 0) {
 			Game.Update();
 			missedFrames -= 1000/fps;
 		}
+		*/
 		Game.Draw();
 		//lastRun = new Date().getTime();
 		//YAY THE FRAME IS DONE! Let's make sure we're staying close to our FPS goal
-		var delta = (new Date().getTime() - lastRun) / 1000;
+		//var delta = (new Date().getTime() - lastRun) / 1000;
 		lastRun = new Date().getTime();
-		var currFPS = ~~(1/delta);
+		//var currFPS = ~~(1/delta);
 		//console.log(currFPS + " fps");
 		//console.log(eps);
+		//console.log(autogoal + " " + localStorage["autogoal"] + " " +  $('#autogoal').prop('checked'));
 		setTimeout(Game.Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
 	}
 	
@@ -715,6 +718,13 @@ Game.Initialize = function() {
 	
 	setInterval(Game.Save, 1000*60);	//Save every 60 seconds	
 	setInterval(Game.recalculate, 1000/100);	//Recalculate EPS/PPS/YPS every 1/10th of a second; it's less stress!
+	
+	setInterval(function() {	//JUST to make sure that effort is calculating correctly, as there are worries that it is not correct.
+		/*console.log("Last Second: " + lastEffort + "      Current Second: " + efforttally + "     Difference: " + (efforttally - lastEffort));
+		console.log("EPS " + eps);
+		console.log("What " + ((eps / fps) + (eps / fps)));
+		lastEffort = efforttally;*/
+	}, 1000);
 	
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
@@ -829,7 +839,7 @@ Game.preLoad = function() {
 		var link = document.createElement('link');
 		link.rel = 'stylesheet';
 		link.type = 'text/css';
-		link.href = 'https://fonts.googleapis.com/css?family=Special+Elite';
+		link.href = 'http://fonts.googleapis.com/css?family=Special+Elite';
 		document.getElementsByTagName('head')[0].appendChild(link);
 
 		// Trick from http://stackoverflow.com/questions/2635814/
@@ -851,7 +861,7 @@ Game.preLoad = function() {
 	catch(e) {
 		Game.finishLoader("paperworker");
 		Game.finishLoader("yessir");
-		Game.checkLoad();
+		Game.Initialize()();
 	}
 	
 	Game.checkLoad();
