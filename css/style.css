@@ -314,6 +314,17 @@ pre {
         background-position: 0 0;
 }
 
+
+
+.tabs a {
+	color: black;
+}
+
+.tabs a.active {
+	text-decoration: none;
+	font-weight: bold;
+}
+
 #yessirer.up {
         background-position: 0px -200px;
 }

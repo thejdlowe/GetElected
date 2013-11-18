@@ -42,11 +42,19 @@ $(document).ready(Game.preLoad);
 </script>
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=198376976960083";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <div id="navbar">
 ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a href="https://github.com/jdllama/GetElected" target="_blank">Github</a>
  | <a href="https://twitter.com/GetElectedGame" target="_blank">Twitter</a>
- | <a href="https://www.facebook.com/getelectedgame" target="_blank">Facebook</a>
-<span id="tabs" style="position: absolute;top:0px;right:5px;"><a href="#game">Game</a> | <a href="#stats">Stats</a> | <a href="#update">Recent Updates</a>
+ | <div class="fb-like" data-href="http://www.facebook.com/getelectedgame" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
+<span class="tabs" style="position: absolute;top:0px;right:5px;"><a href="#game">Game</a> | <a href="#stats">Stats</a> | <a href="#update">Recent Updates</a>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
@@ -75,8 +83,12 @@ Loading
 		<div id="effortdescribe" style="width:80%;margin: 2px">
 		To get where you want to go, you gotta work for it! Push yourself! Click the button! And other positive self-motivating descriptors!
 		</div>
-		Power Ups:
-		<ol id="effortPowerUp">
+		<span class="tabs"><a href="#effortPrimary">Primary</a> | <a href="#effortSecondary">Secondary</a> | <a href="#effortTertiary">Tertiary</a></span>
+		<ol id="effortPrimary">
+		</ol>
+		<ol id="effortSecondary">
+		</ol>
+		<ol id="effortTertiary">
 		</ol>
 	</div>
 	<div id="col2">
@@ -89,8 +101,12 @@ Loading
 		<div id="paperworkdescribe" style="width:80%;margin: 2px">
 		Ah, and now the paperwork! Move your mouse over the paper above to do paperwork to get ahead in life!
 		</div>
-		Power Ups
-		<ol id="paperworkPowerUp">
+		<span class="tabs"><a href="#paperworkPrimary">Primary</a> | <a href="#paperworkSecondary">Secondary</a> | <a href="#paperworkTertiary">Tertiary</a></span>
+		<ol id="paperworkPrimary">
+		</ol>
+		<ol id="paperworkSecondary">
+		</ol>
+		<ol id="paperworkTertiary">
 		</ol>
 	</div>
 	<div id="col3">
@@ -124,8 +140,12 @@ Loading
 		<div id="yessirdescribe" style="width:80%;margin: 2px">
 			Most important: Empty promises! Keep making promises to your voters by clicking the above box and scrolling (either with your mouse wheel, with the up and down arrows, or Page Up/Page Down) both up AND down!
 			</div>
-		Power Ups
-		<ol id="yessirPowerUp">
+		<span class="tabs"><a href="#yessirPrimary">Primary</a> | <a href="#yessirSecondary">Secondary</a> | <a href="#yessirTertiary">Tertiary</a></span>
+		<ol id="yessirPrimary">
+		</ol>
+		<ol id="yessirSecondary">
+		</ol>
+		<ol id="yessirTertiary">
 		</ol>
 	</div>
 	<div id="col4">
@@ -169,6 +189,11 @@ Past Goals:
 </ol>
 </div>
 <div id="update">
+Recent Updates:
+<br />
+<ol>
+<li>11/18/2013 2:00PM EST - Power ups divided into Primary, Secondary, and Tertiary levels
+</ol>
 <a class="twitter-timeline" href="https://twitter.com/GetElectedGame" data-widget-id="400793354947940352">Tweets by @GetElectedGame</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </div>
