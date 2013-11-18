@@ -19,6 +19,10 @@ Game.Initialize = function() {
 	var fps = 30;
 	var lastEffort = 0;
 	var efforttoggle = 1;
+	var totalEffortClicks = 0;
+	var totalPaperworkWiggles = 0;
+	var totalYessirScrolls = 0;
+	var startDate = 0;
 	
 	var autogoal = false;
 
@@ -55,7 +59,7 @@ Game.Initialize = function() {
 			var currGoal = goals[i];
 			var li = $("<li>");
 			$("#pastGoals").prepend(li);
-			li.addClass("disabled");
+			//li.addClass("disabled");
 			var q = $("<q>");
 			var html = "";
 			html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) : "") + " ";
@@ -123,6 +127,7 @@ Game.Initialize = function() {
 	$("#yessirer").scrollTop(scrollerBase);
 	$("#efforter").click(function(e) {
 		e.preventDefault();
+		totalEffortClicks++;
 		var whichFlags = ["grindstone", "back", "pain", "mile", "believe"];
 		var howMuch = 1;
 		for(var i = 0;i<whichFlags.length;i++) {
@@ -542,12 +547,12 @@ Game.Initialize = function() {
 		}
 	}
 	
-	Game.listPowerUp("grindstone");	Game.listPowerUp("back");	Game.listPowerUp("pain");	Game.listPowerUp("mile");	Game.listPowerUp("believe");
-	Game.listPowerUp("stranger");	Game.listPowerUp("perfectstrangers");	Game.listPowerUp("perfectstrangers2");		
-	Game.listPowerUp("acquaintance");	Game.listPowerUp("gettingtoknowyou");	Game.listPowerUp("gettingtoknowallaboutyou");		
-	Game.listPowerUp("friend");	Game.listPowerUp("joey");	Game.listPowerUp("chandler");		
-	Game.listPowerUp("bro");	Game.listPowerUp("budlight");	Game.listPowerUp("collar");		
-	Game.listPowerUp("bestfriend");	Game.listPowerUp("pizza");	Game.listPowerUp("hideabody");		
+				
+	Game.listPowerUp("stranger");	Game.listPowerUp("perfectstrangers");	Game.listPowerUp("perfectstrangers2");		Game.listPowerUp("grindstone");	
+	Game.listPowerUp("acquaintance");	Game.listPowerUp("gettingtoknowyou");	Game.listPowerUp("gettingtoknowallaboutyou");		Game.listPowerUp("back");
+	Game.listPowerUp("friend");	Game.listPowerUp("joey");	Game.listPowerUp("chandler");		Game.listPowerUp("pain");
+	Game.listPowerUp("bro");	Game.listPowerUp("budlight");	Game.listPowerUp("collar");		Game.listPowerUp("mile");
+	Game.listPowerUp("bestfriend");	Game.listPowerUp("pizza");	Game.listPowerUp("hideabody");		Game.listPowerUp("believe");
 	Game.listPowerUp("bff");	Game.listPowerUp("idkmbffj");	Game.listPowerUp("instantgram");		
 	Game.listPowerUp("personallawyer");	Game.listPowerUp("objection");	Game.listPowerUp("takethat");		
 	Game.listPowerUp("sigother");	Game.listPowerUp("cohabitate");	Game.listPowerUp("cosign");		
@@ -606,6 +611,14 @@ Game.Initialize = function() {
 					if(localStorage[i]) powerups[i] = Math.round(parseFloat(localStorage[i]));
 				}
 				$("#autogoal").prop("checked", localStorage["autogoal"] === "true");
+				totalEffortClicks = Math.round(parseFloat(localStorage["totalEffortClicks"]));
+				totalPaperworkWiggles = Math.round(parseFloat(localStorage["totalPaperworkWiggles"]));
+				totalYessirScrolls = Math.round(parseFloat(localStorage["totalYessirScrolls"]));
+				totalEffortClicks = isNaN(totalEffortClicks) ? 0 : totalEffortClicks;
+				totalPaperworkWiggles = isNaN(totalPaperworkWiggles) ? 0 : totalPaperworkWiggles;
+				totalYessirScrolls = isNaN(totalYessirScrolls) ? 0 : totalYessirScrolls;
+				
+				startDate = Math.round(parseFloat(localStorage["startDate"]));
 			}
 		}
 		catch(e) {
@@ -630,6 +643,10 @@ Game.Initialize = function() {
 			localStorage["yessirtally"] = Math.round(yessirtally);
 			localStorage["currentGoalIndex"] = currentGoalIndex;
 			localStorage["autogoal"] = autogoal;
+			localStorage["totalEffortClicks"] = totalEffortClicks;
+			localStorage["totalPaperworkWiggles"] = totalPaperworkWiggles;
+			localStorage["totalYessirScrolls"] = totalYessirScrolls;
+			localStorage["startDate"] = startDate;
 			
 			$("#saved").fadeIn(1000).delay(5000).fadeOut(1000);
 		}
@@ -645,7 +662,11 @@ Game.Initialize = function() {
 		paperworktally = 0;
 		yessirtally = 0;
 		currentGoalIndex = 0;
+		totalEffortClicks = 0;
+		totalPaperworkWiggles = 0;
+		totalYessirScrolls = 0;
 		flags.resetAll();
+		startDate = (new Date()).getTime()
 		Game.recalculate();
 		$("#effortdescribe").show();
 		$("#paperworkdescribe").show();
@@ -719,6 +740,10 @@ Game.Initialize = function() {
 		$("#effortpersec").html(numberWithCommas(eps.toFixed(1)) + " Effort Per Second");
 		$("#paperworkpersec").html(numberWithCommas(pps.toFixed(1)) + " Paperwork Per Second");
 		$("#yessirpersec").html(numberWithCommas(yps.toFixed(1)) + " Yes, Sir! Per Second");
+		$("#totalEffortClicks").html(totalEffortClicks);
+		$("#totalPaperworkWiggles").html(totalPaperworkWiggles);
+		$("#totalYessirScrolls").html(totalYessirScrolls);
+		$("#startDate").html((new Date(startDate)).toLocaleString());
 	}
 	
 	Game.Loop = function() {
@@ -762,6 +787,43 @@ Game.Initialize = function() {
 	
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
+	
+	//admittedly, the code below is from http://www.jacklmoore.com/notes/jquery-tabs/
+	$('#tabs').each(function(){
+		// For each set of tabs, we want to keep track of
+		// which tab is active and it's associated content
+		var $active, $content, $links = $(this).find('a');
+
+		// If the location.hash matches one of the links, use that as the active tab.
+		// If no match is found, use the first link as the initial active tab.
+		$active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+		$active.addClass('active');
+		$content = $($active.attr('href'));
+
+		// Hide the remaining content
+		$links.not($active).each(function () {
+			$($(this).attr('href')).hide();
+		});
+
+		// Bind the click event handler
+		$(this).on('click', 'a', function(e){
+			// Make the old tab inactive.
+			$active.removeClass('active');
+			$content.hide();
+
+			// Update the variables with the new link and content
+			$active = $(this);
+			$content = $($(this).attr('href'));
+
+			// Make the tab active.
+			$active.addClass('active');
+			$content.show();
+
+			// Prevent the anchor's default click action
+			e.preventDefault();
+		});
+	});
+	if(startDate === 0 || isNaN(startDate)) startDate = (new Date()).getTime();
 	Game.Loop();
 }
 

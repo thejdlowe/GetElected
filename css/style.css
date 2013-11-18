@@ -94,7 +94,7 @@ pre {
         font-size:15px;
 }
 
-#game, #stats, #update {
+#nosupport, #game, #stats, #update {
         position: absolute;
         left: 0px;
         top: 32px;
@@ -113,8 +113,11 @@ pre {
         overflow-y: auto;
         top: 0px;
         bottom: 40px;
-        /*Background care of http://subtlepatterns.com/ */
-        background-image: url("../images/witewall_3.png");
+}
+
+#game, #stats, #update {
+	/*Background care of http://subtlepatterns.com/ */
+	 background-image: url("../images/witewall_3.png");
 }
 
 #col1 {

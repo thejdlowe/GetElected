@@ -42,29 +42,11 @@ $(document).ready(Game.preLoad);
 </script>
 </head>
 <body>
-<div id="nosupport">
-Loading
-<br />
-<progress id="progress" value="0" max="100"></progress><span id="progressPercent">0</span>%
-<br />
-<br />
-Hi there. This page is currently in an Alpha stage. This means that the main functionality of this game is working; however, things such as game balance, the overall look, and even some of the secondary functionality
- just doesn't work. As such, it would be appreciated if you would play this and tell me the most important thing:
- <br />
-<br />
-Is it fun?
-<br />
-<br />
-Hit me up on Facebook or Twitter and let me know. I can't improve it without your help.
-<br />
-<br />
-Oh, and if you can see this message? Then awesome. &lt;3
-</div>
 <div id="navbar">
 ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a href="https://github.com/jdllama/GetElected" target="_blank">Github</a>
  | <a href="https://twitter.com/GetElectedGame" target="_blank">Twitter</a>
  | <a href="https://www.facebook.com/getelectedgame" target="_blank">Facebook</a>
-<span style="position: absolute;top:0px;right:5px;">Game | Stats | Update
+<span id="tabs" style="position: absolute;top:0px;right:5px;"><a href="#game">Game</a> | <a href="#stats">Stats</a> | <a href="#update">Recent Updates</a>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
@@ -73,6 +55,13 @@ ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a h
 <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </form>
 </span>
+</div>
+<div id="nosupport">
+Loading
+<br />
+<progress id="progress" value="0" max="100"></progress><span id="progressPercent">0</span>%
+<br />
+<br />
 </div>
 <div id="game">
 	<div id="col1">
@@ -145,9 +134,18 @@ ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a h
 		Current Goal:
 		<ol id="currentGoal">
 		</ol>
-		Past Goals:
-		<ol id="pastGoals">
-		</ol>
+		<br />
+		<br />
+		GetElected! is an incremental game, like <a href="http://orteil.dashnet.org/cookieclicker/" target="_blank">Cookie Clicker</a> or <a href="http://clickingbad.nullism.com/" target="_blank">Clicking Bad</a>. Basically, an incremental game is exactly like Burger Time, except that it's not. You increase your resources, and you can either purchase goals (above) or purchase power ups which will add more resources for you.
+		<br /><br />
+		This page is currently in an Alpha stage. This means that the main functionality of this game is working; however, things such as game balance, the overall look, and even some of the secondary functionality
+		just don't work. As such, it would be appreciated if you would play this and tell me the most important thing:
+		<br />
+		<br />
+		Is it fun?
+		<br />
+		<br />
+		Hit me up on Facebook or Twitter and let me know. I can't improve it without your help.
 	</div>
 	
 	<div id="menu">
@@ -158,6 +156,17 @@ ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a h
 	</div>
 </div>
 <div id="stats">
+Stats For Your Current Game:
+<br />
+<br />
+Start Date: <span id="startDate"></span><br />
+Total Effort Clicks: <span id="totalEffortClicks"></span><br />
+Total Paperwork Wiggles: <span id="totalPaperworkWiggles"></span><br />
+Total Yes Sir! Scrolls: <span id="totalYessirScrolls"></span><br />
+<br />
+Past Goals:
+<ol id="pastGoals">
+</ol>
 </div>
 <div id="update">
 <a class="twitter-timeline" href="https://twitter.com/GetElectedGame" data-widget-id="400793354947940352">Tweets by @GetElectedGame</a>
