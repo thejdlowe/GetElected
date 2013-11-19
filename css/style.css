@@ -314,8 +314,6 @@ pre {
         background-position: 0 0;
 }
 
-
-
 .tabs a {
 	color: black;
 }
@@ -333,9 +331,9 @@ pre {
 background-position: 0px -400px;
 }
 
-#effortPowerUp, #paperworkPowerUp, #yessirPowerUp, #pastGoals {
-	overflow-y: scroll;
-	position: relative;
-	height: 400px;
-	bottom: 0px;
+#effortPrimary, #effortSecondary, #effortTertiary,
+#paperworkPrimary, #paperworkSecondary, #paperworkTertiary, 
+#yessirPrimary, #yessirSecondary, #yessirTertiary,
+#pastGoals {
+	overflow-y: auto;
 }
