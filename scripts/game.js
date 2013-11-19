@@ -118,6 +118,7 @@ Game.Initialize = function() {
 							yessirtally -= goal.reqObj.yessir;
 							Game.addPastGoal(goal);
 							Game.updateCurrentGoals();
+							Game.resizer();
 					}
 				}
 			}(currGoal));
@@ -861,6 +862,13 @@ Game.Initialize = function() {
 	setInterval(Game.Save, 1000*60);	//Save every 60 seconds	
 	setInterval(Game.recalculate, 1000/100);	//Recalculate EPS/PPS/YPS every 1/10th of a second; it's less stress!
 	
+	Game.resizer();
+	
+	$(window).resize(function() {
+		Game.resizer();
+	});
+	
+	
 	/*setInterval(function() {	//JUST to make sure that effort is calculating correctly, as there are worries that it is not correct.
 		console.log("Last Second: " + lastEffort + "      Current Second: " + efforttally + "     Difference: " + (efforttally - lastEffort));
 		console.log("EPS " + eps);
@@ -911,6 +919,16 @@ Game.buildTabs = function() {
 			e.preventDefault();
 		});
 	});
+}
+
+Game.resizer = function() {
+	var lists = ["#effortPrimary","#effortSecondary","#effortTertiary",
+		"#paperworkPrimary","#paperworkSecondary","#paperworkTertiary",
+		"#yessirPrimary","#yessirSecondary","#yessirTertiary"].join(",");
+	$(lists).each(function() {
+		$(this).css("height", ($("#effortPrimary").parent().height() - $("#effortPrimary").offset().top + $("#navbar").height()) + "px");
+	});
+	//$("#effortSecondary").css("height", ($("#effortPrimary").parent().height() - $("#effortPrimary").offset().top) + "px");
 }
 
 Game.loadList = {};
