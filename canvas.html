@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<div id="paperworkpreloader" style="font-family: 'Special Elite', cursive;font-size: 12px;">.</div>
+<img id="whee" />
+<script>
+/*var paperwork = "According to Chapter One, Sub-Chapter Eight, Paragraph Four, Line Two, upon entering what will be hereby forever known forever in the forever as \"The Monkey Pit\", " +
+"items purchased within or within a 3.14 foot proximity of a man what will be hereby forever known forever in the forever as \"Gerald\" cannot, will not, should not, and of not to be " +
+"returned to \"The Monkey Pit\" unless the transaction is witnessed by a gregarious goat on a Monday whose date is divisible by the numbers hereby forever known forever in the forever as " +
+"\"Five,\" \"Eleven,\" and \"Rambledoosh.\" Any attempts made by the person referred to in Chapter Five, Sub-Chapter Seventy Seven, Paragraph One, Sentence One as \"Steve\" to undo, redo, " +
+"anddo, fordo, forgo, fortnight, A Hard Day's Night, The Dark Knight, or anyone else who looks funny will immediately render everything in this chapter moot and will invoke martial law upon " +
+"the wetlands of Notre Dame. If any attempts are made to supercede, subcede, or Sub-Con this non-anti-un-not-nope-nuh-uh negotiable \"contract\", any and all participants will be subject to " +
+"a harsh criticism of John Leguizamo's \"Jerk\". Now, if you will please turn to Act VI, Psalm 22, verse C, this will determine the length of which one must hold on to \"it\" before dropping " +
+"as if it were hot. All rights reserved, must contain a number in your age to partake in this game, offer void in any country whose primary export is spite or longevity. Hey, I could really go " +
+"for a bouncy castle. If the plaintiff, who is dressed very plainly, hence being called \"the plaintiff\", wishes to use one of his or her or they or them or of or be the three wishes granted by " + 
+"the court appointed genie, the plaintiff must profess any and all desires regarding cicadas. If the plaintiff does not have any deep-rooted desires for them, then the genie is to be tied to a " + 
+"raft and made to serve the plaintiff's time in prison. If this is not about prison, then man, just, like, ignore all of this. It's cool. For any and all rapid fire movements on the game \"Track " +
+"& Field\", please make sure to use an electric toothbrush. This web page may include references to pop culture. Please do not drop the bass around this document. The coming of The Dark One, " + 
+"heretofor to be known as \"Cthulhu\", will be scheduled at the soonest convenience of any and all other deities in charge of this web page. This one time, I wrote a rap song talking about " +
+"dropping fools like I drop packets. That was a sad time. In a court ruling, it has been determined that if you group the four ghosts in the top left corner, you can walk away from the machine; " +
+"however, they will perform a reversal once every 17 minutes.";
+function todo(context, text, fontSize, fontColor, canvas) {
+	var max_width  = 600;
+	var fontSize   =  12;
+	var lines      =  new Array();
+	var width = 0, i, j;
+	var result;
+	var color = fontColor || "white";
+	var font = '22px "Special Elite", cursive';
+	// Font and size is required for context.measureText()
+	 context.font = font
+
+	
+	// Start calculation
+	while ( text.length ) {
+		for( i=text.length; context.measureText(text.substr(0,i)).width > max_width; i-- );
+	
+		result = text.substr(0,i);
+	
+		if ( i !== text.length )
+			for( j=0; result.indexOf(" ",j) !== -1; j=result.indexOf(" ",j)+1 );
+		
+		lines.push( result.substr(0, j|| result.length) );
+		width = Math.max( width, context.measureText(lines[ lines.length-1 ]).width );
+		text  = text.substr( lines[ lines.length-1 ].length, text.length );
+	}
+	
+	
+	// Calculate canvas size, add margin
+	context.canvas.width  = 14 + width;
+	context.canvas.height =  8 + ( fontSize + 5 ) * lines.length;
+	context.font   = font;
+
+	// Render
+	context.fillStyle = color;
+	for ( i=0, j=lines.length; i<j; ++i ) {
+		context.fillText( lines[i], 8, 5 + fontSize + (fontSize+5) * i );
+	}
+	var img = canvas.toDataURL();
+	document.getElementById("whee").src = img;
+}
+
+var canvas = document.createElement("canvas");
+document.body.appendChild(canvas);
+var ctx    = canvas.getContext('2d');
+
+var link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = 'http://fonts.googleapis.com/css?family=Special+Elite';
+document.getElementsByTagName('head')[0].appendChild(link);
+
+// Trick from http://stackoverflow.com/questions/2635814/
+var image = new Image;
+image.src = link.href;
+image.onerror = function() {
+	setTimeout(function() {
+		todo(ctx, paperwork, 12, "black", canvas);
+	}, 1000);
+}*/
+var canvas = document.createElement("canvas");
+var ctx    = canvas.getContext('2d');
+var img = new Image();
+img.onload = function() {
+	//alert("Whee");
+	canvas.width = img.width;
+	canvas.height = img.height;
+	ctx.drawImage(img, 0, 0);
+	var x = getRandomInt(0, canvas.width - 200);
+	var y = getRandomInt(0, canvas.height - 200);
+	var data = ctx.getImageData(x, y, 200, 200);
+	var canv2 = document.createElement("canvas");
+	canv2.width = 200;
+	canv2.height = 200;
+	var context2 = canv2.getContext("2d");
+	context2.putImageData(data, 0, 0);
+	var img2 = canv2.toDataURL();
+	document.getElementById("whee").src = img2;
+}
+img.src = "images/paperwork.png";
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+</script>
+</body>
+</html>

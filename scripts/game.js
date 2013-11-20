@@ -906,7 +906,7 @@ Game.Initialize = function() {
 	Game.recalculate();
 	
 	setInterval(Game.Save, 1000*60);	//Save every 60 seconds	
-	setInterval(Game.recalculate, 1000/100);	//Recalculate EPS/PPS/YPS every 1/10th of a second; it's less stress!
+	//setInterval(Game.recalculate, 1000/100);	//Recalculate EPS/PPS/YPS every 1/10th of a second; it's less stress!
 	
 	Game.resizer();
 	
@@ -940,6 +940,81 @@ Game.Initialize = function() {
 		lastEffort = efforttally;
 	}, 1000);
 	*/
+	
+	var randomCreate = function() {
+		var life = 1000 * 15;		//Life will last fifteen seconds. SO MACABRE.
+		var width = height = 200;	//it will be 200 pixels in size.
+		var x = y = 0;
+		var myrand = $("<div>");
+		myrand.html("");
+		$("body").append(myrand);
+		myrand.css({"position": "absolute", "display": "none", "width": width + "px", "height": height + "px", "backgroundColor": "green", "z-index": "9999999"});
+		x = getRandomInt(0, $("#game").width() - width);
+		y = getRandomInt($("#game").offset().top, ($("#game").height() + $("#game").offset().top) - height);
+		myrand.css({"top": y + "px", "left": x + "px"});
+		myrand.fadeIn(5000);
+		myrand.click(function(e) {
+			clearTimeout(randTimer);
+			$(this).remove();
+			/*
+				Possible results:
+					caucus:			+10% of all resources (one time)
+					gridlock:		all resource generating halved for 60 seconds
+					landslide:		8x resource generating for 30 seconds
+					lameduck:		-10% of all resources (one time)
+			*/
+			var results = ["caucus"];//, "gridlock", "landslide", "lameduck"];
+			var weight = [0.25];//, 0.25, 0.25, 0.25];
+			
+			//weighted random from http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
+			
+			var weighed_list = [];
+
+			// Loop over weights
+			for (var i = 0; i < weight.length; i++) {
+				var multiples = weight[i] * 100;
+
+				// Loop over the list of items
+				for (var j = 0; j < multiples; j++) {
+					weighed_list.push(results[i]);
+				}
+			}
+			//var obj = $("#saved").clone();
+			var index = getRandomInt(0, weighed_list.length - 1);
+			var lucky = weighed_list[index];
+			if(lucky === "caucus") {
+				Game.incrementEffort(efforttally * .1);
+				Game.incrementPaperwork(paperworktally * .1);
+				Game.incrementYessir(yessirtally * .1);
+			}
+			else if(lucky === "gridlock") {
+			}
+			else if(lucky === "landslide") {
+			}
+			else if(lucky === "lameduck") {
+				Game.incrementEffort(-efforttally * .1);
+				Game.incrementPaperwork(-paperworktally * .1);
+				Game.incrementYessir(-yessirtally * .1);
+			}
+			randomSpawn();
+		});
+		var randTimer = setTimeout(function() {
+			myrand.fadeOut(5000, function() {
+				$(this).remove();
+				randomSpawn();
+			});
+		}, life);
+	}
+	
+	randomCreate();
+	
+	var randomSpawn = function() {
+		var oneMinute = 1000 * 60;	//Just...just to keep typing down. Yeah.
+		var min = oneMinute * 5;
+		var max = oneMinute * 15;
+		var result = getRandomInt(min, max);
+		setTimeout(randomCreate, result);
+	}
 	
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
