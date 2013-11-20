@@ -1,6 +1,7 @@
 var Game = {};
 
 Game.version = "Version ALPHA";
+Game.currNotes = "";
 
 /*
 	Game.Goal
@@ -219,6 +220,10 @@ Game.Initialize = function() {
 		}
 	});
 	
+	$("#export").click(function() {
+		Game.Export();
+	});
+	
 	var addGoal = function(name, reqObj, unlocks) {
 		goals[goals.length] = new Game.Goal(name, reqObj, unlocks);
 	}
@@ -339,94 +344,12 @@ Game.Initialize = function() {
 			"sell": sell || null
 		};
 	}
-	/*
 	addPowerUp("stranger", {effort: 15, paperwork: 0, yessir: 0}, "Stranger", "+0.1 Effort Per Second", "effortPrimary", function(num) {return {"effort": (0.1 + flags.flag("perfectstrangers") + flags.flag("perfectstrangers2")) * num,"paperwork": 0,"yessir": 0};}, false);
 	addPowerUp("acquaintance", {effort: 100, paperwork: 0, yessir: 0}, "Acquaintance", "+0.5 Effort Per Second", "effortPrimary", function(num) {return {"effort": (0.5 + flags.flag("gettingtoknowyou") + flags.flag("gettingtoknowallaboutyou")) * num,"paperwork": 0,"yessir": 0};}, false);
 	addPowerUp("friend", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "+3 Effort Per Second", "effortPrimary", function(num) {return {"effort": (3 + flags.flag("joey") + flags.flag("chandler")) * num,"paperwork": 0,"yessir": 0};}, false);
 	addPowerUp("bro", {effort: 25437, paperwork: 0, yessir: 0}, "Bro", "+50 Effort Per Second", "effortPrimary", function(num) {return {"effort": (50 + flags.flag("budlight") + flags.flag("collar")) * num,"paperwork": 0,"yessir": 0};}, false);
 	addPowerUp("bestfriend", {effort: 150000, paperwork: 5000, yessir: 0}, "Best Friend", "+300 Effort Per Second", "effortPrimary", function(num) {return {"effort": (300 + flags.flag("pizza") + flags.flag("hideabody")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("bff", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "+111 Effort Per Second", "effortPrimary", function(num) {return {"effort": (111 + flags.flag("idkmbffj") + flags.flag("instantgram")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("personallawyer", {effort: 1000000, paperwork: 675000, yessir: 10000}, "Personal Lawyer", "+9999 Effort Per Second", "effortPrimary", function(num) {return {"effort": (9999 + flags.flag("objection") + flags.flag("takethat")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("sigother", {effort: 11235813, paperwork: 3333360, yessir: 270000}, "Significant Other", "+70000 Effort Per Second", "effortPrimary", function(num) {return {"effort": (70000 + flags.flag("cohabitate") + flags.flag("cosign")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("superpac", {effort: 81000000, paperwork: 7598950, yessir: 999000}, "Super PAC", "+500000 Effort Per Second", "effortPrimary", function(num) {return {"effort": (500000 + flags.flag("babypac") + flags.flag("mspac")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("staples", {effort: 0, paperwork: 15, yessir: 0}, "Staples", "+0.1 Paperwork Per Second", "paperworkPowerUp", function(num) {return {"effort": 0,"paperwork": (0.1 + flags.flag("paperclips") + flags.flag("paperbinders")) * num,"yessir": 0};}, false);
-	addPowerUp("pencil", {effort: 0, paperwork: 100, yessir: 0}, "Pencil", "+0.5 Paperwork Per Second", "paperworkPowerUp", function(num) {return {"effort": 0,"paperwork": (0.5 + flags.flag("sharpenedPencil") + flags.flag("mechanicalpencil")) * num,"yessir": 0};}, false);
-	addPowerUp("pen", {effort: 0, paperwork: 900, yessir: 0}, "Pen", "+3 Paperwork Per Second", "paperworkPowerUp", function(num) {return {"effort": 0,"paperwork": (3 + flags.flag("moreink") + flags.flag("cyberpen")) * num,"yessir": 0};}, false);
-	addPowerUp("typewriter", {effort: 0, paperwork: 25437, yessir: 0}, "Typewriter", "+50 Paperwork Per Second", "paperworkPowerUp", function(num) {return {"effort": 0,"paperwork": (50 + flags.flag("wordprocessor") + flags.flag("talktotext")) * num,"yessir": 0};}, false);
-	addPowerUp("printer", {effort: 540000, paperwork: 150000, yessir: 0}, "Printer", "+300 Paperwork Per Second", "paperworkPowerUp", function(num) {return {"effort": 0,"paperwork": (300 + flags.flag("laserprinter") + flags.flag("threeinone")) * num,"yessir": 0};}, false);
-	addPowerUp("altavista", {effort: 4850000, paperwork: 314159, yessir: 0}, "Email Address", "+111 Paperwork Per Second", "paperworkPowerUp", function(num) {return {"effort": 0,"paperwork": (111 + flags.flag("lycos") + flags.flag("compuserve")) * num,"yessir": 0};}, false);
-	addPowerUp("orphans", {effort: 25600000, paperwork: 1000000, yessir: 80000}, "Flock of orphans with your handwriting", "+9999 Paperwork Per Second", "paperworkPowerUp", function(num) {return {"effort": 0,"paperwork": (9999 + flags.flag("gruel") + flags.flag("posters")) * num,"yessir": 0};}, false);
-	addPowerUp("robots", {effort: 512000000, paperwork: 11235813, yessir: 670000}, "Robots. God damned robots.", "+70000 Paperwork Per Second", "paperworkPowerUp", function(num) {return {"effort": 0,"paperwork": (70000 + flags.flag("laserguns") + flags.flag("sentience")) * num,"yessir": 0};}, false);
-	addPowerUp("tippiecanoe", {effort: 0, paperwork: 0, yessir: 15}, "\"Tippecanoe and Tyler Too!\"", "+0.1 Yes Sir Per Second", "yessirPowerUp", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (0.1 + flags.flag("tyler") + flags.flag("harrison")) * num};}, false);
-	addPowerUp("harry", {effort: 0, paperwork: 0, yessir: 100}, "\"Give 'Em Hell, Harry!\"", "+0.5 Yes Sir Per Second", "yessirPowerUp", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (0.5 + flags.flag("barkley") + flags.flag("truman")) * num};}, false);
-	addPowerUp("ike", {effort: 0, paperwork: 0, yessir: 900}, "\"I Like Ike!\"", "+3 Yes Sir Per Second", "yessirPowerUp", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (3 + flags.flag("nixon") + flags.flag("eisenhower")) * num};}, false);
-	addPowerUp("great", {effort: 0, paperwork: 0, yessir: 25437}, "\"A Time For Greatness\"", "+50 Yes Sir Per Second", "yessirPowerUp", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (50 + flags.flag("johnson") + flags.flag("kennedy")) * num};}, false);
-	addPowerUp("taxes", {effort: 9110000, paperwork: 647000, yessir: 150000}, "\"No New Taxes\"", "+300 Yes Sir Per Second", "yessirPowerUp", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (300 + flags.flag("quayle") + flags.flag("bush")) * num};}, false);
-	addPowerUp("timeforchange", {effort: 44400000, paperwork: 1234567, yessir: 314159}, "\"It's Time To Change America\"", "+111 Yes Sir Per Second", "yessirPowerUp", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (111 + flags.flag("gore") + flags.flag("clinton")) * num};}, false);
-	addPowerUp("change", {effort: 322222222, paperwork: 12345678, yessir: 1000000}, "\"Change\"", "+9999 Yes Sir Per Second", "yessirPowerUp", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (9999 + flags.flag("biden") + flags.flag("obama")) * num};}, false);
-	addPowerUp("handsacrossamerica", {effort: 5000000000, paperwork: 123456789, yessir: 11235813}, "\"Free Sexual Favors For Everyone!\"", "+70000 Yes Sir Per Second", "yessirPowerUp", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (70000 + flags.flag("morelube") + flags.flag("chickenmeanscock")) * num};}, false);
-	addPowerUp("perfectstrangers", {effort: 500, paperwork: 0, yessir: 0}, "Perfect Strangers", "+2 Effort For Every Stranger", "effortSecondary", function(num) { flags.flag("perfectstrangers", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("perfectstrangers", 0);});
-	addPowerUp("perfectstrangers2", {effort: 45000, paperwork: 0, yessir: 0}, "Perfect Strangers Mk. II", "+50 Effort For Every Stranger", "effortSecondary", function(num) { flags.flag("perfectstrangers2", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("perfectstrangers2", 0);});
-	addPowerUp("gettingtoknowyou", {effort: 7600, paperwork: 0, yessir: 0}, "Getting To Know You", "+5 Effort For Every Acquaintance", "effortSecondary", function(num) { flags.flag("gettingtoknowyou", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gettingtoknowyou", 0);});
-	addPowerUp("gettingtoknowallaboutyou", {effort: 620000, paperwork: 0, yessir: 0}, "Getting To Know All About You", "+70 Effort For Every Acquaintance", "effortSecondary", function(num) { flags.flag("gettingtoknowallaboutyou", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gettingtoknowallaboutyou", 0);});
-	addPowerUp("joey", {effort: 50000, paperwork: 0, yessir: 0}, "Joey", "+10 Effort For Every Friend", "effortSecondary", function(num) { flags.flag("joey", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("joey", 0);});
-	addPowerUp("chandler", {effort: 222000, paperwork: 0, yessir: 0}, "Chandler", "+115 Effort For Every Friend", "effortSecondary", function(num) { flags.flag("chandler", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("chandler", 0);});
-	addPowerUp("budlight", {effort: 920000, paperwork: 0, yessir: 0}, "Bud Light", "+115 Effort For Every Bro", "effortSecondary", function(num) { flags.flag("budlight", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("budlight", 0);});
-	addPowerUp("collar", {effort: 3200000, paperwork: 0, yessir: 0}, "Popped Collar", "+420 Effort For Every Bro", "effortSecondary", function(num) { flags.flag("collar", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("collar", 0);});
-	addPowerUp("pizza", {effort: 720000, paperwork: 42000, yessir: 0}, "Pizza", "+500 Effort For Every Best Friend", "effortSecondary", function(num) { flags.flag("pizza", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("pizza", 0);});
-	addPowerUp("hideabody", {effort: 3200000, paperwork: 118000, yessir: 0}, "Hide A Body Maybe?", "+900 Effort For Every Best Friend", "effortSecondary", function(num) { flags.flag("hideabody", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("hideabody", 0);});
-	addPowerUp("idkmbffj", {effort: 1120000, paperwork: 77777, yessir: 0}, "IDK, my BFF Jill?", "+1234 Effort For Every BFF", "effortSecondary", function(num) { flags.flag("idkmbffj", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("idkmbffj", 0);});
-	addPowerUp("instantgram", {effort: 9876543, paperwork: 300000, yessir: 0}, "Instant Gram (That's What The Kids Call It?)", "+5000 Effort For Every BFF", "effortSecondary", function(num) { flags.flag("instantgram", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("instantgram", 0);});
-	addPowerUp("objection", {effort: 4810000, paperwork: 1475000, yessir: 49000}, "OBJECTION!", "+25000 Effort For Every Personal Lawyer", "effortSecondary", function(num) { flags.flag("objection", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("objection", 0);});
-	addPowerUp("takethat", {effort: 10240000, paperwork: 6675000, yessir: 260000}, "TAKE THAT!!", "+50000 Effort For Every Personal Lawyer", "effortSecondary", function(num) { flags.flag("takethat", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("takethat", 0);});
-	addPowerUp("cohabitate", {effort: 21345589, paperwork: 9999990, yessir: 679000}, "Move In Together", "+150000 Effort For Every Significant Other", "effortSecondary", function(num) { flags.flag("cohabitate", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cohabitate", 0);});
-	addPowerUp("cosign", {effort: 144233377, paperwork: 50000000, yessir: 4110000}, "Buy A House!", "+300000 Effort For Every Significant Other", "effortSecondary", function(num) { flags.flag("cosign", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cosign", 0);});
-	addPowerUp("babypac", {effort: 231777551, paperwork: 32000000, yessir: 1241100}, "Baby PAC", "+1750000 Effort For Every Super PAC", "effortSecondary", function(num) { flags.flag("babypac", 1750000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("babypac", 0);});
-	addPowerUp("mspac", {effort: 1557773120, paperwork: 68800000, yessir: 9000000}, "Ms. PAC", "+5000000 Effort For Every Super PAC", "effortSecondary", function(num) { flags.flag("mspac", 5000000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mspac", 0);});
-	addPowerUp("paperclips", {effort: 0, paperwork: 500, yessir: 0}, "Paperclips", "+2 Paperwork For Every Staples", "paperworkPowerUp", function(num) { flags.flag("paperclips", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("paperclips", 0);});
-	addPowerUp("paperbinders", {effort: 0, paperwork: 45000, yessir: 0}, "Paper Binders", "+50 Paperwork For Every Staples", "paperworkPowerUp", function(num) { flags.flag("paperbinders", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("paperbinders", 0);});
-	addPowerUp("sharpenedPencil", {effort: 0, paperwork: 7600, yessir: 0}, "Sharpened Pencil", "+5 Paperwork For Every Pencil", "paperworkPowerUp", function(num) { flags.flag("sharpenedPencil", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("sharpenedPencil", 0);});
-	addPowerUp("mechanicalpencil", {effort: 0, paperwork: 620000, yessir: 0}, "Mechanical Pencil", "+70 Paperwork For Every Pencil", "paperworkPowerUp", function(num) { flags.flag("mechanicalpencil", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mechanicalpencil", 0);});
-	addPowerUp("moreink", {effort: 0, paperwork: 50000, yessir: 0}, "MORE. INK.", "+10 Paperwork For Every Pen", "paperworkPowerUp", function(num) { flags.flag("moreink", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("moreink", 0);});
-	addPowerUp("cyberpen", {effort: 0, paperwork: 222000, yessir: 0}, "Cybernetic Pen", "+115 Paperwork For Every Pen", "paperworkPowerUp", function(num) { flags.flag("cyberpen", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cyberpen", 0);});
-	addPowerUp("wordprocessor", {effort: 0, paperwork: 920000, yessir: 0}, "Word Processor", "+115 Paperwork For Every Typewriter", "paperworkPowerUp", function(num) { flags.flag("wordprocessor", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("wordprocessor", 0);});
-	addPowerUp("talktotext", {effort: 0, paperwork: 3200000, yessir: 0}, "Talk To Text", "+420 Paperwork For Every Typewriter", "paperworkPowerUp", function(num) { flags.flag("talktotext", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("talktotext", 0);});
-	addPowerUp("laserprinter", {effort: 3110000, paperwork: 720000, yessir: 0}, "Laser Printer", "+500 Paperwork For Every Printer", "paperworkPowerUp", function(num) { flags.flag("laserprinter", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("laserprinter", 0);});
-	addPowerUp("threeinone", {effort: 8240000, paperwork: 3200000, yessir: 0}, "Three In One Printer", "+900 Paperwork For Every Printer", "paperworkPowerUp", function(num) { flags.flag("threeinone", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("threeinone", 0);});
-	addPowerUp("lycos", {effort: 5120000, paperwork: 1120000, yessir: 0}, "Lycos", "+1234 Paperwork For Every Email Address", "paperworkPowerUp", function(num) { flags.flag("lycos", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("lycos", 0);});
-	addPowerUp("compuserve", {effort: 42420000, paperwork: 9876543, yessir: 0}, "CompuServe", "+5000 Paperwork For Every Email Address", "paperworkPowerUp", function(num) { flags.flag("compuserve", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("compuserve", 0);});
-	addPowerUp("gruel", {effort: 16140000, paperwork: 4810000, yessir: 721000}, "Bowls Of Gruel", "+25000 Paperwork For Every Flock of orphans with your handwriting", "paperworkPowerUp", function(num) { flags.flag("gruel", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gruel", 0);});
-	addPowerUp("posters", {effort: 616100000, paperwork: 10240000, yessir: 3210000}, "Motivational Posters!", "+50000 Paperwork For Every Flock of orphans with your handwriting", "paperworkPowerUp", function(num) { flags.flag("posters", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("posters", 0);});
-	addPowerUp("laserguns", {effort: 397110000, paperwork: 21345589, yessir: 679000}, "Laser Guns", "+150000 Paperwork For Every Robots. God damned robots.", "paperworkPowerUp", function(num) { flags.flag("laserguns", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("laserguns", 0);});
-	addPowerUp("sentience", {effort: 1337000000, paperwork: 144233377, yessir: 4110000}, "Sentience", "+300000 Paperwork For Every Robots. God damned robots.", "paperworkPowerUp", function(num) { flags.flag("sentience", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("sentience", 0);});
-	addPowerUp("tyler", {effort: 0, paperwork: 0, yessir: 500}, "John Tyler", "+2 Yes Sir For Every \"Tippecanoe and Tyler Too!\"", "yessirPowerUp", function(num) { flags.flag("tyler", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("tyler", 0);});
-	addPowerUp("harrison", {effort: 0, paperwork: 0, yessir: 45000}, "William Henry Harrison", "+50 Yes Sir For Every \"Tippecanoe and Tyler Too!\"", "yessirPowerUp", function(num) { flags.flag("harrison", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("harrison", 0);});
-	addPowerUp("barkley", {effort: 0, paperwork: 0, yessir: 7600}, "Alben W. Barkley", "+5 Yes Sir For Every \"Give 'Em Hell, Harry!\"", "yessirPowerUp", function(num) { flags.flag("barkley", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("barkley", 0);});
-	addPowerUp("truman", {effort: 0, paperwork: 0, yessir: 620000}, "Harry S. Truman", "+70 Yes Sir For Every \"Give 'Em Hell, Harry!\"", "yessirPowerUp", function(num) { flags.flag("truman", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("truman", 0);});
-	addPowerUp("nixon", {effort: 0, paperwork: 0, yessir: 50000}, "Richard Nixon", "+10 Yes Sir For Every \"I Like Ike!\"", "yessirPowerUp", function(num) { flags.flag("nixon", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("nixon", 0);});
-	addPowerUp("eisenhower", {effort: 0, paperwork: 0, yessir: 222000}, "Dwight D. Eisenhower", "+115 Yes Sir For Every \"I Like Ike!\"", "yessirPowerUp", function(num) { flags.flag("eisenhower", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("eisenhower", 0);});
-	addPowerUp("johnson", {effort: 0, paperwork: 0, yessir: 920000}, "Lyndon B. Johnson", "+115 Yes Sir For Every \"A Time For Greatness\"", "yessirPowerUp", function(num) { flags.flag("johnson", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("johnson", 0);});
-	addPowerUp("kennedy", {effort: 0, paperwork: 0, yessir: 3200000}, "John F. Kennedy", "+420 Yes Sir For Every \"A Time For Greatness\"", "yessirPowerUp", function(num) { flags.flag("kennedy", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("kennedy", 0);});
-	addPowerUp("quayle", {effort: 0, paperwork: 0, yessir: 720000}, "Dan Quayle", "+500 Yes Sir For Every \"No New Taxes\"", "yessirPowerUp", function(num) { flags.flag("quayle", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("quayle", 0);});
-	addPowerUp("bush", {effort: 0, paperwork: 0, yessir: 3200000}, "George H. W. Bush", "+900 Yes Sir For Every \"No New Taxes\"", "yessirPowerUp", function(num) { flags.flag("bush", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("bush", 0);});
-	addPowerUp("gore", {effort: 0, paperwork: 0, yessir: 1120000}, "Al Gore", "+1234 Yes Sir For Every \"It's Time To Change America\"", "yessirPowerUp", function(num) { flags.flag("gore", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gore", 0);});
-	addPowerUp("clinton", {effort: 0, paperwork: 0, yessir: 9876543}, "Bill Clinton", "+5000 Yes Sir For Every \"It's Time To Change America\"", "yessirPowerUp", function(num) { flags.flag("clinton", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("clinton", 0);});
-	addPowerUp("biden", {effort: 0, paperwork: 0, yessir: 4810000}, "Joe Biden", "+25000 Yes Sir For Every \"Change\"", "yessirPowerUp", function(num) { flags.flag("biden", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("biden", 0);});
-	addPowerUp("obama", {effort: 0, paperwork: 0, yessir: 10240000}, "Barack Obama", "+50000 Yes Sir For Every \"Change\"", "yessirPowerUp", function(num) { flags.flag("obama", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("obama", 0);});
-	addPowerUp("morelube", {effort: 0, paperwork: 0, yessir: 21345589}, "More Lube", "+150000 Yes Sir For Every \"Free Sexual Favors For Everyone!\"", "yessirPowerUp", function(num) { flags.flag("morelube", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("morelube", 0);});
-	addPowerUp("chickenmeanscock", {effort: 0, paperwork: 0, yessir: 144233377}, "A \"Chicken\" In Every \"Pot\"", "+300000 Yes Sir For Every \"Free Sexual Favors For Everyone!\"", "yessirPowerUp", function(num) { flags.flag("chickenmeanscock", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("chickenmeanscock", 0);});
-	addPowerUp("grindstone", {effort: 1100, paperwork: 0, yessir: 0}, "Nose To The Grindstone", "+5 Effort For Every Click", "effortTertiary", function(num) { flags.flag("grindstone", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("grindstone", 0);});
-	addPowerUp("back", {effort: 21000, paperwork: 0, yessir: 0}, "Put Your Back Into It", "+75 Effort For Every Click", "effortTertiary", function(num) { flags.flag("back", 75); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("back", 0);});
-	addPowerUp("pain", {effort: 480000, paperwork: 0, yessir: 0}, "No Pain, No Gain", "+500 Effort For Every Click", "effortTertiary", function(num) { flags.flag("pain", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("pain", 0);});
-	addPowerUp("mile", {effort: 3456000, paperwork: 0, yessir: 0}, "Go The Extra Mile", "+2500 Effort For Every Click", "effortTertiary", function(num) { flags.flag("mile", 2500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mile", 0);});
-	addPowerUp("believe", {effort: 9999990, paperwork: 0, yessir: 0}, "Believe In Yourself", "+30000 Effort For Every Click", "effortTertiary", function(num) { flags.flag("believe", 30000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("believe", 0);});
-	*/
-	addPowerUp("stranger", {effort: 15, paperwork: 0, yessir: 0}, "Stranger", "+0.1 Effort Per Second", "effortPrimary", function(num) {return {"effort": (0.1 + flags.flag("perfectstrangers") + flags.flag("perfectstrangers2")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("acquaintance", {effort: 100, paperwork: 0, yessir: 0}, "Acquaintance", "+0.5 Effort Per Second", "effortPrimary", function(num) {return {"effort": (0.5 + flags.flag("gettingtoknowyou") + flags.flag("gettingtoknowallaboutyou")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("friend", {effort: 900, paperwork: 0, yessir: 0}, "Friend", "+3 Effort Per Second", "effortPrimary", function(num) {return {"effort": (3 + flags.flag("joey") + flags.flag("chandler")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("bro", {effort: 25437, paperwork: 0, yessir: 0}, "Bro", "+50 Effort Per Second", "effortPrimary", function(num) {return {"effort": (50 + flags.flag("budlight") + flags.flag("collar")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("bestfriend", {effort: 150000, paperwork: 5000, yessir: 0}, "Best Friend", "+300 Effort Per Second", "effortPrimary", function(num) {return {"effort": (300 + flags.flag("pizza") + flags.flag("hideabody")) * num,"paperwork": 0,"yessir": 0};}, false);
-	addPowerUp("bff", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "+111 Effort Per Second", "effortPrimary", function(num) {return {"effort": (111 + flags.flag("idkmbffj") + flags.flag("instantgram")) * num,"paperwork": 0,"yessir": 0};}, false);
+	addPowerUp("bff", {effort: 314159, paperwork: 133700, yessir: 0}, "BFF", "+2400 Effort Per Second", "effortPrimary", function(num) {return {"effort": (2400 + flags.flag("idkmbffj") + flags.flag("instantgram")) * num,"paperwork": 0,"yessir": 0};}, false);
 	addPowerUp("personallawyer", {effort: 1000000, paperwork: 675000, yessir: 10000}, "Personal Lawyer", "+9999 Effort Per Second", "effortPrimary", function(num) {return {"effort": (9999 + flags.flag("objection") + flags.flag("takethat")) * num,"paperwork": 0,"yessir": 0};}, false);
 	addPowerUp("sigother", {effort: 11235813, paperwork: 3333360, yessir: 270000}, "Significant Other", "+70000 Effort Per Second", "effortPrimary", function(num) {return {"effort": (70000 + flags.flag("cohabitate") + flags.flag("cosign")) * num,"paperwork": 0,"yessir": 0};}, false);
 	addPowerUp("superpac", {effort: 81000000, paperwork: 7598950, yessir: 999000}, "Super PAC", "+500000 Effort Per Second", "effortPrimary", function(num) {return {"effort": (500000 + flags.flag("babypac") + flags.flag("mspac")) * num,"paperwork": 0,"yessir": 0};}, false);
@@ -435,7 +358,7 @@ Game.Initialize = function() {
 	addPowerUp("pen", {effort: 0, paperwork: 900, yessir: 0}, "Pen", "+3 Paperwork Per Second", "paperworkPrimary", function(num) {return {"effort": 0,"paperwork": (3 + flags.flag("moreink") + flags.flag("cyberpen")) * num,"yessir": 0};}, false);
 	addPowerUp("typewriter", {effort: 0, paperwork: 25437, yessir: 0}, "Typewriter", "+50 Paperwork Per Second", "paperworkPrimary", function(num) {return {"effort": 0,"paperwork": (50 + flags.flag("wordprocessor") + flags.flag("talktotext")) * num,"yessir": 0};}, false);
 	addPowerUp("printer", {effort: 540000, paperwork: 150000, yessir: 0}, "Printer", "+300 Paperwork Per Second", "paperworkPrimary", function(num) {return {"effort": 0,"paperwork": (300 + flags.flag("laserprinter") + flags.flag("threeinone")) * num,"yessir": 0};}, false);
-	addPowerUp("altavista", {effort: 4850000, paperwork: 314159, yessir: 0}, "Email Address", "+111 Paperwork Per Second", "paperworkPrimary", function(num) {return {"effort": 0,"paperwork": (111 + flags.flag("lycos") + flags.flag("compuserve")) * num,"yessir": 0};}, false);
+	addPowerUp("altavista", {effort: 4850000, paperwork: 314159, yessir: 0}, "Email Address", "+2400 Paperwork Per Second", "paperworkPrimary", function(num) {return {"effort": 0,"paperwork": (2400 + flags.flag("lycos") + flags.flag("compuserve")) * num,"yessir": 0};}, false);
 	addPowerUp("orphans", {effort: 25600000, paperwork: 1000000, yessir: 80000}, "Flock of orphans with your handwriting", "+9999 Paperwork Per Second", "paperworkPrimary", function(num) {return {"effort": 0,"paperwork": (9999 + flags.flag("gruel") + flags.flag("posters")) * num,"yessir": 0};}, false);
 	addPowerUp("robots", {effort: 512000000, paperwork: 11235813, yessir: 670000}, "Robots. God damned robots.", "+70000 Paperwork Per Second", "paperworkPrimary", function(num) {return {"effort": 0,"paperwork": (70000 + flags.flag("laserguns") + flags.flag("sentience")) * num,"yessir": 0};}, false);
 	addPowerUp("tippiecanoe", {effort: 0, paperwork: 0, yessir: 15}, "\"Tippecanoe and Tyler Too!\"", "+0.1 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (0.1 + flags.flag("tyler") + flags.flag("harrison")) * num};}, false);
@@ -443,7 +366,7 @@ Game.Initialize = function() {
 	addPowerUp("ike", {effort: 0, paperwork: 0, yessir: 900}, "\"I Like Ike!\"", "+3 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (3 + flags.flag("nixon") + flags.flag("eisenhower")) * num};}, false);
 	addPowerUp("great", {effort: 0, paperwork: 0, yessir: 25437}, "\"A Time For Greatness\"", "+50 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (50 + flags.flag("johnson") + flags.flag("kennedy")) * num};}, false);
 	addPowerUp("taxes", {effort: 9110000, paperwork: 647000, yessir: 150000}, "\"No New Taxes\"", "+300 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (300 + flags.flag("quayle") + flags.flag("bush")) * num};}, false);
-	addPowerUp("timeforchange", {effort: 44400000, paperwork: 1234567, yessir: 314159}, "\"It's Time To Change America\"", "+111 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (111 + flags.flag("gore") + flags.flag("clinton")) * num};}, false);
+	addPowerUp("timeforchange", {effort: 44400000, paperwork: 1234567, yessir: 314159}, "\"It's Time To Change America\"", "+2400 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (2400 + flags.flag("gore") + flags.flag("clinton")) * num};}, false);
 	addPowerUp("change", {effort: 322222222, paperwork: 12345678, yessir: 1000000}, "\"Change\"", "+9999 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (9999 + flags.flag("biden") + flags.flag("obama")) * num};}, false);
 	addPowerUp("handsacrossamerica", {effort: 5000000000, paperwork: 123456789, yessir: 11235813}, "\"Free Sexual Favors For Everyone!\"", "+70000 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (70000 + flags.flag("morelube") + flags.flag("chickenmeanscock")) * num};}, false);
 	addPowerUp("perfectstrangers", {effort: 500, paperwork: 0, yessir: 0}, "Perfect Strangers", "+2 Effort For Every Stranger", "effortSecondary", function(num) { flags.flag("perfectstrangers", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("perfectstrangers", 0);});
@@ -706,6 +629,20 @@ Game.Initialize = function() {
 		}
 	}
 	
+	Game.Export = function() {
+		try {
+			var s = "";
+			
+			for(var i in localStorage) {
+				s += i + "{;}" + localStorage[i] + "{!}";
+			}
+			
+			prompt("Please copy and paste the below text", s);
+		}
+		catch(e) {
+		}
+	}
+	
 	Game.Save = function() {
 		/*
 			OK, let's declare the variables we NEED to save:
@@ -729,6 +666,8 @@ Game.Initialize = function() {
 			localStorage["totalYessirScrolls"] = totalYessirScrolls;
 			localStorage["startDate"] = startDate;
 			
+			
+			
 			$("#saved").fadeIn(1000).delay(5000).fadeOut(1000);
 		}
 		catch(e) {
@@ -749,6 +688,7 @@ Game.Initialize = function() {
 		flags.resetAll();
 		startDate = (new Date()).getTime()
 		Game.recalculate();
+		Game.resizer();
 		$("#effortdescribe").show();
 		$("#paperworkdescribe").show();
 		$("#yessirdescribe").show();
@@ -868,6 +808,25 @@ Game.Initialize = function() {
 		Game.resizer();
 	});
 	
+	setInterval(function() {	//check for updates every 30 minutes!
+		$.ajax("status.html").done(function(data) {
+			if(Game.currNotes != data) {
+				var myAlert = $("<div>");
+				$("body").append(myAlert);
+				myAlert.html("A change has gone live for GetElected! Please save and refresh.<br /><br />Yes this message is ugly right now :(");
+				myAlert.css("width", "40%");
+				myAlert.css("height", "20%");
+				myAlert.css("z-index", "9999");
+				myAlert.css("backgroundColor", "green");
+				myAlert.css({"position": "absolute", "top": "50%", "left": "50%", "margin": "-" + (myAlert.height() / 2) + "px 0 0 -" +(myAlert.width() / 2) + "px" });
+				myAlert.fadeIn(1000).delay(15000).fadeOut(1000).delay(50);
+			}
+		});
+	}, 1000 * 60 * 30);
+	
+	$.ajax("status.html").done(function(data) {
+		Game.currNotes = data;
+	});
 	
 	/*setInterval(function() {	//JUST to make sure that effort is calculating correctly, as there are worries that it is not correct.
 		console.log("Last Second: " + lastEffort + "      Current Second: " + efforttally + "     Difference: " + (efforttally - lastEffort));
@@ -922,12 +881,26 @@ Game.buildTabs = function() {
 }
 
 Game.resizer = function() {
-	var lists = ["#effortPrimary","#effortSecondary","#effortTertiary",
+	/*var lists = ["#effortPrimary","#effortSecondary","#effortTertiary",
 		"#paperworkPrimary","#paperworkSecondary","#paperworkTertiary",
 		"#yessirPrimary","#yessirSecondary","#yessirTertiary"].join(",");
 	$(lists).each(function() {
 		$(this).css("height", ($("#effortPrimary").parent().height() - $("#effortPrimary").offset().top + $("#navbar").height()) + "px");
 	});
+	*/
+	var lists = {
+		"#effortTarget": ["#effortPrimary","#effortSecondary","#effortTertiary"],
+		"#paperworkTarget": ["#paperworkPrimary","#paperworkSecondary","#paperworkTertiary"],
+		"#yessirTarget": ["#yessirPrimary","#yessirSecondary","#yessirTertiary"],
+		"#pastGoalsTarget": ["#pastGoals"]
+	}
+	
+	for(var i in lists) {
+		var currList = lists[i].join(",");
+		$(currList).each(function() {
+			$(this).css("height", ($(i).parent().height() - $(i).offset().top + $("#navbar").height()) + "px");
+		});
+	}
 	//$("#effortSecondary").css("height", ($("#effortPrimary").parent().height() - $("#effortPrimary").offset().top) + "px");
 }
 
