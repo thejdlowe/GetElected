@@ -180,6 +180,16 @@ pre {
         display: none;
 }
 
+.random {
+	position: absolute;
+	display: none;
+	height: 200px;
+	width: 200px;
+	background-image: url("../images/ballot.low.png");
+	z-index: 99999999;
+	cursor: pointer;
+}
+
 /*
 #efforter {
         -webkit-border-radius: 999px;
