@@ -104,6 +104,10 @@ pre {
         width: 100%;
 }
 
+#stats {
+	overflow: auto;
+}
+
 #stats, #update {
         display: none;
 }
