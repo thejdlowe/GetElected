@@ -12,7 +12,6 @@ Feel free to copy and alter this code to your own liking, but please do not re-h
 
 TODO:
 	* Buying/Selling Power Ups needs to be more obvious to the player
-	* Tertiary power ups needed. JESUS they're needed.
 	* BALANCE BALANCE BALANCE
 	* Distribute Powerups appropriately
 	* Updates
@@ -34,6 +33,7 @@ TODO:
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="scripts/funcs.js"></script>
 <script src="scripts/game.js"></script>
+<script src="scripts/base64.js"></script>
 <script src="scripts/paperwork.js"></script>
 <script src="scripts/jquery.animate-shadow-min.js"></script>
 
@@ -51,10 +51,10 @@ $(document).ready(Game.preLoad);
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 <div id="navbar">
-ALPHA GetElected!&copy; - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a href="https://github.com/jdllama/GetElected" target="_blank">Github</a>
+GetElected!&copy; <span id="fps"></span> - <a href="javascript:void(0)">J.D. Lowe</a> 2013 | <a href="https://github.com/jdllama/GetElected" target="_blank">Github</a>
  | <a href="https://twitter.com/GetElectedGame" target="_blank">Twitter</a>
  | <div class="fb-like" data-href="http://www.facebook.com/getelectedgame" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
-<span class="tabs" style="position: absolute;top:0px;right:5px;"><a href="#game">Game</a> | <a href="#stats">Stats</a> | <a href="#update">Recent Updates</a>
+<span class="tabs" style="position: absolute;top:0px;right:5px;"><a href="#game">Game</a> | <a href="#stats">Save/Load/Stats</a>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
@@ -173,9 +173,6 @@ Loading
 	
 	<div id="menu">
 		<div id="ticker">TICKER GOES HERE</div>
-		<div style="position:absolute;left:0px;bottom:0px;"><button id="save">Manual Save</button>&nbsp;&nbsp;&nbsp;<button id="reset">Reset Game</button></div>
-		<div id="fps" style="position:absolute;bottom:0px;right:0px;"></div><!--Initially for fps checking; screw it! We're using it for the current version!" -->
-		</div>
 	</div>
 </div>
 <div id="stats">
@@ -187,22 +184,15 @@ Total Effort Clicks: <span id="totalEffortClicks"></span><br />
 Total Paperwork Wiggles: <span id="totalPaperworkWiggles"></span><br />
 Total Yes Sir! Scrolls: <span id="totalYessirScrolls"></span><br />
 <br />
-<button id="export">Export Save</button>
+<button id="import">Import Save</button><br />
+<button id="export">Export Save</button><br />
+<button id="save">Manual Save</button><br />
+<button id="reset">Reset Game</button>
 <br /><br />
 Past Goals:
 <span id="pastGoalsTarget"></span>
 <ol id="pastGoals">
 </ol>
-</div>
-<div id="update">
-Recent Updates:
-<br />
-<ol>
-<li>11/19/2013 8:31PM EST - Export Save functionality added</li>
-<li>11/18/2013 2:00PM EST - Power ups divided into Primary, Secondary, and Tertiary levels</li>
-</ol>
-<a class="twitter-timeline" href="https://twitter.com/GetElectedGame" data-widget-id="400793354947940352">Tweets by @GetElectedGame</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </div>
 <!-- Cloners! -->
 <div id="effortclone" style="z-index:50">

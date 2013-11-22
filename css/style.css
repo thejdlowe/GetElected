@@ -30,7 +30,7 @@ html,body {
 li {
         border: 1px solid #696;
         width:98%;
-        padding: 20px 0;
+        padding: 16px 0;
         text-align: center;
         -webkit-border-radius: 8px;
         -moz-border-radius: 8px;
@@ -225,7 +225,6 @@ pre {
         -moz-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
         box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
 
-
         text-align: center;
         height:180px;
         width: 180px;
@@ -241,7 +240,7 @@ pre {
         
         text-shadow: -1px 0 black, 0 1px black,1px 0 black, 0 -1px black;
 		
-	-webkit-touch-callout: none;
+		-webkit-touch-callout: none;
         -webkit-user-select: none;
         -khtml-user-select: none;
         -moz-user-select: -moz-none;
@@ -358,4 +357,13 @@ background-position: 0px -400px;
 	-moz-box-shadow: #666 0px 2px 3px;
 	box-shadow: #666 0px 2px 3px;
 	display: none;
+}
+
+.canPurchase {
+	cursor: pointer;
+	opacity: 1.0;
+}
+
+.cannotPurchase {
+	opacity: 0.4;
 }

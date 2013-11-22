@@ -1,6 +1,6 @@
 var Game = {};
 
-Game.version = "Version ALPHA";
+Game.version = "v. ALPHA";
 Game.currNotes = "";
 
 /*
@@ -24,6 +24,7 @@ Game.Initialize = function() {
 	var totalPaperworkWiggles = 0;
 	var totalYessirScrolls = 0;
 	var startDate = 0;
+	var randSpawnTimer = null;
 	
 	var autogoal = false;
 
@@ -153,6 +154,7 @@ Game.Initialize = function() {
 		obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
 			$(this).remove();
 		});
+		Game.Draw();
 	});
 	
 	$("#efforter").mousedown(function(e) {
@@ -182,6 +184,8 @@ Game.Initialize = function() {
 				$(this).remove();
 			});
 		}
+		
+		Game.Draw();
 	});
 	
 	$("#yessirer").scroll( function(e) {
@@ -217,6 +221,7 @@ Game.Initialize = function() {
 					$(this).addClass("down");
 				}
 			}
+			Game.Draw();
 		}
 		$(this).scrollTop(scrollerBase);
 	});
@@ -237,7 +242,12 @@ Game.Initialize = function() {
 	});
 	
 	$("#export").click(function() {
+		Game.Save();
 		Game.Export();
+	});
+	
+	$("#import").click(function() {
+		Game.Import();
 	});
 	
 	var addGoal = function(name, reqObj, unlocks) {
@@ -250,6 +260,119 @@ Game.Initialize = function() {
 		this.unlocks = unlocks;
 		this.unlocks = unlocks;
 		return this;
+	}
+	
+	var randomCreate = function(pre) {	//if it gets pre passed to it, then it's not random
+		clearTimeout(randSpawnTimer);	//JUUUUST in case.
+		var life = 1000 * 15;		//Life will last fifteen seconds. SO MACABRE.
+		var width = height = 200;	//it will be 200 pixels in size.
+		var x = y = 0;
+		var myrand = $("<div>");
+		myrand.addClass("random");
+		$("body").append(myrand);
+		
+		x = getRandomInt(0, $("#game").width() - width);
+		y = getRandomInt($("#game").offset().top, ($("#game").height() + $("#game").offset().top) - height);
+		myrand.css({"top": y + "px", "left": x + "px"});
+		myrand.fadeIn(5000);
+		
+		pre = pre || "";
+		
+		myrand.click(function(e) {
+			clearTimeout(randTimer);
+			$(this).remove();
+			if(pre === "firstone") {
+				flags.flag("multiplier", 2);
+				Game.recalculate();
+				setTimeout(function() {
+					flags.flag("multiplier", 1);
+					Game.recalculate();
+				}, 1000 * 60);
+				html = "First One's Free: Resource generation 2x for 60 seconds";
+			}
+			else {
+				/*
+					Possible results:
+						caucus:			+10% of all resources (one time)
+						gridlock:		all resource generating halved for 60 seconds
+						landslide:		8x resource generating for 30 seconds
+						lameduck:		-10% of all resources (one time)
+				*/
+				var results = ["caucus", "gridlock", "landslide", "lameduck"];
+				var weight = [0.50, 0.05, 0.05, 0.10];
+				
+				//weighted random from http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
+				
+				var weighed_list = [];
+
+				// Loop over weights
+				for (var i = 0; i < weight.length; i++) {
+					var multiples = weight[i] * 100;
+
+					// Loop over the list of items
+					for (var j = 0; j < multiples; j++) {
+						weighed_list.push(results[i]);
+					}
+				}
+				var index = getRandomInt(0, weighed_list.length - 1);
+				var lucky = weighed_list[index];
+				var html = "";
+				if(lucky === "caucus") {
+					Game.incrementEffort(efforttally * .1);
+					Game.incrementPaperwork(paperworktally * .1);
+					Game.incrementYessir(yessirtally * .1);
+					html = "Caucus: +10% all resources";
+				}
+				else if(lucky === "gridlock") {
+					flags.flag("multiplier", 0.5);
+					Game.recalculate();
+					setTimeout(function() {
+						flags.flag("multiplier", 1);
+						Game.recalculate();
+					}, 1000 * 60);
+					html = "Gridlock: Resource generation halved for one minute";
+				}
+				else if(lucky === "landslide") {
+					flags.flag("multiplier", 8);
+					Game.recalculate();
+					setTimeout(function() {
+						flags.flag("multiplier", 1);
+						Game.recalculate();
+					}, 1000 * 30);
+					html = "Landslide: Resource generation 8x for 30 seconds";
+				}
+				else if(lucky === "lameduck") {
+					Game.incrementEffort(-efforttally * .1);
+					Game.incrementPaperwork(-paperworktally * .1);
+					Game.incrementYessir(-yessirtally * .1);
+					html = "Lame Duck: -10% all resources";
+				}
+			}
+			var obj = $("#saved").clone();
+			obj.html(html);
+			$("body").append(obj);
+			obj.css({"display": "none", "position": "absolute", "z-index": "66669999", "bottom": (40 + obj.height()) + "px", "left": "50%", "margin": "0 0 0 -" + (obj.width() / 2) + "px"});
+			obj.fadeIn(1000).delay(5000);
+			obj.fadeOut(1000, function() {
+				$(this).remove();
+			});
+			randomSpawn();
+		});
+		var randTimer = setTimeout(function() {
+			myrand.fadeOut(5000, function() {
+				$(this).remove();
+				randomSpawn();
+			});
+		}, life);
+	}
+	
+	var randomSpawn = function() {
+		var oneMinute = 1000 * 60;	//Just...just to keep typing down. Yeah.
+		var min = oneMinute * 5;
+		var max = oneMinute * 15;
+		var result = getRandomInt(min, max);
+		console.log("Next random spawn in " + result + "ms. You're welcome.");
+		randSpawnTimer = setTimeout(randomCreate, result);
 	}
 	
 	var ticker = ["Eventually, something clever goes here.", "Something witty goes here, like, all British-humour-like.", "Man, I hope this is funny."];
@@ -387,63 +510,66 @@ Game.Initialize = function() {
 	addPowerUp("timeforchange", {effort: 44400000, paperwork: 1234567, yessir: 314159}, "\"It's Time To Change America\"", "+2400 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (2400 + flags.flag("gore") + flags.flag("clinton")) * num};}, false);
 	addPowerUp("change", {effort: 322222222, paperwork: 12345678, yessir: 1000000}, "\"Change\"", "+9999 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (9999 + flags.flag("biden") + flags.flag("obama")) * num};}, false);
 	addPowerUp("handsacrossamerica", {effort: 5000000000, paperwork: 123456789, yessir: 11235813}, "\"Free Sexual Favors For Everyone!\"", "+70000 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (70000 + flags.flag("morelube") + flags.flag("chickenmeanscock")) * num};}, false);
-	addPowerUp("perfectstrangers", {effort: 500, paperwork: 0, yessir: 0}, "Perfect Strangers", "+2 Effort For Every Stranger", "effortSecondary", function(num) { flags.flag("perfectstrangers", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("perfectstrangers", 0);});
-	addPowerUp("perfectstrangers2", {effort: 45000, paperwork: 0, yessir: 0}, "Perfect Strangers Mk. II", "+50 Effort For Every Stranger", "effortSecondary", function(num) { flags.flag("perfectstrangers2", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("perfectstrangers2", 0);});
-	addPowerUp("gettingtoknowyou", {effort: 7600, paperwork: 0, yessir: 0}, "Getting To Know You", "+5 Effort For Every Acquaintance", "effortSecondary", function(num) { flags.flag("gettingtoknowyou", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gettingtoknowyou", 0);});
-	addPowerUp("gettingtoknowallaboutyou", {effort: 620000, paperwork: 0, yessir: 0}, "Getting To Know All About You", "+70 Effort For Every Acquaintance", "effortSecondary", function(num) { flags.flag("gettingtoknowallaboutyou", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gettingtoknowallaboutyou", 0);});
-	addPowerUp("joey", {effort: 50000, paperwork: 0, yessir: 0}, "Joey", "+10 Effort For Every Friend", "effortSecondary", function(num) { flags.flag("joey", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("joey", 0);});
-	addPowerUp("chandler", {effort: 222000, paperwork: 0, yessir: 0}, "Chandler", "+115 Effort For Every Friend", "effortSecondary", function(num) { flags.flag("chandler", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("chandler", 0);});
-	addPowerUp("budlight", {effort: 920000, paperwork: 0, yessir: 0}, "Bud Light", "+115 Effort For Every Bro", "effortSecondary", function(num) { flags.flag("budlight", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("budlight", 0);});
-	addPowerUp("collar", {effort: 3200000, paperwork: 0, yessir: 0}, "Popped Collar", "+420 Effort For Every Bro", "effortSecondary", function(num) { flags.flag("collar", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("collar", 0);});
-	addPowerUp("pizza", {effort: 720000, paperwork: 42000, yessir: 0}, "Pizza", "+500 Effort For Every Best Friend", "effortSecondary", function(num) { flags.flag("pizza", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("pizza", 0);});
-	addPowerUp("hideabody", {effort: 3200000, paperwork: 118000, yessir: 0}, "Hide A Body Maybe?", "+900 Effort For Every Best Friend", "effortSecondary", function(num) { flags.flag("hideabody", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("hideabody", 0);});
-	addPowerUp("idkmbffj", {effort: 1120000, paperwork: 77777, yessir: 0}, "IDK, my BFF Jill?", "+1234 Effort For Every BFF", "effortSecondary", function(num) { flags.flag("idkmbffj", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("idkmbffj", 0);});
-	addPowerUp("instantgram", {effort: 9876543, paperwork: 300000, yessir: 0}, "Instant Gram (That's What The Kids Call It?)", "+5000 Effort For Every BFF", "effortSecondary", function(num) { flags.flag("instantgram", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("instantgram", 0);});
-	addPowerUp("objection", {effort: 4810000, paperwork: 1475000, yessir: 49000}, "OBJECTION!", "+25000 Effort For Every Personal Lawyer", "effortSecondary", function(num) { flags.flag("objection", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("objection", 0);});
-	addPowerUp("takethat", {effort: 10240000, paperwork: 6675000, yessir: 260000}, "TAKE THAT!!", "+50000 Effort For Every Personal Lawyer", "effortSecondary", function(num) { flags.flag("takethat", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("takethat", 0);});
-	addPowerUp("cohabitate", {effort: 21345589, paperwork: 9999990, yessir: 679000}, "Move In Together", "+150000 Effort For Every Significant Other", "effortSecondary", function(num) { flags.flag("cohabitate", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cohabitate", 0);});
-	addPowerUp("cosign", {effort: 144233377, paperwork: 50000000, yessir: 4110000}, "Buy A House!", "+300000 Effort For Every Significant Other", "effortSecondary", function(num) { flags.flag("cosign", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cosign", 0);});
-	addPowerUp("babypac", {effort: 231777551, paperwork: 32000000, yessir: 1241100}, "Baby PAC", "+1750000 Effort For Every Super PAC", "effortSecondary", function(num) { flags.flag("babypac", 1750000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("babypac", 0);});
-	addPowerUp("mspac", {effort: 1557773120, paperwork: 68800000, yessir: 9000000}, "Ms. PAC", "+5000000 Effort For Every Super PAC", "effortSecondary", function(num) { flags.flag("mspac", 5000000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mspac", 0);});
-	addPowerUp("paperclips", {effort: 0, paperwork: 500, yessir: 0}, "Paperclips", "+2 Paperwork For Every Staples", "paperworkSecondary", function(num) { flags.flag("paperclips", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("paperclips", 0);});
-	addPowerUp("paperbinders", {effort: 0, paperwork: 45000, yessir: 0}, "Paper Binders", "+50 Paperwork For Every Staples", "paperworkSecondary", function(num) { flags.flag("paperbinders", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("paperbinders", 0);});
-	addPowerUp("sharpenedPencil", {effort: 0, paperwork: 7600, yessir: 0}, "Sharpened Pencil", "+5 Paperwork For Every Pencil", "paperworkSecondary", function(num) { flags.flag("sharpenedPencil", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("sharpenedPencil", 0);});
-	addPowerUp("mechanicalpencil", {effort: 0, paperwork: 620000, yessir: 0}, "Mechanical Pencil", "+70 Paperwork For Every Pencil", "paperworkSecondary", function(num) { flags.flag("mechanicalpencil", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mechanicalpencil", 0);});
-	addPowerUp("moreink", {effort: 0, paperwork: 50000, yessir: 0}, "MORE. INK.", "+10 Paperwork For Every Pen", "paperworkSecondary", function(num) { flags.flag("moreink", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("moreink", 0);});
-	addPowerUp("cyberpen", {effort: 0, paperwork: 222000, yessir: 0}, "Cybernetic Pen", "+115 Paperwork For Every Pen", "paperworkSecondary", function(num) { flags.flag("cyberpen", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cyberpen", 0);});
-	addPowerUp("wordprocessor", {effort: 0, paperwork: 920000, yessir: 0}, "Word Processor", "+115 Paperwork For Every Typewriter", "paperworkSecondary", function(num) { flags.flag("wordprocessor", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("wordprocessor", 0);});
-	addPowerUp("talktotext", {effort: 0, paperwork: 3200000, yessir: 0}, "Talk To Text", "+420 Paperwork For Every Typewriter", "paperworkSecondary", function(num) { flags.flag("talktotext", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("talktotext", 0);});
-	addPowerUp("laserprinter", {effort: 3110000, paperwork: 720000, yessir: 0}, "Laser Printer", "+500 Paperwork For Every Printer", "paperworkSecondary", function(num) { flags.flag("laserprinter", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("laserprinter", 0);});
-	addPowerUp("threeinone", {effort: 8240000, paperwork: 3200000, yessir: 0}, "Three In One Printer", "+900 Paperwork For Every Printer", "paperworkSecondary", function(num) { flags.flag("threeinone", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("threeinone", 0);});
-	addPowerUp("lycos", {effort: 5120000, paperwork: 1120000, yessir: 0}, "Lycos", "+1234 Paperwork For Every Email Address", "paperworkSecondary", function(num) { flags.flag("lycos", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("lycos", 0);});
-	addPowerUp("compuserve", {effort: 42420000, paperwork: 9876543, yessir: 0}, "CompuServe", "+5000 Paperwork For Every Email Address", "paperworkSecondary", function(num) { flags.flag("compuserve", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("compuserve", 0);});
-	addPowerUp("gruel", {effort: 16140000, paperwork: 4810000, yessir: 721000}, "Bowls Of Gruel", "+25000 Paperwork For Every Flock of orphans with your handwriting", "paperworkSecondary", function(num) { flags.flag("gruel", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gruel", 0);});
-	addPowerUp("posters", {effort: 616100000, paperwork: 10240000, yessir: 3210000}, "Motivational Posters!", "+50000 Paperwork For Every Flock of orphans with your handwriting", "paperworkSecondary", function(num) { flags.flag("posters", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("posters", 0);});
-	addPowerUp("laserguns", {effort: 397110000, paperwork: 21345589, yessir: 679000}, "Laser Guns", "+150000 Paperwork For Every Robots. God damned robots.", "paperworkSecondary", function(num) { flags.flag("laserguns", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("laserguns", 0);});
-	addPowerUp("sentience", {effort: 1337000000, paperwork: 144233377, yessir: 4110000}, "Sentience", "+300000 Paperwork For Every Robots. God damned robots.", "paperworkSecondary", function(num) { flags.flag("sentience", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("sentience", 0);});
-	addPowerUp("matrix", {effort: 794220000, paperwork: 64036767, yessir: 2716000}, "Matrix of...Eh.", "+1750000 Paperwork For Every Living planet with amazing handwriting", "paperworkSecondary", function(num) { flags.flag("matrix", 1750000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("matrix", 0);});
-	addPowerUp("disc", {effort: 1588440000, paperwork: 177407054, yessir: 5432000}, "Silver Disc", "+5000000 Paperwork For Every Living planet with amazing handwriting", "paperworkSecondary", function(num) { flags.flag("disc", 5000000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("disc", 0);});
-	addPowerUp("tyler", {effort: 0, paperwork: 0, yessir: 500}, "John Tyler", "+2 Yes Sir For Every \"Tippecanoe and Tyler Too!\"", "yessirSecondary", function(num) { flags.flag("tyler", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("tyler", 0);});
-	addPowerUp("harrison", {effort: 0, paperwork: 0, yessir: 45000}, "William Henry Harrison", "+50 Yes Sir For Every \"Tippecanoe and Tyler Too!\"", "yessirSecondary", function(num) { flags.flag("harrison", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("harrison", 0);});
-	addPowerUp("barkley", {effort: 0, paperwork: 0, yessir: 7600}, "Alben W. Barkley", "+5 Yes Sir For Every \"Give 'Em Hell, Harry!\"", "yessirSecondary", function(num) { flags.flag("barkley", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("barkley", 0);});
-	addPowerUp("truman", {effort: 0, paperwork: 0, yessir: 620000}, "Harry S. Truman", "+70 Yes Sir For Every \"Give 'Em Hell, Harry!\"", "yessirSecondary", function(num) { flags.flag("truman", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("truman", 0);});
-	addPowerUp("nixon", {effort: 0, paperwork: 0, yessir: 50000}, "Richard Nixon", "+10 Yes Sir For Every \"I Like Ike!\"", "yessirSecondary", function(num) { flags.flag("nixon", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("nixon", 0);});
-	addPowerUp("eisenhower", {effort: 0, paperwork: 0, yessir: 222000}, "Dwight D. Eisenhower", "+115 Yes Sir For Every \"I Like Ike!\"", "yessirSecondary", function(num) { flags.flag("eisenhower", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("eisenhower", 0);});
-	addPowerUp("johnson", {effort: 0, paperwork: 0, yessir: 920000}, "Lyndon B. Johnson", "+115 Yes Sir For Every \"A Time For Greatness\"", "yessirSecondary", function(num) { flags.flag("johnson", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("johnson", 0);});
-	addPowerUp("kennedy", {effort: 0, paperwork: 0, yessir: 3200000}, "John F. Kennedy", "+420 Yes Sir For Every \"A Time For Greatness\"", "yessirSecondary", function(num) { flags.flag("kennedy", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("kennedy", 0);});
-	addPowerUp("quayle", {effort: 0, paperwork: 0, yessir: 720000}, "Dan Quayle", "+500 Yes Sir For Every \"No New Taxes\"", "yessirSecondary", function(num) { flags.flag("quayle", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("quayle", 0);});
-	addPowerUp("bush", {effort: 0, paperwork: 0, yessir: 3200000}, "George H. W. Bush", "+900 Yes Sir For Every \"No New Taxes\"", "yessirSecondary", function(num) { flags.flag("bush", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("bush", 0);});
-	addPowerUp("gore", {effort: 0, paperwork: 0, yessir: 1120000}, "Al Gore", "+1234 Yes Sir For Every \"It's Time To Change America\"", "yessirSecondary", function(num) { flags.flag("gore", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gore", 0);});
-	addPowerUp("clinton", {effort: 0, paperwork: 0, yessir: 9876543}, "Bill Clinton", "+5000 Yes Sir For Every \"It's Time To Change America\"", "yessirSecondary", function(num) { flags.flag("clinton", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("clinton", 0);});
-	addPowerUp("biden", {effort: 0, paperwork: 0, yessir: 4810000}, "Joe Biden", "+25000 Yes Sir For Every \"Change\"", "yessirSecondary", function(num) { flags.flag("biden", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("biden", 0);});
-	addPowerUp("obama", {effort: 0, paperwork: 0, yessir: 10240000}, "Barack Obama", "+50000 Yes Sir For Every \"Change\"", "yessirSecondary", function(num) { flags.flag("obama", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("obama", 0);});
-	addPowerUp("morelube", {effort: 0, paperwork: 0, yessir: 21345589}, "More Lube", "+150000 Yes Sir For Every \"Free Sexual Favors For Everyone!\"", "yessirSecondary", function(num) { flags.flag("morelube", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("morelube", 0);});
-	addPowerUp("chickenmeanscock", {effort: 0, paperwork: 0, yessir: 144233377}, "A \"Chicken\" In Every \"Pot\"", "+300000 Yes Sir For Every \"Free Sexual Favors For Everyone!\"", "yessirSecondary", function(num) { flags.flag("chickenmeanscock", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("chickenmeanscock", 0);});
-	addPowerUp("grindstone", {effort: 1100, paperwork: 0, yessir: 0}, "Nose To The Grindstone", "+5 Effort For Every Click", "effortTertiary", function(num) { flags.flag("grindstone", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("grindstone", 0);});
-	addPowerUp("back", {effort: 21000, paperwork: 0, yessir: 0}, "Put Your Back Into It", "+75 Effort For Every Click", "effortTertiary", function(num) { flags.flag("back", 75); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("back", 0);});
-	addPowerUp("pain", {effort: 480000, paperwork: 0, yessir: 0}, "No Pain, No Gain", "+500 Effort For Every Click", "effortTertiary", function(num) { flags.flag("pain", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("pain", 0);});
-	addPowerUp("mile", {effort: 3456000, paperwork: 0, yessir: 0}, "Go The Extra Mile", "+2500 Effort For Every Click", "effortTertiary", function(num) { flags.flag("mile", 2500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mile", 0);});
-	addPowerUp("believe", {effort: 9999990, paperwork: 0, yessir: 0}, "Believe In Yourself", "+30000 Effort For Every Click", "effortTertiary", function(num) { flags.flag("believe", 30000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("believe", 0);});
+	addPowerUp("morelies", {effort: 8500000000, paperwork: 370370367, yessir: 134829756}, "\"Here, Have Some Empty Promises\"", "+500000 Yes Sir Per Second", "yessirPrimary", function(num) {return {"effort": 0,"paperwork": 0,"yessir": (500000 + flags.flag("jobs") + flags.flag("hungryhungry")) * num};}, false);
+	addPowerUp("perfectstrangers", {effort: 500, paperwork: 0, yessir: 0}, "Perfect Strangers", "+2 Effort For Every Stranger", "effortSecondary", function(num) { if( $("#perfectstrangers").length > 0 && num > 0) {$("#perfectstrangers").remove();}flags.flag("perfectstrangers", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("perfectstrangers", 0);});
+	addPowerUp("perfectstrangers2", {effort: 45000, paperwork: 0, yessir: 0}, "Perfect Strangers Mk. II", "+50 Effort For Every Stranger", "effortSecondary", function(num) { if( $("#perfectstrangers2").length > 0 && num > 0) {$("#perfectstrangers2").remove();}flags.flag("perfectstrangers2", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("perfectstrangers2", 0);});
+	addPowerUp("gettingtoknowyou", {effort: 7600, paperwork: 0, yessir: 0}, "Getting To Know You", "+5 Effort For Every Acquaintance", "effortSecondary", function(num) { if( $("#gettingtoknowyou").length > 0 && num > 0) {$("#gettingtoknowyou").remove();}flags.flag("gettingtoknowyou", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gettingtoknowyou", 0);});
+	addPowerUp("gettingtoknowallaboutyou", {effort: 620000, paperwork: 0, yessir: 0}, "Getting To Know All About You", "+70 Effort For Every Acquaintance", "effortSecondary", function(num) { if( $("#gettingtoknowallaboutyou").length > 0 && num > 0) {$("#gettingtoknowallaboutyou").remove();}flags.flag("gettingtoknowallaboutyou", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gettingtoknowallaboutyou", 0);});
+	addPowerUp("joey", {effort: 50000, paperwork: 0, yessir: 0}, "Joey", "+10 Effort For Every Friend", "effortSecondary", function(num) { if( $("#joey").length > 0 && num > 0) {$("#joey").remove();}flags.flag("joey", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("joey", 0);});
+	addPowerUp("chandler", {effort: 222000, paperwork: 0, yessir: 0}, "Chandler", "+115 Effort For Every Friend", "effortSecondary", function(num) { if( $("#chandler").length > 0 && num > 0) {$("#chandler").remove();}flags.flag("chandler", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("chandler", 0);});
+	addPowerUp("budlight", {effort: 920000, paperwork: 0, yessir: 0}, "Bud Light", "+115 Effort For Every Bro", "effortSecondary", function(num) { if( $("#budlight").length > 0 && num > 0) {$("#budlight").remove();}flags.flag("budlight", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("budlight", 0);});
+	addPowerUp("collar", {effort: 3200000, paperwork: 0, yessir: 0}, "Popped Collar", "+420 Effort For Every Bro", "effortSecondary", function(num) { if( $("#collar").length > 0 && num > 0) {$("#collar").remove();}flags.flag("collar", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("collar", 0);});
+	addPowerUp("pizza", {effort: 720000, paperwork: 42000, yessir: 0}, "Pizza", "+500 Effort For Every Best Friend", "effortSecondary", function(num) { if( $("#pizza").length > 0 && num > 0) {$("#pizza").remove();}flags.flag("pizza", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("pizza", 0);});
+	addPowerUp("hideabody", {effort: 3200000, paperwork: 118000, yessir: 0}, "Hide A Body Maybe?", "+900 Effort For Every Best Friend", "effortSecondary", function(num) { if( $("#hideabody").length > 0 && num > 0) {$("#hideabody").remove();}flags.flag("hideabody", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("hideabody", 0);});
+	addPowerUp("idkmbffj", {effort: 1120000, paperwork: 77777, yessir: 0}, "IDK, my BFF Jill?", "+1234 Effort For Every BFF", "effortSecondary", function(num) { if( $("#idkmbffj").length > 0 && num > 0) {$("#idkmbffj").remove();}flags.flag("idkmbffj", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("idkmbffj", 0);});
+	addPowerUp("instantgram", {effort: 9876543, paperwork: 300000, yessir: 0}, "Instant Gram (That's What The Kids Call It?)", "+5000 Effort For Every BFF", "effortSecondary", function(num) { if( $("#instantgram").length > 0 && num > 0) {$("#instantgram").remove();}flags.flag("instantgram", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("instantgram", 0);});
+	addPowerUp("objection", {effort: 4810000, paperwork: 1475000, yessir: 49000}, "OBJECTION!", "+25000 Effort For Every Personal Lawyer", "effortSecondary", function(num) { if( $("#objection").length > 0 && num > 0) {$("#objection").remove();}flags.flag("objection", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("objection", 0);});
+	addPowerUp("takethat", {effort: 10240000, paperwork: 6675000, yessir: 260000}, "TAKE THAT!!", "+50000 Effort For Every Personal Lawyer", "effortSecondary", function(num) { if( $("#takethat").length > 0 && num > 0) {$("#takethat").remove();}flags.flag("takethat", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("takethat", 0);});
+	addPowerUp("cohabitate", {effort: 21345589, paperwork: 9999990, yessir: 679000}, "Move In Together", "+150000 Effort For Every Significant Other", "effortSecondary", function(num) { if( $("#cohabitate").length > 0 && num > 0) {$("#cohabitate").remove();}flags.flag("cohabitate", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cohabitate", 0);});
+	addPowerUp("cosign", {effort: 144233377, paperwork: 50000000, yessir: 4110000}, "Buy A House!", "+300000 Effort For Every Significant Other", "effortSecondary", function(num) { if( $("#cosign").length > 0 && num > 0) {$("#cosign").remove();}flags.flag("cosign", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cosign", 0);});
+	addPowerUp("babypac", {effort: 231777551, paperwork: 32000000, yessir: 1241100}, "Baby PAC", "+1750000 Effort For Every Super PAC", "effortSecondary", function(num) { if( $("#babypac").length > 0 && num > 0) {$("#babypac").remove();}flags.flag("babypac", 1750000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("babypac", 0);});
+	addPowerUp("mspac", {effort: 1557773120, paperwork: 68800000, yessir: 9000000}, "Ms. PAC", "+5000000 Effort For Every Super PAC", "effortSecondary", function(num) { if( $("#mspac").length > 0 && num > 0) {$("#mspac").remove();}flags.flag("mspac", 5000000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mspac", 0);});
+	addPowerUp("paperclips", {effort: 0, paperwork: 500, yessir: 0}, "Paperclips", "+2 Paperwork For Every Staples", "paperworkSecondary", function(num) { if( $("#paperclips").length > 0 && num > 0) {$("#paperclips").remove();}flags.flag("paperclips", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("paperclips", 0);});
+	addPowerUp("paperbinders", {effort: 0, paperwork: 45000, yessir: 0}, "Paper Binders", "+50 Paperwork For Every Staples", "paperworkSecondary", function(num) { if( $("#paperbinders").length > 0 && num > 0) {$("#paperbinders").remove();}flags.flag("paperbinders", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("paperbinders", 0);});
+	addPowerUp("sharpenedPencil", {effort: 0, paperwork: 7600, yessir: 0}, "Sharpened Pencil", "+5 Paperwork For Every Pencil", "paperworkSecondary", function(num) { if( $("#sharpenedPencil").length > 0 && num > 0) {$("#sharpenedPencil").remove();}flags.flag("sharpenedPencil", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("sharpenedPencil", 0);});
+	addPowerUp("mechanicalpencil", {effort: 0, paperwork: 620000, yessir: 0}, "Mechanical Pencil", "+70 Paperwork For Every Pencil", "paperworkSecondary", function(num) { if( $("#mechanicalpencil").length > 0 && num > 0) {$("#mechanicalpencil").remove();}flags.flag("mechanicalpencil", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mechanicalpencil", 0);});
+	addPowerUp("moreink", {effort: 0, paperwork: 50000, yessir: 0}, "MORE. INK.", "+10 Paperwork For Every Pen", "paperworkSecondary", function(num) { if( $("#moreink").length > 0 && num > 0) {$("#moreink").remove();}flags.flag("moreink", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("moreink", 0);});
+	addPowerUp("cyberpen", {effort: 0, paperwork: 222000, yessir: 0}, "Cybernetic Pen", "+115 Paperwork For Every Pen", "paperworkSecondary", function(num) { if( $("#cyberpen").length > 0 && num > 0) {$("#cyberpen").remove();}flags.flag("cyberpen", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("cyberpen", 0);});
+	addPowerUp("wordprocessor", {effort: 0, paperwork: 920000, yessir: 0}, "Word Processor", "+115 Paperwork For Every Typewriter", "paperworkSecondary", function(num) { if( $("#wordprocessor").length > 0 && num > 0) {$("#wordprocessor").remove();}flags.flag("wordprocessor", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("wordprocessor", 0);});
+	addPowerUp("talktotext", {effort: 0, paperwork: 3200000, yessir: 0}, "Talk To Text", "+420 Paperwork For Every Typewriter", "paperworkSecondary", function(num) { if( $("#talktotext").length > 0 && num > 0) {$("#talktotext").remove();}flags.flag("talktotext", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("talktotext", 0);});
+	addPowerUp("laserprinter", {effort: 3110000, paperwork: 720000, yessir: 0}, "Laser Printer", "+500 Paperwork For Every Printer", "paperworkSecondary", function(num) { if( $("#laserprinter").length > 0 && num > 0) {$("#laserprinter").remove();}flags.flag("laserprinter", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("laserprinter", 0);});
+	addPowerUp("threeinone", {effort: 8240000, paperwork: 3200000, yessir: 0}, "Three In One Printer", "+900 Paperwork For Every Printer", "paperworkSecondary", function(num) { if( $("#threeinone").length > 0 && num > 0) {$("#threeinone").remove();}flags.flag("threeinone", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("threeinone", 0);});
+	addPowerUp("lycos", {effort: 5120000, paperwork: 1120000, yessir: 0}, "Lycos", "+1234 Paperwork For Every Email Address", "paperworkSecondary", function(num) { if( $("#lycos").length > 0 && num > 0) {$("#lycos").remove();}flags.flag("lycos", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("lycos", 0);});
+	addPowerUp("compuserve", {effort: 42420000, paperwork: 9876543, yessir: 0}, "CompuServe", "+5000 Paperwork For Every Email Address", "paperworkSecondary", function(num) { if( $("#compuserve").length > 0 && num > 0) {$("#compuserve").remove();}flags.flag("compuserve", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("compuserve", 0);});
+	addPowerUp("gruel", {effort: 16140000, paperwork: 4810000, yessir: 721000}, "Bowls Of Gruel", "+25000 Paperwork For Every Flock of orphans with your handwriting", "paperworkSecondary", function(num) { if( $("#gruel").length > 0 && num > 0) {$("#gruel").remove();}flags.flag("gruel", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gruel", 0);});
+	addPowerUp("posters", {effort: 616100000, paperwork: 10240000, yessir: 3210000}, "Motivational Posters!", "+50000 Paperwork For Every Flock of orphans with your handwriting", "paperworkSecondary", function(num) { if( $("#posters").length > 0 && num > 0) {$("#posters").remove();}flags.flag("posters", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("posters", 0);});
+	addPowerUp("laserguns", {effort: 397110000, paperwork: 21345589, yessir: 679000}, "Laser Guns", "+150000 Paperwork For Every Robots. God damned robots.", "paperworkSecondary", function(num) { if( $("#laserguns").length > 0 && num > 0) {$("#laserguns").remove();}flags.flag("laserguns", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("laserguns", 0);});
+	addPowerUp("sentience", {effort: 1337000000, paperwork: 144233377, yessir: 4110000}, "Sentience", "+300000 Paperwork For Every Robots. God damned robots.", "paperworkSecondary", function(num) { if( $("#sentience").length > 0 && num > 0) {$("#sentience").remove();}flags.flag("sentience", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("sentience", 0);});
+	addPowerUp("matrix", {effort: 794220000, paperwork: 64036767, yessir: 2716000}, "Matrix of...Eh.", "+1750000 Paperwork For Every Living planet with amazing handwriting", "paperworkSecondary", function(num) { if( $("#matrix").length > 0 && num > 0) {$("#matrix").remove();}flags.flag("matrix", 1750000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("matrix", 0);});
+	addPowerUp("disc", {effort: 1588440000, paperwork: 177407054, yessir: 5432000}, "Silver Disc", "+5000000 Paperwork For Every Living planet with amazing handwriting", "paperworkSecondary", function(num) { if( $("#disc").length > 0 && num > 0) {$("#disc").remove();}flags.flag("disc", 5000000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("disc", 0);});
+	addPowerUp("tyler", {effort: 0, paperwork: 0, yessir: 500}, "John Tyler", "+2 Yes Sir For Every \"Tippecanoe and Tyler Too!\"", "yessirSecondary", function(num) { if( $("#tyler").length > 0 && num > 0) {$("#tyler").remove();}flags.flag("tyler", 2); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("tyler", 0);});
+	addPowerUp("harrison", {effort: 0, paperwork: 0, yessir: 45000}, "William Henry Harrison", "+50 Yes Sir For Every \"Tippecanoe and Tyler Too!\"", "yessirSecondary", function(num) { if( $("#harrison").length > 0 && num > 0) {$("#harrison").remove();}flags.flag("harrison", 50); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("harrison", 0);});
+	addPowerUp("barkley", {effort: 0, paperwork: 0, yessir: 7600}, "Alben W. Barkley", "+5 Yes Sir For Every \"Give 'Em Hell, Harry!\"", "yessirSecondary", function(num) { if( $("#barkley").length > 0 && num > 0) {$("#barkley").remove();}flags.flag("barkley", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("barkley", 0);});
+	addPowerUp("truman", {effort: 0, paperwork: 0, yessir: 620000}, "Harry S. Truman", "+70 Yes Sir For Every \"Give 'Em Hell, Harry!\"", "yessirSecondary", function(num) { if( $("#truman").length > 0 && num > 0) {$("#truman").remove();}flags.flag("truman", 70); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("truman", 0);});
+	addPowerUp("nixon", {effort: 0, paperwork: 0, yessir: 50000}, "Richard Nixon", "+10 Yes Sir For Every \"I Like Ike!\"", "yessirSecondary", function(num) { if( $("#nixon").length > 0 && num > 0) {$("#nixon").remove();}flags.flag("nixon", 10); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("nixon", 0);});
+	addPowerUp("eisenhower", {effort: 0, paperwork: 0, yessir: 222000}, "Dwight D. Eisenhower", "+115 Yes Sir For Every \"I Like Ike!\"", "yessirSecondary", function(num) { if( $("#eisenhower").length > 0 && num > 0) {$("#eisenhower").remove();}flags.flag("eisenhower", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("eisenhower", 0);});
+	addPowerUp("johnson", {effort: 0, paperwork: 0, yessir: 920000}, "Lyndon B. Johnson", "+115 Yes Sir For Every \"A Time For Greatness\"", "yessirSecondary", function(num) { if( $("#johnson").length > 0 && num > 0) {$("#johnson").remove();}flags.flag("johnson", 115); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("johnson", 0);});
+	addPowerUp("kennedy", {effort: 0, paperwork: 0, yessir: 3200000}, "John F. Kennedy", "+420 Yes Sir For Every \"A Time For Greatness\"", "yessirSecondary", function(num) { if( $("#kennedy").length > 0 && num > 0) {$("#kennedy").remove();}flags.flag("kennedy", 420); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("kennedy", 0);});
+	addPowerUp("quayle", {effort: 18660000, paperwork: 18660000, yessir: 18660000}, "Dan Quayle", "+500 Yes Sir For Every \"No New Taxes\"", "yessirSecondary", function(num) { if( $("#quayle").length > 0 && num > 0) {$("#quayle").remove();}flags.flag("quayle", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("quayle", 0);});
+	addPowerUp("bush", {effort: 49440000, paperwork: 49440000, yessir: 49440000}, "George H. W. Bush", "+900 Yes Sir For Every \"No New Taxes\"", "yessirSecondary", function(num) { if( $("#bush").length > 0 && num > 0) {$("#bush").remove();}flags.flag("bush", 900); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("bush", 0);});
+	addPowerUp("gore", {effort: 30720000, paperwork: 30720000, yessir: 30720000}, "Al Gore", "+1234 Yes Sir For Every \"It's Time To Change America\"", "yessirSecondary", function(num) { if( $("#gore").length > 0 && num > 0) {$("#gore").remove();}flags.flag("gore", 1234); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("gore", 0);});
+	addPowerUp("clinton", {effort: 254520000, paperwork: 254520000, yessir: 254520000}, "Bill Clinton", "+5000 Yes Sir For Every \"It's Time To Change America\"", "yessirSecondary", function(num) { if( $("#clinton").length > 0 && num > 0) {$("#clinton").remove();}flags.flag("clinton", 5000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("clinton", 0);});
+	addPowerUp("biden", {effort: 96840000, paperwork: 96840000, yessir: 96840000}, "Joe Biden", "+25000 Yes Sir For Every \"Change\"", "yessirSecondary", function(num) { if( $("#biden").length > 0 && num > 0) {$("#biden").remove();}flags.flag("biden", 25000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("biden", 0);});
+	addPowerUp("obama", {effort: 3696600000, paperwork: 3696600000, yessir: 3696600000}, "Barack Obama", "+50000 Yes Sir For Every \"Change\"", "yessirSecondary", function(num) { if( $("#obama").length > 0 && num > 0) {$("#obama").remove();}flags.flag("obama", 50000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("obama", 0);});
+	addPowerUp("morelube", {effort: 2382660000, paperwork: 2382660000, yessir: 2382660000}, "More Lube", "+150000 Yes Sir For Every \"Free Sexual Favors For Everyone!\"", "yessirSecondary", function(num) { if( $("#morelube").length > 0 && num > 0) {$("#morelube").remove();}flags.flag("morelube", 150000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("morelube", 0);});
+	addPowerUp("chickenmeanscock", {effort: 8022000000, paperwork: 8022000000, yessir: 8022000000}, "A \"Chicken\" In Every \"Pot\"", "+300000 Yes Sir For Every \"Free Sexual Favors For Everyone!\"", "yessirSecondary", function(num) { if( $("#chickenmeanscock").length > 0 && num > 0) {$("#chickenmeanscock").remove();}flags.flag("chickenmeanscock", 300000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("chickenmeanscock", 0);});
+	addPowerUp("jobs", {effort: 4765320000, paperwork: 4765320000, yessir: 4765320000}, "\"Jobs For Everyone, For Real!\"", "+1750000 Yes Sir For Every \"Here, Have Some Empty Promises\"", "yessirSecondary", function(num) { if( $("#jobs").length > 0 && num > 0) {$("#jobs").remove();}flags.flag("jobs", 1750000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("jobs", 0);});
+	addPowerUp("hungryhungry", {effort: 9530640000, paperwork: 9530640000, yessir: 9530640000}, "\"I Will End World Hunger Forever.\"", "+5000000 Yes Sir For Every \"Here, Have Some Empty Promises\"", "yessirSecondary", function(num) { if( $("#hungryhungry").length > 0 && num > 0) {$("#hungryhungry").remove();}flags.flag("hungryhungry", 5000000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("hungryhungry", 0);});
+	addPowerUp("grindstone", {effort: 1100, paperwork: 0, yessir: 0}, "Nose To The Grindstone", "+5 Effort For Every Click", "effortTertiary", function(num) { if( $("#grindstone").length > 0 && num > 0) {$("#grindstone").remove();} flags.flag("grindstone", 5); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("grindstone", 0);});
+	addPowerUp("back", {effort: 21000, paperwork: 0, yessir: 0}, "Put Your Back Into It", "+75 Effort For Every Click", "effortTertiary", function(num) { if( $("#back").length > 0 && num > 0) {$("#back").remove();} flags.flag("back", 75); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("back", 0);});
+	addPowerUp("pain", {effort: 480000, paperwork: 0, yessir: 0}, "No Pain, No Gain", "+500 Effort For Every Click", "effortTertiary", function(num) { if( $("#pain").length > 0 && num > 0) {$("#pain").remove();} flags.flag("pain", 500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("pain", 0);});
+	addPowerUp("mile", {effort: 3456000, paperwork: 0, yessir: 0}, "Go The Extra Mile", "+2500 Effort For Every Click", "effortTertiary", function(num) { if( $("#mile").length > 0 && num > 0) {$("#mile").remove();} flags.flag("mile", 2500); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("mile", 0);});
+	addPowerUp("believe", {effort: 9999990, paperwork: 0, yessir: 0}, "Believe In Yourself", "+30000 Effort For Every Click", "effortTertiary", function(num) { if( $("#believe").length > 0 && num > 0) {$("#believe").remove();} flags.flag("believe", 30000); return {"effort": 0,"paperwork": 0,"yessir": 0};}, true, function() { flags.flag("believe", 0);});	
 
 	var flags = {
 		list: {},
@@ -468,7 +594,6 @@ Game.Initialize = function() {
 			var target = $("#" + func["section"]);
 			var li = $("<li>");
 			li.attr("id", id);
-			//li.attr("title", func["description"]);
 			li.html(func["label"]);
 			target.append(li);
 			var q = $("<q>");
@@ -515,11 +640,7 @@ Game.Initialize = function() {
 					if(func["sell"] !== null) func["sell"]();
 				}
 			});*/
-			
-			var buy = $("<button>Buy 1</button>");
-			buy.attr("id", id + "_buy");
-			li.append(buy);
-			buy.click(function(goal, id) {
+			li.click(function(goal, id) {
 				return function() {
 					var effortVal = Game.compInt(func["cost"].effort, powerups[id]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[id]), yessirVal = Game.compInt(func["cost"].yessir, powerups[id]);
 					if(efforttally >= effortVal &&
@@ -546,87 +667,44 @@ Game.Initialize = function() {
 			label.html(func["description"]);
 			label.css({"position": "absolute", "right": "3px", "top": "3px", "font-size": "10px"});
 			li.append(label);
-			/*li.click(function(goal, id) {
-				return function() {
-					var effortVal = Game.compInt(func["cost"].effort, powerups[id]), paperworkVal = Game.compInt(func["cost"].paperwork, powerups[id]), yessirVal = Game.compInt(func["cost"].yessir, powerups[id]);
-					if(efforttally >= effortVal &&
-						paperworktally >= paperworkVal &&
-						yessirtally >= yessirVal) {
-							if(func["onetime"] === true && powerups[id] > 0) return;
-							powerups[id]++;
-							efforttally -= effortVal;
-							paperworktally -= paperworkVal;
-							yessirtally -= yessirVal;
-							var q = $("#" + id + "_q");
-							var html = "";
-							html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(Game.compInt(func["cost"].effort, powerups[id]).toFixed(0)) : "") + " ";
-							html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(Game.compInt(func["cost"].paperwork, powerups[id]).toFixed(0)) : "") + " ";
-							html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(Game.compInt(func["cost"].yessir, powerups[id]).toFixed(0)) : "");
-							q.html(html);
-							var pre = $("#" + id + "_pre");
-							pre.html("Total: " + powerups[id]);
-					}
-				}
-			}(func, id));*/
 			//li.tooltip({track: true});
 		}
 	}
-	
-	Game.listPowerUp("grindstone");	Game.listPowerUp("back");	Game.listPowerUp("pain");	Game.listPowerUp("mile");	Game.listPowerUp("believe");
-	Game.listPowerUp("stranger");	Game.listPowerUp("perfectstrangers");	Game.listPowerUp("perfectstrangers2");		
-	Game.listPowerUp("acquaintance");	Game.listPowerUp("gettingtoknowyou");	Game.listPowerUp("gettingtoknowallaboutyou");		
-	Game.listPowerUp("friend");	Game.listPowerUp("joey");	Game.listPowerUp("chandler");		
-	Game.listPowerUp("bro");	Game.listPowerUp("budlight");	Game.listPowerUp("collar");		
-	Game.listPowerUp("bestfriend");	Game.listPowerUp("pizza");	Game.listPowerUp("hideabody");		
-	Game.listPowerUp("bff");	Game.listPowerUp("idkmbffj");	Game.listPowerUp("instantgram");		
-	Game.listPowerUp("personallawyer");	Game.listPowerUp("objection");	Game.listPowerUp("takethat");		
-	Game.listPowerUp("sigother");	Game.listPowerUp("cohabitate");	Game.listPowerUp("cosign");		
-	Game.listPowerUp("superpac");	Game.listPowerUp("babypac");	Game.listPowerUp("mspac");		
-	Game.listPowerUp("staples");	Game.listPowerUp("paperclips");	Game.listPowerUp("paperbinders");		
-	Game.listPowerUp("pencil");	Game.listPowerUp("sharpenedPencil");	Game.listPowerUp("mechanicalpencil");		
-	Game.listPowerUp("pen");	Game.listPowerUp("moreink");	Game.listPowerUp("cyberpen");		
-	Game.listPowerUp("typewriter");	Game.listPowerUp("wordprocessor");	Game.listPowerUp("talktotext");		
-	Game.listPowerUp("printer");	Game.listPowerUp("laserprinter");	Game.listPowerUp("threeinone");		
-	Game.listPowerUp("altavista");	Game.listPowerUp("lycos");	Game.listPowerUp("compuserve");		
-	Game.listPowerUp("orphans");	Game.listPowerUp("gruel");	Game.listPowerUp("posters");		
-	Game.listPowerUp("robots");	Game.listPowerUp("laserguns");	Game.listPowerUp("sentience");		
-	Game.listPowerUp("unicron");	Game.listPowerUp("matrix");	Game.listPowerUp("disc");		
-	Game.listPowerUp("tippiecanoe");	Game.listPowerUp("tyler");	Game.listPowerUp("harrison");		
-	Game.listPowerUp("harry");	Game.listPowerUp("barkley");	Game.listPowerUp("truman");		
-	Game.listPowerUp("ike");	Game.listPowerUp("nixon");	Game.listPowerUp("eisenhower");		
-	Game.listPowerUp("great");	Game.listPowerUp("johnson");	Game.listPowerUp("kennedy");		
-	Game.listPowerUp("taxes");	Game.listPowerUp("quayle");	Game.listPowerUp("bush");		
-	Game.listPowerUp("timeforchange");	Game.listPowerUp("gore");	Game.listPowerUp("clinton");		
-	Game.listPowerUp("change");	Game.listPowerUp("biden");	Game.listPowerUp("obama");		
-	Game.listPowerUp("handsacrossamerica");	Game.listPowerUp("morelube");	Game.listPowerUp("chickenmeanscock");		
-	
-	/*			
-	Game.listPowerUp("stranger");	Game.listPowerUp("perfectstrangers");	Game.listPowerUp("perfectstrangers2");		Game.listPowerUp("grindstone");	
-	Game.listPowerUp("acquaintance");	Game.listPowerUp("gettingtoknowyou");	Game.listPowerUp("gettingtoknowallaboutyou");		Game.listPowerUp("back");
-	Game.listPowerUp("friend");	Game.listPowerUp("joey");	Game.listPowerUp("chandler");		Game.listPowerUp("pain");
-	Game.listPowerUp("bro");	Game.listPowerUp("budlight");	Game.listPowerUp("collar");		Game.listPowerUp("mile");
-	Game.listPowerUp("bestfriend");	Game.listPowerUp("pizza");	Game.listPowerUp("hideabody");		Game.listPowerUp("believe");
-	Game.listPowerUp("bff");	Game.listPowerUp("idkmbffj");	Game.listPowerUp("instantgram");		
-	Game.listPowerUp("personallawyer");	Game.listPowerUp("objection");	Game.listPowerUp("takethat");		
-	Game.listPowerUp("sigother");	Game.listPowerUp("cohabitate");	Game.listPowerUp("cosign");		
-	Game.listPowerUp("superpac");	Game.listPowerUp("babypac");	Game.listPowerUp("mspac");		
-	Game.listPowerUp("staples");	Game.listPowerUp("paperclips");	Game.listPowerUp("paperbinders");		
-	Game.listPowerUp("pencil");	Game.listPowerUp("sharpenedPencil");	Game.listPowerUp("mechanicalpencil");		
-	Game.listPowerUp("pen");	Game.listPowerUp("moreink");	Game.listPowerUp("cyberpen");		
-	Game.listPowerUp("typewriter");	Game.listPowerUp("wordprocessor");	Game.listPowerUp("talktotext");		
-	Game.listPowerUp("printer");	Game.listPowerUp("laserprinter");	Game.listPowerUp("threeinone");		
-	Game.listPowerUp("altavista");	Game.listPowerUp("lycos");	Game.listPowerUp("compuserve");		
-	Game.listPowerUp("orphans");	Game.listPowerUp("gruel");	Game.listPowerUp("posters");		
-	Game.listPowerUp("robots");	Game.listPowerUp("laserguns");	Game.listPowerUp("sentience");		
-	Game.listPowerUp("tippiecanoe");	Game.listPowerUp("tyler");	Game.listPowerUp("harrison");		
-	Game.listPowerUp("harry");	Game.listPowerUp("barkley");	Game.listPowerUp("truman");		
-	Game.listPowerUp("ike");	Game.listPowerUp("nixon");	Game.listPowerUp("eisenhower");		
-	Game.listPowerUp("great");	Game.listPowerUp("johnson");	Game.listPowerUp("kennedy");		
-	Game.listPowerUp("taxes");	Game.listPowerUp("quayle");	Game.listPowerUp("bush");		
-	Game.listPowerUp("timeforchange");	Game.listPowerUp("gore");	Game.listPowerUp("clinton");		
-	Game.listPowerUp("change");	Game.listPowerUp("biden");	Game.listPowerUp("obama");		
-	Game.listPowerUp("handsacrossamerica");	Game.listPowerUp("morelube");	Game.listPowerUp("chickenmeanscock");		
-	*/
+	var buildPows = function() {
+		var targs = ["#effortPrimary","#effortSecondary","#effortTertiary",
+			"#paperworkPrimary","#paperworkSecondary","#paperworkTertiary",
+			"#yessirPrimary","#yessirSecondary","#yessirTertiary"].join(",");
+		$(targs).empty();
+		Game.listPowerUp("grindstone");	Game.listPowerUp("back");	Game.listPowerUp("pain");	Game.listPowerUp("mile");	Game.listPowerUp("believe");
+		Game.listPowerUp("stranger");	Game.listPowerUp("perfectstrangers");	Game.listPowerUp("perfectstrangers2");		
+		Game.listPowerUp("acquaintance");	Game.listPowerUp("gettingtoknowyou");	Game.listPowerUp("gettingtoknowallaboutyou");		
+		Game.listPowerUp("friend");	Game.listPowerUp("joey");	Game.listPowerUp("chandler");		
+		Game.listPowerUp("bro");	Game.listPowerUp("budlight");	Game.listPowerUp("collar");		
+		Game.listPowerUp("bestfriend");	Game.listPowerUp("pizza");	Game.listPowerUp("hideabody");		
+		Game.listPowerUp("bff");	Game.listPowerUp("idkmbffj");	Game.listPowerUp("instantgram");		
+		Game.listPowerUp("personallawyer");	Game.listPowerUp("objection");	Game.listPowerUp("takethat");		
+		Game.listPowerUp("sigother");	Game.listPowerUp("cohabitate");	Game.listPowerUp("cosign");		
+		Game.listPowerUp("superpac");	Game.listPowerUp("babypac");	Game.listPowerUp("mspac");		
+		Game.listPowerUp("staples");	Game.listPowerUp("paperclips");	Game.listPowerUp("paperbinders");		
+		Game.listPowerUp("pencil");	Game.listPowerUp("sharpenedPencil");	Game.listPowerUp("mechanicalpencil");		
+		Game.listPowerUp("pen");	Game.listPowerUp("moreink");	Game.listPowerUp("cyberpen");		
+		Game.listPowerUp("typewriter");	Game.listPowerUp("wordprocessor");	Game.listPowerUp("talktotext");		
+		Game.listPowerUp("printer");	Game.listPowerUp("laserprinter");	Game.listPowerUp("threeinone");		
+		Game.listPowerUp("altavista");	Game.listPowerUp("lycos");	Game.listPowerUp("compuserve");		
+		Game.listPowerUp("orphans");	Game.listPowerUp("gruel");	Game.listPowerUp("posters");		
+		Game.listPowerUp("robots");	Game.listPowerUp("laserguns");	Game.listPowerUp("sentience");		
+		Game.listPowerUp("unicron");	Game.listPowerUp("matrix");	Game.listPowerUp("disc");		
+		Game.listPowerUp("tippiecanoe");	Game.listPowerUp("tyler");	Game.listPowerUp("harrison");		
+		Game.listPowerUp("harry");	Game.listPowerUp("barkley");	Game.listPowerUp("truman");		
+		Game.listPowerUp("ike");	Game.listPowerUp("nixon");	Game.listPowerUp("eisenhower");		
+		Game.listPowerUp("great");	Game.listPowerUp("johnson");	Game.listPowerUp("kennedy");		
+		Game.listPowerUp("taxes");	Game.listPowerUp("quayle");	Game.listPowerUp("bush");		
+		Game.listPowerUp("timeforchange");	Game.listPowerUp("gore");	Game.listPowerUp("clinton");		
+		Game.listPowerUp("change");	Game.listPowerUp("biden");	Game.listPowerUp("obama");		
+		Game.listPowerUp("handsacrossamerica");	Game.listPowerUp("morelube");	Game.listPowerUp("chickenmeanscock");		
+		Game.listPowerUp("morelies");	Game.listPowerUp("jobs");	Game.listPowerUp("hungryhungry");		
+	}
+	buildPows();
 	
 	Game.Load = function() {
 		try {
@@ -647,6 +725,10 @@ Game.Initialize = function() {
 				totalYessirScrolls = isNaN(totalYessirScrolls) ? 0 : totalYessirScrolls;
 				
 				startDate = Math.round(parseFloat(localStorage["startDate"]));
+				randomSpawn();
+			}
+			else {
+				randomCreate("firstone");	//Yep. First one's free.
 			}
 		}
 		catch(e) {
@@ -662,6 +744,32 @@ Game.Initialize = function() {
 			}
 			
 			prompt("Please copy and paste the below text", s);
+		}
+		catch(e) {
+		}
+	}
+	
+	Game.Import = function() {
+		try {
+			var s = prompt("Please paste your exported data below and click OK", "");
+			
+			if(s && s !== "" && s.split("{!}").length > 1) {
+				var objs = s.split("{!}");
+				for(var i = 0;i<objs.length;i++) {
+					var obj = objs[i];
+					if(obj.split("{;}").length > 1) {
+						var key = obj.split("{;}")[0];
+						var val = obj.split("{;}")[1];
+						if(val === "true" || val === "false") localStorage[key] = Boolean(val);
+						else localStorage[key] = Math.round(parseFloat(val));
+					}
+				}
+				Game.Load();
+				Game.updatePastGoals();
+				Game.updateCurrentGoals();
+			}
+			else return alert("Invalid save data");
+			
 		}
 		catch(e) {
 		}
@@ -714,9 +822,12 @@ Game.Initialize = function() {
 		startDate = (new Date()).getTime()
 		Game.recalculate();
 		Game.resizer();
+		clearTimeout(randSpawnTimer);
 		$("#effortdescribe").show();
 		$("#paperworkdescribe").show();
 		$("#yessirdescribe").show();
+		randomCreate("firstone");
+		buildPows();
 	}
 	
 	var eps = pps = yps = 0;
@@ -769,12 +880,9 @@ Game.Initialize = function() {
 				if(efforttally >= effortVal &&
 					paperworktally >= paperworkVal &&
 					yessirtally >= yessirVal) {
-						if(func["onetime"] === true && powerups[i] > 0) {
-							$("#" + i + "_buy").html("Power Up Purchased").attr("disabled", "disabled");
-						}
-						else $("#" + i + "_buy").removeAttr("disabled");
+						$("#" + i).addClass("canPurchase").removeClass("cannotPurchase").attr("title", "Click to buy one");
 				}
-				else $("#" + i + "_buy").attr("disabled", "disabled");
+				else $("#" + i).removeClass("canPurchase").addClass("cannotPurchase").attr("title", "Cannot afford at this time");
 				
 				var q = $("#" + i + "_q");
 				var html = "";
@@ -828,7 +936,7 @@ Game.Initialize = function() {
 	Game.recalculate();
 	
 	setInterval(Game.Save, 1000*60);	//Save every 60 seconds	
-	//setInterval(Game.recalculate, 1000/100);	//Recalculate EPS/PPS/YPS every 1/10th of a second; it's less stress!
+	setInterval(Game.recalculate, 1000/100);	//Recalculate EPS/PPS/YPS every 1/10th of a second; it's less stress!
 	
 	Game.resizer();
 	
@@ -862,105 +970,6 @@ Game.Initialize = function() {
 		lastEffort = efforttally;
 	}, 1000);
 	*/
-	
-	var randomCreate = function() {
-		var life = 1000 * 15;		//Life will last fifteen seconds. SO MACABRE.
-		var width = height = 200;	//it will be 200 pixels in size.
-		var x = y = 0;
-		var myrand = $("<div>");
-		myrand.addClass("random");
-		$("body").append(myrand);
-		
-		x = getRandomInt(0, $("#game").width() - width);
-		y = getRandomInt($("#game").offset().top, ($("#game").height() + $("#game").offset().top) - height);
-		myrand.css({"top": y + "px", "left": x + "px"});
-		myrand.fadeIn(5000);
-		myrand.click(function(e) {
-			clearTimeout(randTimer);
-			$(this).remove();
-			/*
-				Possible results:
-					caucus:			+10% of all resources (one time)
-					gridlock:		all resource generating halved for 60 seconds
-					landslide:		8x resource generating for 30 seconds
-					lameduck:		-10% of all resources (one time)
-			*/
-			var results = ["caucus", "gridlock", "landslide", "lameduck"];
-			var weight = [0.40, 0.10, 0.10, 0.40];
-			
-			//weighted random from http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
-			
-			var weighed_list = [];
-
-			// Loop over weights
-			for (var i = 0; i < weight.length; i++) {
-				var multiples = weight[i] * 100;
-
-				// Loop over the list of items
-				for (var j = 0; j < multiples; j++) {
-					weighed_list.push(results[i]);
-				}
-			}
-			var index = getRandomInt(0, weighed_list.length - 1);
-			var lucky = weighed_list[index];
-			var html = "";
-			if(lucky === "caucus") {
-				Game.incrementEffort(efforttally * .1);
-				Game.incrementPaperwork(paperworktally * .1);
-				Game.incrementYessir(yessirtally * .1);
-				html = "Caucus: +10% all resources";
-			}
-			else if(lucky === "gridlock") {
-				flags.flag("multiplier", 0.5);
-				Game.recalculate();
-				setTimeout(function() {
-					flags.flag("multiplier", 1);
-					Game.recalculate();
-				}, 1000 * 60);
-				html = "Gridlock: Resource generation halved for one minute";
-			}
-			else if(lucky === "landslide") {
-				flags.flag("multiplier", 8);
-				Game.recalculate();
-				setTimeout(function() {
-					flags.flag("multiplier", 1);
-					Game.recalculate();
-				}, 1000 * 30);
-				html = "Landslide: Resource generation 8x for 30 seconds";
-			}
-			else if(lucky === "lameduck") {
-				Game.incrementEffort(-efforttally * .1);
-				Game.incrementPaperwork(-paperworktally * .1);
-				Game.incrementYessir(-yessirtally * .1);
-				html = "Lame Duck: -10% all resources";
-			}
-			var obj = $("#saved").clone();
-			obj.html(html);
-			$("body").append(obj);
-			obj.css({"display": "none", "position": "absolute", "z-index": "66669999", "bottom": (40 + obj.height()) + "px", "left": "50%", "margin": "0 0 0 -" + (obj.width() / 2) + "px"});
-			obj.fadeIn(1000).delay(5000);
-			obj.fadeOut(1000, function() {
-				$(this).remove();
-			});
-			randomSpawn();
-		});
-		var randTimer = setTimeout(function() {
-			myrand.fadeOut(5000, function() {
-				$(this).remove();
-				randomSpawn();
-			});
-		}, life);
-	}
-	
-	randomCreate();
-	
-	var randomSpawn = function() {
-		var oneMinute = 1000 * 60;	//Just...just to keep typing down. Yeah.
-		var min = oneMinute * 5;
-		var max = oneMinute * 15;
-		var result = getRandomInt(min, max);
-		setTimeout(randomCreate, result);
-	}
 	
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	var lastRun = new Date().getTime();
