@@ -12,6 +12,14 @@ Game.currNotes = "";
 		unlocks:		function that executes when requirements are met. Use this to show next requirements; do NOT use this to show/hide goals
 */
 
+Game.Goal = function(name, reqObj, unlocks) {
+	this.name = name;
+	this.reqObj = reqObj;
+	this.unlocks = unlocks;
+	this.unlocks = unlocks;
+	return this;
+}
+
 Game.Initialize = function() {	
 	var efforttally = paperworktally = yessirtally = 0;
 	var currentGoalIndex = 0;
@@ -26,16 +34,18 @@ Game.Initialize = function() {
 	var startDate = 0;
 	var randSpawnTimer = null;
 	
+	Game.compInt = function(base, times) {
+		return Math.floor(base * Math.pow(1+interest, times));
+	}
+
+	Game.reverseCompInt = function(base, times) {
+		return Math.floor(base / Math.pow(1+interest, times));
+	}
+	
 	var autogoal = false;
 
 	var interest = 0.27;	//Be sure to tip your costs, and drive home safe!
 	var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
-	Game.compInt = function(base, times) {
-		return Math.floor(base * Math.pow(1+interest, times));
-	}
-	Game.reverseCompInt = function(base, times) {
-		return Math.floor(base / Math.pow(1+interest, times));
-	}
 	Game.incrementEffort = function(num) {
 		efforttally += num;
 		if(efforttally <= 0) {
@@ -61,7 +71,6 @@ Game.Initialize = function() {
 			var currGoal = goals[i];
 			var li = $("<li>");
 			$("#pastGoals").prepend(li);
-			//li.addClass("disabled");
 			var q = $("<q>");
 			var html = "";
 			html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) : "") + " ";
@@ -86,6 +95,27 @@ Game.Initialize = function() {
 		li.html(currGoal.name);
 		li.append(q);
 		li.addClass("disabled");
+	}
+	
+	Game.log = function(str) {
+		var newLog = $("<div>");
+		newLog.addClass("log").html(str);
+		$("body").append(newLog);
+		newLog.css({"position": "absolute", "bottom": "-" + newLog.height() + "px", "left": "50%", "z-index": "999000", "opacity": "0"});
+		$(".log").each(function() {
+			$(this).animate({bottom: "+=" + newLog.height()}, 500, function() {
+				//console.log($(this).css("bottom"));
+			});
+		});
+		newLog.animate(
+			{opacity: 1},
+			{duration: 1000, queue: false}
+		).delay(5000).animate(
+			{bottom: "+=" + newLog.height() + "px", opacity: 0},
+			{duration: 1000, complete: function() {
+				$(this).remove();
+			}
+		});
 	}
 	
 	Game.updateCurrentGoals = function() {
@@ -254,14 +284,6 @@ Game.Initialize = function() {
 		goals[goals.length] = new Game.Goal(name, reqObj, unlocks);
 	}
 	
-	Game.Goal = function(name, reqObj, unlocks) {
-		this.name = name;
-		this.reqObj = reqObj;
-		this.unlocks = unlocks;
-		this.unlocks = unlocks;
-		return this;
-	}
-	
 	var randomCreate = function(pre) {	//if it gets pre passed to it, then it's not random
 		clearTimeout(randSpawnTimer);	//JUUUUST in case.
 		var life = 1000 * 15;		//Life will last fifteen seconds. SO MACABRE.
@@ -348,7 +370,8 @@ Game.Initialize = function() {
 					html = "Lame Duck: -10% all resources";
 				}
 			}
-			var obj = $("#saved").clone();
+			Game.log(html);
+			/*var obj = $("#log").clone();
 			obj.html(html);
 			$("body").append(obj);
 			obj.css({"display": "none", "position": "absolute", "z-index": "66669999", "bottom": (40 + obj.height()) + "px", "left": "50%", "margin": "0 0 0 -" + (obj.width() / 2) + "px"});
@@ -356,6 +379,7 @@ Game.Initialize = function() {
 			obj.fadeOut(1000, function() {
 				$(this).remove();
 			});
+			*/
 			randomSpawn();
 		});
 		var randTimer = setTimeout(function() {
@@ -799,8 +823,8 @@ Game.Initialize = function() {
 			localStorage["startDate"] = startDate;
 			
 			
-			
-			$("#saved").fadeIn(1000).delay(5000).fadeOut(1000);
+			Game.log("Game Saved");
+			//$("#log").fadeIn(1000).delay(5000).fadeOut(1000);
 		}
 		catch(e) {
 		}
@@ -1027,7 +1051,7 @@ Game.resizer = function() {
 		var currList = lists[i].join(",");
 		$(currList).each(function() {
 			if($(this).attr("id") === "pastGoals") {
-				console.log($(this).parent().height() + " " + $("#game").height());
+				//console.log($(this).parent().height() + " " + $("#game").height());
 				$(this).css("height", ($(this).parent().height() - $(i).offset().top - $("#navbar").height()) + "px");
 			}
 			else $(this).css("height", ($("#game").height() - $(i).offset().top - $("#navbar").height()) + "px");

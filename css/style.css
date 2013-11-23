@@ -173,19 +173,10 @@ pre {
         vertical-align: middle;
 }
 
-#saved {
-        position: absolute;
-        bottom: 40px;
-        text-align: center;
-        line-height: 32px;
-        height: 32px;
-        font-size: 32px;
-        z-index: 20;
-        left: 0px;
-        right: 0px;
-        color: white;
-        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-        display: none;
+.log {
+	font-size: 2.0em;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 .random {
