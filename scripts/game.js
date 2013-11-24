@@ -916,12 +916,12 @@ Game.Initialize = function() {
 				q.html(html);
 			}
 		}
-		$("#efforttally").html(numberWithCommas((Math.floor(efforttally * 10) / 10).toFixed(1)) + " Effort");
-		$("#paperworktally").html(numberWithCommas((Math.floor(paperworktally * 10) / 10).toFixed(1)) + " Paperwork");
-		$("#yessirtally").html(numberWithCommas((Math.floor(yessirtally * 10) / 10).toFixed(1)) + " Yes, Sir!");
-		$("#effortpersec").html(numberWithCommas(eps.toFixed(1)) + " Effort Per Second");
-		$("#paperworkpersec").html(numberWithCommas(pps.toFixed(1)) + " Paperwork Per Second");
-		$("#yessirpersec").html(numberWithCommas(yps.toFixed(1)) + " Yes, Sir! Per Second");
+		$("#efforttally").html(numberWithCommas((Math.floor(efforttally * 10) / 10).toFixed(1)) + "&nbsp;Effort");
+		$("#paperworktally").html(numberWithCommas((Math.floor(paperworktally * 10) / 10).toFixed(1)) + "&nbsp;Paperwork");
+		$("#yessirtally").html(numberWithCommas((Math.floor(yessirtally * 10) / 10).toFixed(1)) + "&nbsp;Yes,&nbsp;Sir!");
+		$("#effortpersec").html(numberWithCommas(eps.toFixed(1)) + "&nbsp;Effort&nbsp;Per&nbsp;Second");
+		$("#paperworkpersec").html(numberWithCommas(pps.toFixed(1)) + "&nbsp;Paperwork&nbsp;Per&nbsp;Second");
+		$("#yessirpersec").html(numberWithCommas(yps.toFixed(1)) + "&nbsp;Yes,&nbsp;Sir!&nbsp;Per&nbsp;Second");
 		$("#totalEffortClicks").html(totalEffortClicks);
 		$("#totalPaperworkWiggles").html(totalPaperworkWiggles);
 		$("#totalYessirScrolls").html(totalYessirScrolls);
