@@ -122,22 +122,26 @@ Game.Initialize = function() {
 		$("#currentGoal").empty();
 		var currGoal = goals[currentGoalIndex];
 		if(!currGoal) {
-			var li = $("<li>");
+			var li = $("<span>");
 			$("#currentGoal").append(li);
 			var html = "End Game";
 			li.html(html);
 		}
 		else {
-			var li = $("<li>");
+			var li = $("<span>");
 			$("#currentGoal").append(li);
-			var q = $("<q>");
+			/*var q = $("<q>");
 			var html = "";
 			html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) : "") + " ";
 			html += (currGoal.reqObj.paperwork !== 0 ? "Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)) : "") + " ";
 			html += (currGoal.reqObj.yessir !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)) : "");
 			q.html(html);
+			*/
+			$("#effortgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.effort.toFixed(0)));
+			$("#paperworkgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)));
+			$("#yessirgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)));
 			li.html(currGoal.name);
-			li.append(q);
+			//li.append(q);
 			li.click(function(goal) {
 				return function() {
 					if(efforttally >= goal.reqObj.effort &&
@@ -919,9 +923,9 @@ Game.Initialize = function() {
 		$("#efforttally").html(numberWithCommas((Math.floor(efforttally * 10) / 10).toFixed(1)) + "&nbsp;Effort");
 		$("#paperworktally").html(numberWithCommas((Math.floor(paperworktally * 10) / 10).toFixed(1)) + "&nbsp;Paperwork");
 		$("#yessirtally").html(numberWithCommas((Math.floor(yessirtally * 10) / 10).toFixed(1)) + "&nbsp;Yes,&nbsp;Sir!");
-		$("#effortpersec").html(numberWithCommas(eps.toFixed(1)) + "&nbsp;Effort&nbsp;Per&nbsp;Second");
-		$("#paperworkpersec").html(numberWithCommas(pps.toFixed(1)) + "&nbsp;Paperwork&nbsp;Per&nbsp;Second");
-		$("#yessirpersec").html(numberWithCommas(yps.toFixed(1)) + "&nbsp;Yes,&nbsp;Sir!&nbsp;Per&nbsp;Second");
+		$("#effortpersec").html(numberWithCommas(eps.toFixed(1)) + "&nbsp;Per&nbsp;Second");
+		$("#paperworkpersec").html(numberWithCommas(pps.toFixed(1)) + "&nbsp;Per&nbsp;Second");
+		$("#yessirpersec").html(numberWithCommas(yps.toFixed(1)) + "&nbsp;Per&nbsp;Second");
 		$("#totalEffortClicks").html(totalEffortClicks);
 		$("#totalPaperworkWiggles").html(totalPaperworkWiggles);
 		$("#totalYessirScrolls").html(totalYessirScrolls);

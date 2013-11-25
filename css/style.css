@@ -325,8 +325,7 @@ background-position: 0px -400px;
 
 #effortPrimary, #effortSecondary, #effortTertiary,
 #paperworkPrimary, #paperworkSecondary, #paperworkTertiary, 
-#yessirPrimary, #yessirSecondary, #yessirTertiary,
-#pastGoals {
+#yessirPrimary, #yessirSecondary, #yessirTertiary {
 	overflow-y: auto;
 }
 
