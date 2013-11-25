@@ -396,9 +396,9 @@ Game.Initialize = function() {
 	
 	var randomSpawn = function() {
 		var oneMinute = 1000 * 60;	//Just...just to keep typing down. Yeah.
-		var min = oneMinute * 5;
-		var max = oneMinute * 15;
-		var result = getRandomInt(min, max);
+		var min = 3;
+		var max = 7;
+		var result = getRandomInt(min, max) * oneMinute;
 		console.log("Next random spawn in " + result + "ms. You're welcome.");
 		randSpawnTimer = setTimeout(randomCreate, result);
 	}

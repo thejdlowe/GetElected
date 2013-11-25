@@ -118,7 +118,6 @@ pre {
 
 #col1, #col2, #col3, #col4 {
         position: absolute;
-        overflow-y: auto;
         top: 0px;
         bottom: 40px;
 }
@@ -322,6 +321,7 @@ pre {
 #yessirer.down {
 background-position: 0px -400px;
 }
+
 
 #effortPrimary, #effortSecondary, #effortTertiary,
 #paperworkPrimary, #paperworkSecondary, #paperworkTertiary, 
