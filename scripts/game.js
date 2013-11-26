@@ -29,8 +29,10 @@ Game.Initialize = function() {
 	var lastEffort = 0;
 	var efforttoggle = 1;
 	var totalEffortClicks = 0;
+	var totalEffortGained = 0;
 	var totalPaperworkWiggles = 0;
 	var totalYessirScrolls = 0;
+	var totalRestart = 0;
 	var startDate = 0;
 	var randSpawnTimer = null;
 	
@@ -48,6 +50,8 @@ Game.Initialize = function() {
 	var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
 	Game.incrementEffort = function(num) {
 		efforttally += num;
+		totalEffortGained += num;
+		totalEffortGained = Math.round(totalEffortGained);
 		if(efforttally <= 0) {
 			efforttally = 0;
 		}
@@ -101,19 +105,23 @@ Game.Initialize = function() {
 		var newLog = $("<div>");
 		newLog.addClass("log").html(str);
 		$("body").append(newLog);
-		newLog.css({"position": "absolute", "bottom": "-" + newLog.height() + "px", "left": "50%", "z-index": "999000", "opacity": "0"});
+		newLog.css({"position": "absolute", "bottom": "0px", "left": "50%", "z-index": "999000", "opacity": "0"});
 		$(".log").each(function() {
-			$(this).animate({bottom: "+=" + newLog.height()}, 500, function() {
-				//console.log($(this).css("bottom"));
-			});
+			$(this).animate({bottom: "+=" + $(this).height()}, 500);
 		});
 		newLog.animate(
 			{opacity: 1},
-			{duration: 1000, queue: false}
-		).delay(5000).animate(
-			{bottom: "+=" + newLog.height() + "px", opacity: 0},
-			{duration: 1000, complete: function() {
-				$(this).remove();
+			{duration: 1000, queue: false, complete: function() {
+				var obj = this;
+				setTimeout(function() {
+					$(obj).animate(
+						{bottom: "+=" + $(obj).height(), opacity: 0},
+						{duration: 1000, complete: function() {
+								$(this).remove();
+							}
+						}
+					);
+				}, 5000);
 			}
 		});
 	}
@@ -741,14 +749,18 @@ Game.Initialize = function() {
 				paperworktally = Math.round(parseFloat(localStorage["paperworktally"]));
 				yessirtally = Math.round(parseFloat(localStorage["yessirtally"]));
 				currentGoalIndex = Math.round(parseFloat(localStorage["currentGoalIndex"]));
+				totalRestart = Math.round(parseFloat(localStorage["totalRestart"]));
 				for(var i in powerups) {
 					if(localStorage[i]) powerups[i] = Math.round(parseFloat(localStorage[i]));
 				}
 				$("#autogoal").prop("checked", localStorage["autogoal"] === "true");
 				totalEffortClicks = Math.round(parseFloat(localStorage["totalEffortClicks"]));
+				totalEffortGained = Math.round(parseFloat(localStorage["totalEffortGained"]));
 				totalPaperworkWiggles = Math.round(parseFloat(localStorage["totalPaperworkWiggles"]));
 				totalYessirScrolls = Math.round(parseFloat(localStorage["totalYessirScrolls"]));
+				totalRestart = isNaN(totalRestart) ? 0 : totalRestart;
 				totalEffortClicks = isNaN(totalEffortClicks) ? 0 : totalEffortClicks;
+				totalEffortGained = isNaN(totalEffortGained) ? 0 : totalEffortGained;
 				totalPaperworkWiggles = isNaN(totalPaperworkWiggles) ? 0 : totalPaperworkWiggles;
 				totalYessirScrolls = isNaN(totalYessirScrolls) ? 0 : totalYessirScrolls;
 				
@@ -822,10 +834,12 @@ Game.Initialize = function() {
 			localStorage["currentGoalIndex"] = currentGoalIndex;
 			localStorage["autogoal"] = autogoal;
 			localStorage["totalEffortClicks"] = totalEffortClicks;
+			localStorage["totalEffortGained"] = totalEffortGained;
 			localStorage["totalPaperworkWiggles"] = totalPaperworkWiggles;
 			localStorage["totalYessirScrolls"] = totalYessirScrolls;
 			localStorage["startDate"] = startDate;
-			
+			localStorage["totalRestart"] = totalRestart;
+			console.log(currentGoalIndex);
 			
 			Game.log("Game Saved");
 			//$("#log").fadeIn(1000).delay(5000).fadeOut(1000);
@@ -841,8 +855,10 @@ Game.Initialize = function() {
 		efforttally = 0;
 		paperworktally = 0;
 		yessirtally = 0;
+		totalRestart += currentGoalIndex;
 		currentGoalIndex = 0;
 		totalEffortClicks = 0;
+		totalEffortGained = 0;
 		totalPaperworkWiggles = 0;
 		totalYessirScrolls = 0;
 		flags.resetAll();
@@ -879,6 +895,9 @@ Game.Initialize = function() {
 		var tempPap = Math.round((pps / fps) * 10000000) / 10000000;
 		var tempYes = Math.round((yps / fps) * 10000000) / 10000000;
 		
+		tempEff += (tempEff * (totalRestart / 100));
+		tempPap += (tempPap * (totalRestart / 100));
+		tempYes += (tempYes * (totalRestart / 100));
 		Game.incrementEffort(tempEff);
 		Game.incrementPaperwork(tempPap);
 		Game.incrementYessir(tempYes);
@@ -927,8 +946,10 @@ Game.Initialize = function() {
 		$("#paperworkpersec").html(numberWithCommas(pps.toFixed(1)) + "&nbsp;Per&nbsp;Second");
 		$("#yessirpersec").html(numberWithCommas(yps.toFixed(1)) + "&nbsp;Per&nbsp;Second");
 		$("#totalEffortClicks").html(totalEffortClicks);
+		$("#totalEffortGained").html(totalEffortGained);
 		$("#totalPaperworkWiggles").html(totalPaperworkWiggles);
 		$("#totalYessirScrolls").html(totalYessirScrolls);
+		$("#totalRestart").html(totalRestart);
 		$("#startDate").html((new Date(startDate)).toLocaleString());
 	}
 	

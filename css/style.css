@@ -31,7 +31,7 @@ html,body {
 
 li {
         border: 1px solid #696;
-        width:98%;
+        width:99%;
         padding: 16px 0;
         text-align: center;
         -webkit-border-radius: 8px;
@@ -125,14 +125,16 @@ pre {
 #game, #stats, #update {
 	/*Background care of http://subtlepatterns.com/ */
 	 background-image: url("../images/witewall_3.png");
+	/* background-image: url("../images/effortbackground3.png");
+	color: white;*/
 }
 
 #col1 {
-        left: 0px;
-        width: 75%;
-        min-width: 256px;
-        z-index: 4;
-        border-right: 1px solid black;
+	left: 0px;
+	width: 75%;
+	min-width: 256px;
+	z-index: 4;
+	border-right: 1px solid black;	
 }
 
 #col2 {
@@ -173,6 +175,7 @@ pre {
 }
 
 .log {
+	position: absolute;
 	font-size: 2.0em;
 	color: white;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
