@@ -1,3 +1,4 @@
+var testing = true;
 var incrementEffort = function(num) {
 	efforttally += num;
 	totalEffortGained += num;
@@ -17,4 +18,10 @@ var incrementYessir = function(num) {
 	if(yessirtally <= 0) {
 		yessirtally = 0;
 	}
+}
+
+if(testing === true) {
+	window.incrementEffort = incrementEffort;
+	window.incrementPaperwork = incrementPaperwork;
+	window.incrementYessir = incrementYessir;
 }

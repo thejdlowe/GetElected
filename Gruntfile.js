@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 		banner: "/*\n" +
 			"<%=pkg.name %> - v. <%=pkg.version %>\n" + 
 			"Copyright (c) <%= grunt.template.today('yyyy') %>\n" +
-			"Last Compiled <%= grunt.template.today('yyyy-mm-dd') %>\n*/",
+			"Last Compiled <%= grunt.template.today('yyyy-mm-dd HH:MM') %>\n*/",
 		encase: {
 			develop: {
 				separator: "",
@@ -26,6 +26,8 @@ module.exports = function(grunt) {
 	});
 	grunt.loadNpmTasks('grunt-encase');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-version')
+	grunt.loadNpmTasks('grunt-push-release');
 	
 	grunt.registerTask("default", ["uglify", "encase"]);
 };

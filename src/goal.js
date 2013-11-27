@@ -11,7 +11,6 @@ var Goal = function(name, reqObj, unlocks) {
 	this.name = name;
 	this.reqObj = reqObj;
 	this.unlocks = unlocks;
-	this.unlocks = unlocks;
 	return this;
 }
 
@@ -51,6 +50,13 @@ var addPastGoal = function(currGoal) {
 	li.addClass("disabled");
 }
 
+var currGoalIndex = function(name) {
+	for(var i = 0;i<goals.length;i++) {
+		if(goals[i].name === name) return i;
+	}
+	return -1;
+}
+
 var updateCurrentGoals = function() {
 	$("#currentGoal").empty();
 	var currGoal = goals[currentGoalIndex];
@@ -63,13 +69,6 @@ var updateCurrentGoals = function() {
 	else {
 		var li = $("<span>");
 		$("#currentGoal").append(li);
-		/*var q = $("<q>");
-		var html = "";
-		html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) : "") + " ";
-		html += (currGoal.reqObj.paperwork !== 0 ? "Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)) : "") + " ";
-		html += (currGoal.reqObj.yessir !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)) : "");
-		q.html(html);
-		*/
 		$("#effortgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.effort.toFixed(0)));
 		$("#paperworkgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)));
 		$("#yessirgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)));

@@ -215,3 +215,5 @@ pip-log.txt
 .mr.developer.cfg
 
 balance.xlsx
+
+node_modules/

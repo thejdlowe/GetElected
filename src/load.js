@@ -1,6 +1,62 @@
 var Load = function() {
 	try {
-		if(localStorage["efforttally"] && localStorage["efforttally"] !== "") {
+		if(localStorage.save && localStorage.save !== "") {
+			var str = LZString.decompressFromBase64(localStorage.save);
+			localStorage.clear();
+			Save(str);
+			var obj = JSON.parse(str);
+			
+			var l = function(val) {
+				return Math.round(parseFloat(val));
+			}
+			
+			efforttally = l(obj["efforttally"]);
+			paperworktally = l(obj["paperworktally"]);
+			yessirtally = l(obj["yessirtally"]);
+			currentGoalIndex = l(obj["currentGoalIndex"]);
+			totalRestart = l(obj["totalRestart"]);
+			for(var i in powerups) {
+				if(obj[i]) powerups[i] = l(obj[i]);
+			}
+			$("#autogoal").prop("checked", obj["autogoal"] === "true");
+			totalEffortClicks = l(obj["totalEffortClicks"]);
+			totalEffortGained = l(obj["totalEffortGained"]);
+			totalPaperworkWiggles = l(obj["totalPaperworkWiggles"]);
+			totalYessirScrolls = l(obj["totalYessirScrolls"]);
+			startDate = l(obj["startDate"]);
+			
+			
+			totalRestart = isNaN(totalRestart) ? 0 : totalRestart;
+			totalEffortClicks = isNaN(totalEffortClicks) ? 0 : totalEffortClicks;
+			totalEffortGained = isNaN(totalEffortGained) ? 0 : totalEffortGained;
+			totalPaperworkWiggles = isNaN(totalPaperworkWiggles) ? 0 : totalPaperworkWiggles;
+			totalYessirScrolls = isNaN(totalYessirScrolls) ? 0 : totalYessirScrolls;
+			
+			randomSpawn();
+			
+			/*
+			var obj = {
+				saveVer: version
+			};
+			
+			for(var i in powerups) {
+				obj[i] = powerups[i];
+			}
+			obj["efforttally"] = Math.round(efforttally);
+			obj["paperworktally"] = Math.round(paperworktally);
+			obj["yessirtally"] = Math.round(yessirtally);
+			obj["currentGoalIndex"] = currentGoalIndex;
+			obj["autogoal"] = autogoal;
+			obj["totalEffortClicks"] = totalEffortClicks;
+			obj["totalEffortGained"] = totalEffortGained;
+			obj["totalPaperworkWiggles"] = totalPaperworkWiggles;
+			obj["totalYessirScrolls"] = totalYessirScrolls;
+			obj["startDate"] = startDate;
+			obj["totalRestart"] = totalRestart;
+			*/
+			//efforttally = Math.round();
+		}
+		else if(localStorage["efforttally"] && localStorage["efforttally"] !== "") {
 			efforttally = Math.round(parseFloat(localStorage["efforttally"]));
 			paperworktally = Math.round(parseFloat(localStorage["paperworktally"]));
 			yessirtally = Math.round(parseFloat(localStorage["yessirtally"]));
@@ -28,5 +84,6 @@ var Load = function() {
 		}
 	}
 	catch(e) {
+		return alert("There was a problem loading the save data.");
 	}
 }
