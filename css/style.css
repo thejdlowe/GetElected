@@ -352,3 +352,11 @@ background-position: 0px -400px;
 .cannotPurchase {
 	opacity: 0.4;
 }
+
+#currGoal {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	cursor: pointer;
+	background-color: green;
+}
