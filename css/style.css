@@ -329,6 +329,7 @@ background-position: 0px -400px;
 #effortPrimary, #effortSecondary, #effortTertiary,
 #paperworkPrimary, #paperworkSecondary, #paperworkTertiary, 
 #yessirPrimary, #yessirSecondary, #yessirTertiary {
+	position: relative;
 	overflow-y: auto;
 }
 
@@ -357,6 +358,16 @@ background-position: 0px -400px;
 	position: absolute;
 	bottom: 0px;
 	right: 0px;
+	height: 40px;
+	line-height: 40px;
+	vertical-align: middle;
 	cursor: pointer;
 	background-color: green;
+}
+
+#tutorial {
+	-webkit-box-shadow: 7px 7px 5px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    7px 7px 5px rgba(50, 50, 50, 0.75);
+	box-shadow:         7px 7px 5px rgba(50, 50, 50, 0.75);
+	background-color: white;
 }

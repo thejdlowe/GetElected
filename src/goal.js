@@ -74,8 +74,10 @@ var updateCurrentGoals = function() {
 		$("#yessirgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)));
 		li.html(currGoal.name);
 		//li.append(q);
-		li.click(function(goal) {
+		
+		$("#currGoal").click(function(goal) {
 			return function() {
+				console.log("Click");
 				if(efforttally >= goal.reqObj.effort &&
 					paperworktally >= goal.reqObj.paperwork &&
 					yessirtally >= goal.reqObj.yessir) {

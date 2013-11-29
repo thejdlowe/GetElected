@@ -2,8 +2,10 @@ var Load = function() {
 	try {
 		if(localStorage.save && localStorage.save !== "") {
 			var str = LZString.decompressFromBase64(localStorage.save);
-			localStorage.clear();
-			Save(str);
+			if(localStorage["efforttally"]) {
+				localStorage.clear();
+				Save();
+			}
 			var obj = JSON.parse(str);
 			
 			var l = function(val) {
@@ -80,7 +82,6 @@ var Load = function() {
 			randomSpawn();
 		}
 		else {
-			randomCreate("firstone");	//Yep. First one's free.
 		}
 	}
 	catch(e) {

@@ -128,6 +128,14 @@ var Initialize = function() {
 		Import();
 	});
 	
+	Tutorial();
+	
+	/*
+	for(var i in resizelists) {
+		var currList = resizelists[i].join(",");
+		$(currList).perfectScrollbar();
+	}*/
+	
 	tickerChange();
 	setInterval(tickerChange, 1000*15);
 	
@@ -377,7 +385,7 @@ var Initialize = function() {
 	
 	recalculate();
 	
-	setInterval(Save, 1000*60);	//Save every 60 seconds	
+	setInterval(Save, 1000*30);	//Save every 30 seconds	
 	setInterval(recalculate, 1000/100);	//Recalculate EPS/PPS/YPS every 1/10th of a second; it's less stress!
 	
 	resizer();

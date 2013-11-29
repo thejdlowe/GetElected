@@ -23,6 +23,7 @@ TODO:
 <link href="css/reset.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <link href="css/style.css" rel="stylesheet" type="text/css">
+<link href="css/perfect-scrollbar-0.4.5.min.css" rel="stylesheet" type="text/css">
 <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Gudea:700' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
@@ -37,9 +38,10 @@ TODO:
 <script>
 $(document).ready(Game.preLoad);
 </script -->
-<script src="game.js"></script>
+<!--script src="scripts/perfect-scrollbar-0.4.5.with-mousewheel.min.js"></script -->
 <script src="scripts/lzstring.js"></script>
 <script src="scripts/jquery.animate-shadow-min.js"></script>
+<script src="game.js"></script>
 </head>
 <body>
 <div id="fb-root"></div>
@@ -209,6 +211,15 @@ Past Goals:
 </div>
 <!-- Cloners! -->
 <div id="effortclone" style="z-index:50">
+</div>
+<div id="tutorial">
+Welcome to GetElected!
+<br />
+<br />
+The goal of this game is to complete as many goals as possible. Your current goal <br />
+is listed below. Build your resource to meet the Current Goal, then click the goal below <br />
+to move on. You can automatically purchase goals in the settings menu.<br />
+<button onclick="closeTutorial()">Close Tutorial</button>
 </div>
 <!--div id="log">
 Game Saved

@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "grunt": "~0.4.2",
-    "grunt-cli": "*",
+    "grunt-cli": "~0.1.11",
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-contrib-jshint": "~0.7.0",
     "grunt-contrib-concat": "~0.3.0",
