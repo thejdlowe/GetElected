@@ -20,12 +20,12 @@ var Initialize = function() {
 			PRETTY PRETTY ANIMATIONS, DAMMIT
 		*/
 		var obj = $("#effortclone").clone();
+		obj.css("position", "absolute");
 		obj.html("+" + howMuch);
 		$("body").append(obj);
 		var left = 15 * efforttoggle;
 		efforttoggle *= -1;
-		obj.offset({left: e.pageX, top: e.pageY - 30});
-		obj.css("opacity", 100);
+		obj.css({"opacity": 1, "left": e.pageX, "top": e.pageY - 30});
 		obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
 			$(this).remove();
 		});
@@ -48,14 +48,14 @@ var Initialize = function() {
 		/*
 			PRETTY PRETTY ANIMATIONS, DAMMIT
 		*/
-		if(Math.random() < 0.17) {
+		if(Math.random() < 0.10) {
 			var obj = $("#effortclone").clone();
+			obj.css("position", "absolute");
 			obj.html("+" + howMuch);
 			$("body").append(obj);
 			var left = 15 * efforttoggle;
 			efforttoggle *= -1;
-			obj.offset({left: e.pageX, top: e.pageY - 30});
-			obj.css("opacity", 100);
+			obj.css({"opacity": 1, "left": e.pageX, "top": e.pageY - 30});
 			obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
 				$(this).remove();
 			});
