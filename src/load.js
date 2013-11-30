@@ -15,7 +15,8 @@ var Load = function() {
 			efforttally = l(obj["efforttally"]);
 			paperworktally = l(obj["paperworktally"]);
 			yessirtally = l(obj["yessirtally"]);
-			currentGoalIndex = l(obj["currentGoalIndex"]);
+			if(obj["currGoalLabel"]) currentGoalIndex = currGoalIndex(obj["currGoalLabel"]);
+			else currentGoalIndex = l(obj["currentGoalIndex"]);
 			totalRestart = l(obj["totalRestart"]);
 			for(var i in powerups) {
 				if(obj[i]) powerups[i] = l(obj[i]);

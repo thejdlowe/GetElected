@@ -365,6 +365,10 @@ background-position: 0px -400px;
 	background-color: green;
 }
 
+#currentGoal, #currentGoal * {
+	cursor: pointer;
+}
+
 #tutorial {
 	-webkit-box-shadow: 7px 7px 5px rgba(50, 50, 50, 0.75);
 	-moz-box-shadow:    7px 7px 5px rgba(50, 50, 50, 0.75);

@@ -28,6 +28,7 @@ var Update = function() {
 				yessirtally -= goal.reqObj.yessir;
 				addPastGoal(goal);
 				updateCurrentGoals();
+				goal = goals[currentGoalIndex];
 		}
 	}
 }

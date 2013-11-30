@@ -57,6 +57,10 @@ var currGoalIndex = function(name) {
 	return -1;
 }
 
+var currGoalLabel = function(index) {
+	return goals[index] ? goals[index].name : "";
+}
+
 var updateCurrentGoals = function() {
 	$("#currentGoal").empty();
 	var currGoal = goals[currentGoalIndex];
@@ -77,10 +81,12 @@ var updateCurrentGoals = function() {
 		
 		$("#currGoal").click(function(goal) {
 			return function() {
-				console.log("Click");
 				if(efforttally >= goal.reqObj.effort &&
 					paperworktally >= goal.reqObj.paperwork &&
 					yessirtally >= goal.reqObj.yessir) {
+						console.log("Current Effort: " + efforttally + "    Goal Effort: " + goal.reqObj.effort);
+						console.log("Current Paperwork: " + paperworktally + "    Goal Paperwork: " + goal.reqObj.paperwork);
+						console.log("Current Yes Sir: " + yessirtally + "    Goal Effort: " + goal.reqObj.yessir);
 						goal.unlocks();
 						currentGoalIndex++;
 						efforttally -= goal.reqObj.effort;
@@ -88,6 +94,7 @@ var updateCurrentGoals = function() {
 						yessirtally -= goal.reqObj.yessir;
 						addPastGoal(goal);
 						updateCurrentGoals();
+						goal = goals[currentGoalIndex];
 						resizer();
 				}
 			}

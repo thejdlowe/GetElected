@@ -22,7 +22,8 @@ var Save = function(str) {
 			obj["efforttally"] = Math.round(efforttally);
 			obj["paperworktally"] = Math.round(paperworktally);
 			obj["yessirtally"] = Math.round(yessirtally);
-			obj["currentGoalIndex"] = currentGoalIndex;
+			obj["currGoalLabel"] = currGoalLabel(currentGoalIndex);
+			//obj["currentGoalIndex"] = currentGoalIndex;
 			obj["autogoal"] = autogoal;
 			obj["totalEffortClicks"] = totalEffortClicks;
 			obj["totalEffortGained"] = totalEffortGained;
@@ -32,6 +33,7 @@ var Save = function(str) {
 			obj["totalRestart"] = totalRestart;
 			
 			localStorage.save = LZString.compressToBase64(JSON.stringify(obj));
+			if(testing === true) localStorage.rawsave = JSON.stringify(obj);
 			//console.log(JSON.stringify(obj));
 			
 			/*for(var i in powerups) {
