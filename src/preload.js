@@ -103,7 +103,7 @@ var preLoad = function() {
 	}
 	
 	try {
-		addLoader("paperworker");
+		/*addLoader("paperworker");
 		var ctx    = canvas.getContext('2d');
 		var link = document.createElement('link');
 		link.rel = 'stylesheet';
@@ -119,6 +119,17 @@ var preLoad = function() {
 				todo(ctx, paperwork, 12, "black");
 			}, 1000);
 		}
+		*/
+		
+		addLoader("paperworker");
+		var image = new Image();
+		image.onload = function() {
+			var x = getRandomInt(0, this.width - 200);
+			var y = getRandomInt(0, this.height - 200);
+			$("#paperworker").css({"background-image": "url(" + this.src + ")", "background-position": x + "px " + y + "px"});
+			finishLoader("paperworker");
+		}
+		image.src = "images/paperwork.png";
 		
 		addLoader("yessir");
 		var img = new Image;

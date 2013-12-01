@@ -47,7 +47,8 @@ var addPastGoal = function(currGoal) {
 	q.html(html);
 	li.html(currGoal.name);
 	li.append(q);
-	li.addClass("disabled");
+	console.log(currGoal.name);
+	//li.addClass("disabled");
 }
 
 var currGoalIndex = function(name) {
@@ -84,9 +85,10 @@ var updateCurrentGoals = function() {
 				if(efforttally >= goal.reqObj.effort &&
 					paperworktally >= goal.reqObj.paperwork &&
 					yessirtally >= goal.reqObj.yessir) {
-						console.log("Current Effort: " + efforttally + "    Goal Effort: " + goal.reqObj.effort);
-						console.log("Current Paperwork: " + paperworktally + "    Goal Paperwork: " + goal.reqObj.paperwork);
-						console.log("Current Yes Sir: " + yessirtally + "    Goal Effort: " + goal.reqObj.yessir);
+						$(this).unbind("click");
+						//console.log("Current Effort: " + efforttally + "    Goal Effort: " + goal.reqObj.effort);
+						//console.log("Current Paperwork: " + paperworktally + "    Goal Paperwork: " + goal.reqObj.paperwork);
+						//console.log("Current Yes Sir: " + yessirtally + "    Goal Effort: " + goal.reqObj.yessir);
 						goal.unlocks();
 						currentGoalIndex++;
 						efforttally -= goal.reqObj.effort;
@@ -94,7 +96,7 @@ var updateCurrentGoals = function() {
 						yessirtally -= goal.reqObj.yessir;
 						addPastGoal(goal);
 						updateCurrentGoals();
-						goal = goals[currentGoalIndex];
+						//goal = goals[currentGoalIndex];
 						resizer();
 				}
 			}

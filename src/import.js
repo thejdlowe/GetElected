@@ -10,10 +10,13 @@ var Import = function() {
 					if(obj.split("{;}").length > 1) {
 						var key = obj.split("{;}")[0];
 						var val = obj.split("{;}")[1];
+						console.log("key: " + key + "     val: " + val);
 						if(val === "true" || val === "false") localStorage[key] = Boolean(val);
 						else localStorage[key] = Math.round(parseFloat(val));
+						console.log("local storage: " + localStorage[key]);
 					}
 				}
+				console.log("localStorage: " + localStorage["efforttally"])
 			}
 			else {
 				var str = LZString.decompressFromBase64(s);

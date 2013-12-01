@@ -2,10 +2,11 @@
 <html>
 <head>
 <link href='https://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
-<div id="paperworkpreloader" style="font-family: 'Special Elite', cursive;font-size: 12px;">.</div>
-<img id="whee" />
+<!-- div id="paperworkpreloader" style="font-family: 'Special Elite', cursive;font-size: 12px;">.</div -->
+<div id="whee" style="width:200px;height:200px"></div>
 <script>
 /*var paperwork = "According to Chapter One, Sub-Chapter Eight, Paragraph Four, Line Two, upon entering what will be hereby forever known forever in the forever as \"The Monkey Pit\", " +
 "items purchased within or within a 3.14 foot proximity of a man what will be hereby forever known forever in the forever as \"Gerald\" cannot, will not, should not, and of not to be " +
@@ -81,6 +82,7 @@ image.onerror = function() {
 		todo(ctx, paperwork, 12, "black", canvas);
 	}, 1000);
 }*/
+/*
 var canvas = document.createElement("canvas");
 var ctx    = canvas.getContext('2d');
 var img = new Image();
@@ -105,6 +107,19 @@ img.src = "images/paperwork.png";
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+*/
+
+var getRandomInt = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var img = new Image();
+img.onload = function() {
+	var x = getRandomInt(0, this.width - 200);
+	var y = getRandomInt(0, this.height - 200);
+	$("#whee").css({"background-image": "url(" + this.src + ")", "background-position": x + "px " + y + "px"});
+}
+img.src = "images/paperwork.png";
 </script>
 </body>
 </html>

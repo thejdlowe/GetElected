@@ -1,5 +1,6 @@
 var Load = function() {
 	try {
+		console.log("localStorage: " + localStorage["efforttally"])
 		if(localStorage.save && localStorage.save !== "") {
 			var str = LZString.decompressFromBase64(localStorage.save);
 			if(localStorage["efforttally"]) {
@@ -36,30 +37,9 @@ var Load = function() {
 			totalYessirScrolls = isNaN(totalYessirScrolls) ? 0 : totalYessirScrolls;
 			
 			randomSpawn();
-			
-			/*
-			var obj = {
-				saveVer: version
-			};
-			
-			for(var i in powerups) {
-				obj[i] = powerups[i];
-			}
-			obj["efforttally"] = Math.round(efforttally);
-			obj["paperworktally"] = Math.round(paperworktally);
-			obj["yessirtally"] = Math.round(yessirtally);
-			obj["currentGoalIndex"] = currentGoalIndex;
-			obj["autogoal"] = autogoal;
-			obj["totalEffortClicks"] = totalEffortClicks;
-			obj["totalEffortGained"] = totalEffortGained;
-			obj["totalPaperworkWiggles"] = totalPaperworkWiggles;
-			obj["totalYessirScrolls"] = totalYessirScrolls;
-			obj["startDate"] = startDate;
-			obj["totalRestart"] = totalRestart;
-			*/
-			//efforttally = Math.round();
 		}
 		else if(localStorage["efforttally"] && localStorage["efforttally"] !== "") {
+			console.log("success");
 			efforttally = Math.round(parseFloat(localStorage["efforttally"]));
 			paperworktally = Math.round(parseFloat(localStorage["paperworktally"]));
 			yessirtally = Math.round(parseFloat(localStorage["yessirtally"]));
