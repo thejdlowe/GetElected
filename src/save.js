@@ -23,6 +23,7 @@ var Save = function(str) {
 			obj["paperworktally"] = Math.round(paperworktally);
 			obj["yessirtally"] = Math.round(yessirtally);
 			obj["currGoalLabel"] = currGoalLabel(currentGoalIndex);
+			obj["numberA"] = $("#numberA").val();
 			//obj["currentGoalIndex"] = currentGoalIndex;
 			obj["autogoal"] = autogoal;
 			obj["totalEffortClicks"] = totalEffortClicks;

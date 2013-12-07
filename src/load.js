@@ -13,6 +13,8 @@ var Load = function() {
 				return Math.round(parseFloat(val));
 			}
 			
+			$("#numberA").val(obj["numberA"] || "none");
+			
 			efforttally = l(obj["efforttally"]);
 			paperworktally = l(obj["paperworktally"]);
 			yessirtally = l(obj["yessirtally"]);

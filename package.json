@@ -1,6 +1,6 @@
 {
   "name": "GetElected!",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The most awesome game ever.",
   "main": "Gruntfile.js",
   "dependencies": {

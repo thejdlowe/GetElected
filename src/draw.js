@@ -32,4 +32,8 @@ var Draw = function() {
 	$("#totalYessirScrolls").html(totalYessirScrolls);
 	$("#totalRestart").html(totalRestart);
 	$("#startDate").html((new Date(startDate)).toLocaleString());
+	var currGoal = goals[currentGoalIndex];
+	$("#effortgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.effort));
+	$("#paperworkgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.paperwork));
+	$("#yessirgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.yessir));
 }

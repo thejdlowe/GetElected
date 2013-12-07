@@ -74,9 +74,9 @@ var updateCurrentGoals = function() {
 	else {
 		var li = $("<span>");
 		$("#currentGoal").append(li);
-		$("#effortgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.effort.toFixed(0)));
-		$("#paperworkgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)));
-		$("#yessirgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)));
+		$("#effortgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.effort));
+		$("#paperworkgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.paperwork));
+		$("#yessirgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.yessir));
 		li.html(currGoal.name);
 		//li.append(q);
 		
