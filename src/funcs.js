@@ -102,7 +102,7 @@ var numberWithCommas = function(number) {
 		return number;
 	}
 	else if(numberA === "high") {
-		return Number(number).toPrecision(2);
+		return Number(number).toExponential();
 	}
 	else {
 		var parts=number.toString().split(".");
