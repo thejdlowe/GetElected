@@ -29,6 +29,7 @@ var updatePastGoals = function() {
 		html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) : "") + " ";
 		html += (currGoal.reqObj.paperwork !== 0 ? "Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)) : "") + " ";
 		html += (currGoal.reqObj.yessir !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)) : "");
+		html += (currGoal.reqObj.bribery !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.bribery.toFixed(0)) : "");
 		q.html(html);
 		li.html(currGoal.name);
 		li.append(q);
@@ -44,11 +45,11 @@ var addPastGoal = function(currGoal) {
 	html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) : "") + " ";
 	html += (currGoal.reqObj.paperwork !== 0 ? "Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)) : "") + " ";
 	html += (currGoal.reqObj.yessir !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)) : "");
+	html += (currGoal.reqObj.bribery !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.bribery.toFixed(0)) : "");
 	q.html(html);
 	li.html(currGoal.name);
 	li.append(q);
-	console.log(currGoal.name);
-	//li.addClass("disabled");
+	//console.log(currGoal.name);
 }
 
 var currGoalIndex = function(name) {
@@ -77,6 +78,7 @@ var updateCurrentGoals = function() {
 		$("#effortgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.effort));
 		$("#paperworkgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.paperwork));
 		$("#yessirgoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.yessir));
+		$("#briberygoal").html("Current&nbsp;Goal:&nbsp;" + numberWithCommas(currGoal.reqObj.bribery));
 		li.html(currGoal.name);
 		//li.append(q);
 		
@@ -84,19 +86,17 @@ var updateCurrentGoals = function() {
 			return function() {
 				if(efforttally >= goal.reqObj.effort &&
 					paperworktally >= goal.reqObj.paperwork &&
-					yessirtally >= goal.reqObj.yessir) {
+					yessirtally >= goal.reqObj.yessir &&
+					briberytally >= goal.reqObj.bribery) {
 						$(this).unbind("click");
-						//console.log("Current Effort: " + efforttally + "    Goal Effort: " + goal.reqObj.effort);
-						//console.log("Current Paperwork: " + paperworktally + "    Goal Paperwork: " + goal.reqObj.paperwork);
-						//console.log("Current Yes Sir: " + yessirtally + "    Goal Effort: " + goal.reqObj.yessir);
 						goal.unlocks();
 						currentGoalIndex++;
 						efforttally -= goal.reqObj.effort;
 						paperworktally -= goal.reqObj.paperwork;
 						yessirtally -= goal.reqObj.yessir;
+						briberytally -= goal.reqObj.bribery;
 						addPastGoal(goal);
 						updateCurrentGoals();
-						//goal = goals[currentGoalIndex];
 						resizer();
 				}
 			}

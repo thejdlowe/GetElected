@@ -20,8 +20,16 @@ var incrementYessir = function(num) {
 	}
 }
 
+var incrementBribery = function(num) {
+	briberytally += num;
+	if(briberytally <= 0) {
+		briberytally = 0;
+	}
+}
+
 if(testing === true) {
 	window.incrementEffort = incrementEffort;
 	window.incrementPaperwork = incrementPaperwork;
 	window.incrementYessir = incrementYessir;
+	window.incrementBribery = incrementBribery;
 }

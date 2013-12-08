@@ -1,12 +1,4 @@
 var Save = function(str) {
-	/*
-		OK, let's declare the variables we NEED to save:
-		powerups
-		efforttally
-		paperworktally
-		yessirtally
-		currentGoalIndex
-	*/
 	try {
 		if(str) {
 			localStorage.save = LZString.compressToBase64(str);
@@ -22,6 +14,7 @@ var Save = function(str) {
 			obj["efforttally"] = Math.round(efforttally);
 			obj["paperworktally"] = Math.round(paperworktally);
 			obj["yessirtally"] = Math.round(yessirtally);
+			obj["briberytally"] = Math.round(briberytally);
 			obj["currGoalLabel"] = currGoalLabel(currentGoalIndex);
 			obj["numberA"] = $("#numberA").val();
 			//obj["currentGoalIndex"] = currentGoalIndex;

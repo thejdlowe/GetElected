@@ -44,12 +44,14 @@ $(document).ready(Game.preLoad);
 <body>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
+  /*var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=198376976960083";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+}(document, 'script', 'facebook-jssdk'));
+*/
+</script>
 <div id="navbar">
 GetElected!&copy; <span id="fps"></span> - <a href="javascript:void(0)">J.D. Lowe</a> 2013
  | <a href="faqs.html" target="_blank">FAQs</a>
@@ -157,6 +159,29 @@ Loading
 		</ol>
 	</div>
 	<div id="col4">
+		<div style="width:200px;margin: 0 auto;">
+			Bribery
+			<div id="briberyer" style="position: relative;width:100%;height:200px;border: 1px solid black">
+				<img style="position: absolute;top: 0px; left: 0px; width: 50px;height: 50px;" id="buck" src="images/stack-of-bills-money-clip-art.jpg" />
+				<div style="position: absolute;width: 50px;height: 50px;border: 1px solid black;bottom: 0px; right: 0px;" id="goal"></div>
+			</div>
+			<div id="briberytally">0.0 Bribery</div>
+			<div id="briberypersec">0.0 Per Second</div>
+			<div id="briberygoal">Current Goal: 0</div>
+		</div>
+		<div id="briberydescribe" style="width:80%;margin: 2px">
+		You need to bribe some people to get their votes! Drag the money into the box.
+		</div>
+		<span class="tabs"><a href="#briberyPrimary">Primary</a> | <a href="#briberySecondary">Secondary</a> | <a href="#briberyTertiary">Tertiary</a></span>
+		<span id="briberyTarget"></span>
+		<ol id="briberyPrimary">
+		</ol>
+		<ol id="briberySecondary">
+		</ol>
+		<ol id="briberyTertiary">
+		</ol>
+	</div>
+	<div id="col5">
 		GetElected! is an incremental game, like <a href="http://orteil.dashnet.org/cookieclicker/" target="_blank">Cookie Clicker</a> or <a href="http://clickingbad.nullism.com/" target="_blank">Clicking Bad</a>. Basically, an incremental game is exactly like Burger Time, except that it's not. You increase your resources, and you can either purchase goals (above) or purchase power ups which will add more resources for you.
 		<br /><br />
 		This page is currently in an Alpha stage. This means that the main functionality of this game is working; however, things such as game balance, the overall look, and even some of the secondary functionality
@@ -177,9 +202,8 @@ Loading
 		google_ad_height = 200;
 		//-->
 		</script>
-		<script type="text/javascript"
-		src="//pagead2.googlesyndication.com/pagead/show_ads.js">
-		</script>
+		<!--script type="text/javascript" src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script -->
 	</div>
 	
 	<div id="menu">
@@ -234,7 +258,7 @@ Game Saved
 <div id="effortclone" style="z-index:50">
 </div>
 <script>
-
+/*
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -242,6 +266,7 @@ Game Saved
 
   ga('create', 'UA-45684430-1', 'gdriv.es');
   ga('send', 'pageview');
+  */
 </script>
 </body>
 </html>

@@ -5,6 +5,7 @@ var twoCol = function() {
 	$("#col1").animate({"width": "75%"}, 500, function(){});
 	$("#col2").hide();
 	$("#col3").hide();
+	$("#col4").hide();
 }
 
 var threeCol = function() {
@@ -12,6 +13,7 @@ var threeCol = function() {
 	$("#col2").animate({"width": "40%", "left": "35%"}, 500, function(){});
 	$("#col2").show();
 	$("#col3").hide();
+	$("#col4").hide();
 }
 
 var fourCol = function() {
@@ -20,6 +22,17 @@ var fourCol = function() {
 	$("#col3").animate({"width": "25%", "left": "50%"}, 500, function(){});
 	$("#col2").show();
 	$("#col3").show();
+	$("#col4").hide();
+}
+
+var fiveCol = function() {
+	$("#col1").animate({"width": "20%"}, 500, function(){});
+	$("#col2").animate({"width": "20%", "left": "20%"}, 500, function(){});
+	$("#col3").animate({"width": "20%", "left": "40%"}, 500, function(){});
+	$("#col4").animate({"width": "20%", "left": "60%"}, 500, function(){});
+	$("#col2").show();
+	$("#col3").show();
+	$("#col4").show();
 }
 
 //function from http://stackoverflow.com/a/10899795/1644838

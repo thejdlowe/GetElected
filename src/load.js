@@ -18,6 +18,7 @@ var Load = function() {
 			efforttally = l(obj["efforttally"]);
 			paperworktally = l(obj["paperworktally"]);
 			yessirtally = l(obj["yessirtally"]);
+			briberytally = l(obj["briberytally"]);
 			if(obj["currGoalLabel"]) currentGoalIndex = currGoalIndex(obj["currGoalLabel"]);
 			else currentGoalIndex = l(obj["currentGoalIndex"]);
 			totalRestart = l(obj["totalRestart"]);
@@ -31,7 +32,7 @@ var Load = function() {
 			totalYessirScrolls = l(obj["totalYessirScrolls"]);
 			startDate = l(obj["startDate"]);
 			
-			
+			briberytally = isNaN(briberytally) ? 0 : briberytally;
 			totalRestart = isNaN(totalRestart) ? 0 : totalRestart;
 			totalEffortClicks = isNaN(totalEffortClicks) ? 0 : totalEffortClicks;
 			totalEffortGained = isNaN(totalEffortGained) ? 0 : totalEffortGained;
@@ -45,6 +46,7 @@ var Load = function() {
 			efforttally = Math.round(parseFloat(localStorage["efforttally"]));
 			paperworktally = Math.round(parseFloat(localStorage["paperworktally"]));
 			yessirtally = Math.round(parseFloat(localStorage["yessirtally"]));
+			briberytally = Math.round(parseFloat(localStorage["briberytally"]));
 			currentGoalIndex = Math.round(parseFloat(localStorage["currentGoalIndex"]));
 			totalRestart = Math.round(parseFloat(localStorage["totalRestart"]));
 			for(var i in powerups) {

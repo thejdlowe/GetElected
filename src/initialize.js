@@ -104,6 +104,45 @@ var Initialize = function() {
 		$(this).scrollTop(scrollerBase);
 	});
 	
+	var x = y = 0; //$( "#buck" ).offset().left, y = $( "#buck" ).offset().top;
+	$("#buck").draggable({ containment: "parent", stop: function() {
+			var obj1 = {
+				x:		$(this).offset().left,
+				y:		$(this).offset().top,
+				width:	$(this).width(),
+				height:	$(this).height()
+			};
+			var obj2 = {
+				x:		$("#goal").offset().left,
+				y:		$("#goal").offset().top,
+				width:	$("#goal").width(),
+				height:	$("#goal").height()
+			};
+
+			if(obj1.x < obj2.x + obj2.width && obj1.x + obj1.width > obj2.x &&
+				obj1.y < obj2.y + obj2.height && obj1.y + obj1.height > obj2.y) {
+					var howMuch = 1;
+					/*for(var i = 0;i<whichFlags.length;i++) {
+						howMuch += flags.flag(whichFlags[i]);
+					}
+					
+					howMuch *= flags.flag("multiplier");
+					*/
+
+					incrementBribery(howMuch);
+					var newTop = $("#goal").offset().top + ($("#goal").height() / 2);
+					var newLeft = $("#goal").offset().left + ($("#goal").width() / 2);
+					//count++;
+					$(this).animate({height: 0, width: 0}, 400, function() {
+						$(this).animate({top: 0, left: 0, height: 50, width: 50}, 5);
+					});
+			}
+			else {
+				$(this).animate({top: 0, left: 0}, 500);
+			}
+		}
+	});
+	
 	$("#save").click(function() {
 		Save();
 	});
@@ -130,56 +169,150 @@ var Initialize = function() {
 	
 	Tutorial();
 	
-	/*
-	for(var i in resizelists) {
-		var currList = resizelists[i].join(",");
-		$(currList).perfectScrollbar();
-	}*/
-	
 	tickerChange();
 	setInterval(tickerChange, 1000*15);
 	
 	goals = [
-		new Goal("Class Clown", {effort: 75, paperwork: 0, yessir: 0}, function() {$("#effortdescribe").hide("slow");}),
-		new Goal("Hall Monitor", {effort: 150, paperwork: 0, yessir: 0}, function() {}),
-		new Goal("Class Treasurer", {effort: 300, paperwork: 0, yessir: 0}, function() {}),
-		new Goal("Class Vice President", {effort: 600, paperwork: 0, yessir: 0}, function() {}),
-		new Goal("Class President", {effort: 1800, paperwork: 0, yessir: 0}, function() {}),
-		new Goal("Prom Royalty", {effort: 5400, paperwork: 0, yessir: 0}, function() {}),
-		new Goal("Sports Captain", {effort: 16200, paperwork: 0, yessir: 0}, function() {threeCol();}),
-		new Goal("Fry Cook", {effort: 32400, paperwork: 75, yessir: 0}, function() {$("#paperworkdescribe").hide("slow");}),
-		new Goal("Assistant Assistant Manager", {effort: 97200, paperwork: 150, yessir: 0}, function() {}),
-		new Goal("Assistant Manager", {effort: 291600, paperwork: 300, yessir: 0}, function() {}),
-		new Goal("General Manager", {effort: 583200, paperwork: 600, yessir: 0}, function() {}),
-		new Goal("District Manager", {effort: 1749600, paperwork: 1800, yessir: 0}, function() {}),
-		new Goal("PTA Treasurer", {effort: 3499200, paperwork: 5400, yessir: 0}, function() {}),
-		new Goal("PTA Vice President", {effort: 13996800, paperwork: 16200, yessir: 0}, function() {}),
-		new Goal("PTA President", {effort: 27993600, paperwork: 32400, yessir: 0}, function() {}),
-		new Goal("City Council", {effort: 111974400, paperwork: 97200, yessir: 0}, function() {}),
-		new Goal("Deputy Mayor", {effort: 335923200, paperwork: 291600, yessir: 0}, function() {fourCol();}),
-		new Goal("Mayor", {effort: 671846400, paperwork: 583200, yessir: 75}, function() {$("#yessirdescribe").hide("slow");}),
-		new Goal("Judge", {effort: 1343692800, paperwork: 1749600, yessir: 150}, function() {}),
-		new Goal("Lieutenant Governor", {effort: 2687385600, paperwork: 3499200, yessir: 300}, function() {}),
-		new Goal("Governor", {effort: 10749542400, paperwork: 13996800, yessir: 600}, function() {}),
-		new Goal("Senator", {effort: 21499084800, paperwork: 27993600, yessir: 1800}, function() {}),
-		new Goal("Vice President", {effort: 85996339200, paperwork: 111974400, yessir: 5400}, function() {}),
-		new Goal("President of the United States", {effort: 343985356800, paperwork: 335923200, yessir: 16200}, function() {}),
-		new Goal("Head of United Nations", {effort: 1031956070400, paperwork: 671846400, yessir: 32400}, function() {}),
-		new Goal("President of the Western Hemisphere", {effort: 2063912140800, paperwork: 1343692800, yessir: 97200}, function() {}),
-		new Goal("President of Earth", {effort: 6191736422400, paperwork: 2687385600, yessir: 291600}, function() {}),
-		new Goal("President of the Solar System", {effort: 18575209267200, paperwork: 10749542400, yessir: 583200}, function() {}),
-		new Goal("President of the Solar Interstellar Neighborhood", {effort: 37150418534400, paperwork: 21499084800, yessir: 1749600}, function() {}),
-		new Goal("President of the Milky Way Galaxy", {effort: 74300837068800, paperwork: 85996339200, yessir: 3499200}, function() {}),
-		new Goal("President of the Local Galactic Group", {effort: 148601674137600, paperwork: 343985356800, yessir: 13996800}, function() {}),
-		new Goal("President of the Virgo Supercluster", {effort: 297203348275200, paperwork: 1031956070400, yessir: 27993600}, function() {}),
-		new Goal("President of all Local Superclusters", {effort: 1188813393100800, paperwork: 2063912140800, yessir: 111974400}, function() {}),
-		new Goal("President of the Observable Universe", {effort: 2377626786201600, paperwork: 6191736422400, yessir: 335923200}, function() {}),
-		new Goal("President of Universe, Observable or Not", {effort: 9510507144806400, paperwork: 18575209267200, yessir: 671846400}, function() {}),
-		new Goal("President of The Multiverse", {effort: 38042028579225600, paperwork: 37150418534400, yessir: 1343692800}, function() {}),
-		new Goal("President of Time", {effort: 76084057158451200, paperwork: 74300837068800, yessir: 2687385600}, function() {}),
-		new Goal("Vice God", {effort: 152168114316902400, paperwork: 148601674137600, yessir: 10749542400}, function() {}),
-		new Goal("God", {effort: 456504342950707200, paperwork: 297203348275200, yessir: 21499084800}, function() {}),
-		new Goal("Ultra God", {effort: 1369513028852121600, paperwork: 1188813393100800, yessir: 85996339200}, function() {})
+		new Goal("Participation Award", {effort: 2, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Best Hand Turkey Drawer", {effort: 25, paperwork: 0, yessir: 0, bribery: 0}, function() {$("#effortdescribe").hide("slow");}),
+		new Goal("Class Clown", {effort: 75, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Hall Monitor", {effort: 150, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Class Treasurer", {effort: 300, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Class Vice President", {effort: 600, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Class President", {effort: 1800, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Prom Royalty", {effort: 3600, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Sports Captain", {effort: 5800, paperwork: 0, yessir: 0, bribery: 0}, function() {threeCol();}),
+		new Goal("Valedictorian", {effort: 10000, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Summa Cum Laude", {effort: 16100, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Fraternity Pledge", {effort: 23500, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Fraternity Treasurer", {effort: 32000, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Fraternity Vice President", {effort: 41300, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Fraternity President", {effort: 52000, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Inter-Fraternity Council President", {effort: 67200, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Big Man On Campus", {effort: 85000, paperwork: 0, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Fry Cook", {effort: 100000, paperwork: 1000, yessir: 0, bribery: 0}, function() {$("#paperworkdescribe").hide("slow");}),
+		new Goal("Asst. Employee Of The Week", {effort: 128000, paperwork: 1280, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Employee Of The Week", {effort: 163840, paperwork: 1638.4, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Employee Of The Year", {effort: 209715.2, paperwork: 2097.152, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Assistant Assistant Manager", {effort: 268435.456, paperwork: 2684.35456, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Assistant Manager", {effort: 343597.38368, paperwork: 3435.9738368000003, yessir: 0, bribery: 0}, function() {}),
+		new Goal("General Manager", {effort: 439804.65111040004, paperwork: 4398.046511104, yessir: 0, bribery: 0}, function() {}),
+		new Goal("District Manager", {effort: 562949.953421312, paperwork: 5629.499534213121, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Teacher", {effort: 720575.9403792794, paperwork: 7205.759403792795, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Vice Principal", {effort: 922337.2036854777, paperwork: 9223.372036854777, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Principal", {effort: 1199038.364791121, paperwork: 11990.38364791121, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Professor", {effort: 1558749.8742284575, paperwork: 15587.498742284575, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Dean of Students", {effort: 2026374.8364969948, paperwork: 20263.74836496995, yessir: 0, bribery: 0}, function() {}),
+		new Goal("PTA Treasurer", {effort: 2634287.2874460933, paperwork: 26342.872874460933, yessir: 0, bribery: 0}, function() {}),
+		new Goal("PTA Vice President", {effort: 3424573.4736799216, paperwork: 34245.73473679922, yessir: 0, bribery: 0}, function() {}),
+		new Goal("PTA President", {effort: 4451945.5157838985, paperwork: 44519.45515783899, yessir: 0, bribery: 0}, function() {}),
+		new Goal("City Council", {effort: 5787529.170519068, paperwork: 57875.29170519068, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Undersheriff", {effort: 7523787.921674789, paperwork: 75237.87921674788, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Sheriff", {effort: 9780924.298177226, paperwork: 97809.24298177226, yessir: 0, bribery: 0}, function() {}),
+		new Goal("Deputy Mayor", {effort: 12715201.587630393, paperwork: 127152.01587630394, yessir: 1271.5201587630393, bribery: 0}, function() {fourCol();}),
+		new Goal("Mayor", {effort: 17165522.143301032, paperwork: 171655.22143301033, yessir: 1716.5522143301032, bribery: 0}, function() {$("#yessirdescribe").hide("slow");}),
+		new Goal("Chupacabra", {effort: 23173454.893456396, paperwork: 231734.54893456397, yessir: 2317.3454893456396, bribery: 0}, function() {}),
+		new Goal("Ruler of The Forests", {effort: 31284164.106166136, paperwork: 312841.64106166136, yessir: 3128.4164106166136, bribery: 0}, function() {}),
+		new Goal("Judge", {effort: 42233621.543324284, paperwork: 422336.21543324285, yessir: 4223.362154332429, bribery: 0}, function() {}),
+		new Goal("Lieutenant Governor", {effort: 57015389.08348779, paperwork: 570153.8908348778, yessir: 5701.538908348779, bribery: 0}, function() {}),
+		new Goal("Governor", {effort: 76970775.26270851, paperwork: 769707.7526270852, yessir: 7697.077526270852, bribery: 0}, function() {}),
+		new Goal("Senator", {effort: 103910546.6046565, paperwork: 1039105.466046565, yessir: 10391.05466046565, bribery: 0}, function() {}),
+		new Goal("Vice President", {effort: 140279237.9162863, paperwork: 1402792.379162863, yessir: 14027.92379162863, bribery: 0}, function() {}),
+		new Goal("President of the United States", {effort: 210418856.87442943, paperwork: 2104188.5687442943, yessir: 21041.885687442944, bribery: 0}, function() {}),
+		new Goal("Nobel Peace Prize", {effort: 315628285.31164414, paperwork: 3156282.8531164415, yessir: 31562.828531164414, bribery: 0}, function() {}),
+		new Goal("Head of United Nations", {effort: 473442427.96746624, paperwork: 4734424.279674662, yessir: 47344.24279674662, bribery: 0}, function() {}),
+		new Goal("President of the Western Hemisphere", {effort: 710163641.9511993, paperwork: 7101636.4195119925, yessir: 71016.36419511992, bribery: 0}, function() {}),
+		new Goal("President of Earth", {effort: 1065245462.9267989, paperwork: 10652454.629267989, yessir: 106524.5462926799, bribery: 1065.2454629267988}, function() {}),
+		new Goal("The Greatest Human, Like, Ever", {effort: 1597868194.3901985, paperwork: 15978681.943901984, yessir: 159786.81943901983, bribery: 1597.8681943901984}, function() {}),
+		new Goal("President of the Solar System", {effort: 3627160801.2657504, paperwork: 36271608.0126575, yessir: 362716.080126575, bribery: 3627.1608012657503}, function() {}),
+		new Goal("President of the Solar Interstellar Neighborhood", {effort: 8233655018.873254, paperwork: 82336550.18873253, yessir: 823365.5018873253, bribery: 8233.655018873253}, function() {}),
+		new Goal("President of the Milky Way Galaxy", {effort: 18690396892.842285, paperwork: 186903968.92842284, yessir: 1869039.6892842285, bribery: 18690.396892842284}, function() {}),
+		new Goal("President of the Local Galactic Group", {effort: 42427200946.75199, paperwork: 424272009.46751994, yessir: 4242720.094675199, bribery: 42427.20094675199}, function() {}),
+		new Goal("President of the Virgo Supercluster", {effort: 99703922224.86719, paperwork: 997039222.2486719, yessir: 9970392.22248672, bribery: 99703.9222248672}, function() {}),
+		new Goal("President of all Local Superclusters", {effort: 234304217228.4379, paperwork: 2343042172.284379, yessir: 23430421.72284379, bribery: 234304.2172284379}, function() {}),
+		new Goal("President of the Observable Universe", {effort: 550614910486.8291, paperwork: 5506149104.868291, yessir: 55061491.048682906, bribery: 550614.910486829}, function() {}),
+		new Goal("President of Universe, Observable or Not", {effort: 1734436968033.5117, paperwork: 17344369680.335117, yessir: 173443696.80335116, bribery: 1734436.9680335117}, function() {}),
+		new Goal("President of The Multiverse", {effort: 5463476449305.562, paperwork: 54634764493.05562, yessir: 546347644.9305562, bribery: 5463476.449305561}, function() {}),
+		new Goal("President of Time", {effort: 17209950815312.518, paperwork: 172099508153.12518, yessir: 1720995081.531252, bribery: 17209950.81531252}, function() {}),
+		new Goal("Vice God", {effort: 54211345068234.43, paperwork: 542113450682.3443, yessir: 5421134506.823443, bribery: 54211345.068234436}, function() {}),
+		new Goal("God", {effort: 170765736964938.44, paperwork: 1707657369649.3843, yessir: 17076573696.493843, bribery: 170765736.96493843}, function() {}),
+		new Goal("Ultra God", {effort: 537912071439556.06, paperwork: 5379120714395.561, yessir: 53791207143.955605, bribery: 537912071.439556}, function() {}),
+		new Goal("The One", {effort: 1694423025034601.5, paperwork: 16944230250346.016, yessir: 169442302503.46014, bribery: 1694423025.0346014}, function() {}),
+		new Goal("Pretty Good Incremental Game Developer", {effort: 5337432528858995, paperwork: 53374325288589.95, yessir: 533743252885.89954, bribery: 5337432528.858995}, function() {}),
+		new Goal("Awesome Game Developer", {effort: 16812912465905834, paperwork: 168129124659058.34, yessir: 1681291246590.5835, bribery: 16812912465.905834}, function() {}),
+		new Goal("Creator of GetElected!", {effort: 52960674267603376, paperwork: 529606742676033.75, yessir: 5296067426760.338, bribery: 52960674267.60338}, function() {}),
+		new Goal("Nirvana", {effort: 166826123942950624, paperwork: 1668261239429506.2, yessir: 16682612394295.062, bribery: 166826123942.95062}, function() {}),
+		new Goal("Reincarnate - True Vote Hunter Mode", {effort: 525502290420294460, paperwork: 5255022904202945, yessir: 52550229042029.45, bribery: 525502290420.29456}, function() {}),
+		new Goal("TVHM Participation Award", {effort: 2000000000, paperwork: 20000000, yessir: 200000, bribery: 2000}, function() {}),
+		new Goal("TVHM Best Hand Turkey Drawer", {effort: 25000000000, paperwork: 25000000000, yessir: 25000000000, bribery: 25000000000}, function() {}),
+		new Goal("TVHM Class Clown", {effort: 75000000000, paperwork: 75000000000, yessir: 75000000000, bribery: 75000000000}, function() {}),
+		new Goal("TVHM Hall Monitor", {effort: 150000000000, paperwork: 150000000000, yessir: 150000000000, bribery: 150000000000}, function() {}),
+		new Goal("TVHM Class Treasurer", {effort: 300000000000, paperwork: 300000000000, yessir: 300000000000, bribery: 300000000000}, function() {}),
+		new Goal("TVHM Class Vice President", {effort: 600000000000, paperwork: 600000000000, yessir: 600000000000, bribery: 600000000000}, function() {}),
+		new Goal("TVHM Class President", {effort: 1800000000000, paperwork: 1800000000000, yessir: 1800000000000, bribery: 1800000000000}, function() {}),
+		new Goal("TVHM Prom Royalty", {effort: 3600000000000, paperwork: 3600000000000, yessir: 3600000000000, bribery: 3600000000000}, function() {}),
+		new Goal("TVHM Sports Captain", {effort: 5800000000000, paperwork: 5800000000000, yessir: 5800000000000, bribery: 5800000000000}, function() {}),
+		new Goal("TVHM Valedictorian", {effort: 10000000000000, paperwork: 10000000000000, yessir: 10000000000000, bribery: 10000000000000}, function() {}),
+		new Goal("TVHM Summa Cum Laude", {effort: 16100000000000, paperwork: 16100000000000, yessir: 16100000000000, bribery: 16100000000000}, function() {}),
+		new Goal("TVHM Fraternity Pledge", {effort: 23500000000000, paperwork: 23500000000000, yessir: 23500000000000, bribery: 23500000000000}, function() {}),
+		new Goal("TVHM Fraternity Treasurer", {effort: 32000000000000, paperwork: 32000000000000, yessir: 32000000000000, bribery: 32000000000000}, function() {}),
+		new Goal("TVHM Fraternity Vice President", {effort: 41300000000000, paperwork: 41300000000000, yessir: 41300000000000, bribery: 41300000000000}, function() {}),
+		new Goal("TVHM Fraternity President", {effort: 52000000000000, paperwork: 52000000000000, yessir: 52000000000000, bribery: 52000000000000}, function() {}),
+		new Goal("TVHM Inter-Fraternity Council President", {effort: 67200000000000, paperwork: 67200000000000, yessir: 67200000000000, bribery: 67200000000000}, function() {}),
+		new Goal("TVHM Big Man On Campus", {effort: 85000000000000, paperwork: 85000000000000, yessir: 85000000000000, bribery: 85000000000000}, function() {}),
+		new Goal("TVHM Fry Cook", {effort: 100000000000000, paperwork: 100000000000000, yessir: 100000000000000, bribery: 100000000000000}, function() {}),
+		new Goal("TVHM Asst. Employee Of The Week", {effort: 128000000000000, paperwork: 128000000000000, yessir: 128000000000000, bribery: 128000000000000}, function() {}),
+		new Goal("TVHM Employee Of The Week", {effort: 163840000000000, paperwork: 163840000000000, yessir: 163840000000000, bribery: 163840000000000}, function() {}),
+		new Goal("TVHM Employee Of The Year", {effort: 209715200000000, paperwork: 209715200000000, yessir: 209715200000000, bribery: 209715200000000}, function() {}),
+		new Goal("TVHM Assistant Assistant Manager", {effort: 268435456000000, paperwork: 268435456000000, yessir: 268435456000000, bribery: 268435456000000}, function() {}),
+		new Goal("TVHM Assistant Manager", {effort: 343597383680000, paperwork: 343597383680000, yessir: 343597383680000, bribery: 343597383680000}, function() {}),
+		new Goal("TVHM General Manager", {effort: 439804651110400.06, paperwork: 439804651110400.06, yessir: 439804651110400.06, bribery: 439804651110400.06}, function() {}),
+		new Goal("TVHM District Manager", {effort: 562949953421312, paperwork: 562949953421312, yessir: 562949953421312, bribery: 562949953421312}, function() {}),
+		new Goal("TVHM Teacher", {effort: 720575940379279.4, paperwork: 720575940379279.4, yessir: 720575940379279.4, bribery: 720575940379279.4}, function() {}),
+		new Goal("TVHM Vice Principal", {effort: 922337203685477.8, paperwork: 922337203685477.8, yessir: 922337203685477.8, bribery: 922337203685477.8}, function() {}),
+		new Goal("TVHM Principal", {effort: 1199038364791121, paperwork: 1199038364791121, yessir: 1199038364791121, bribery: 1199038364791121}, function() {}),
+		new Goal("TVHM Professor", {effort: 1558749874228457.5, paperwork: 1558749874228457.5, yessir: 1558749874228457.5, bribery: 1558749874228457.5}, function() {}),
+		new Goal("TVHM Dean of Students", {effort: 2026374836496994.8, paperwork: 2026374836496994.8, yessir: 2026374836496994.8, bribery: 2026374836496994.8}, function() {}),
+		new Goal("TVHM PTA Treasurer", {effort: 2634287287446093.5, paperwork: 2634287287446093.5, yessir: 2634287287446093.5, bribery: 2634287287446093.5}, function() {}),
+		new Goal("TVHM PTA Vice President", {effort: 3424573473679921.5, paperwork: 3424573473679921.5, yessir: 3424573473679921.5, bribery: 3424573473679921.5}, function() {}),
+		new Goal("TVHM PTA President", {effort: 4451945515783898.5, paperwork: 4451945515783898.5, yessir: 4451945515783898.5, bribery: 4451945515783898.5}, function() {}),
+		new Goal("TVHM City Council", {effort: 5787529170519068, paperwork: 5787529170519068, yessir: 5787529170519068, bribery: 5787529170519068}, function() {}),
+		new Goal("TVHM Undersheriff", {effort: 7523787921674789, paperwork: 7523787921674789, yessir: 7523787921674789, bribery: 7523787921674789}, function() {}),
+		new Goal("TVHM Sheriff", {effort: 9780924298177226, paperwork: 9780924298177226, yessir: 9780924298177226, bribery: 9780924298177226}, function() {}),
+		new Goal("TVHM Deputy Mayor", {effort: 12715201587630392, paperwork: 12715201587630392, yessir: 12715201587630392, bribery: 12715201587630392}, function() {}),
+		new Goal("TVHM Mayor", {effort: 17165522143301032, paperwork: 17165522143301032, yessir: 17165522143301032, bribery: 17165522143301032}, function() {}),
+		new Goal("TVHM Chupacabra", {effort: 23173454893456396, paperwork: 23173454893456396, yessir: 23173454893456396, bribery: 23173454893456396}, function() {}),
+		new Goal("TVHM Ruler of The Forests", {effort: 31284164106166136, paperwork: 31284164106166136, yessir: 31284164106166136, bribery: 31284164106166136}, function() {}),
+		new Goal("TVHM Judge", {effort: 42233621543324288, paperwork: 42233621543324288, yessir: 42233621543324288, bribery: 42233621543324288}, function() {}),
+		new Goal("TVHM Lieutenant Governor", {effort: 57015389083487784, paperwork: 57015389083487784, yessir: 57015389083487784, bribery: 57015389083487784}, function() {}),
+		new Goal("TVHM Governor", {effort: 76970775262708512, paperwork: 76970775262708512, yessir: 76970775262708512, bribery: 76970775262708512}, function() {}),
+		new Goal("TVHM Senator", {effort: 103910546604656496, paperwork: 103910546604656496, yessir: 103910546604656496, bribery: 103910546604656496}, function() {}),
+		new Goal("TVHM Vice President", {effort: 140279237916286288, paperwork: 140279237916286288, yessir: 140279237916286288, bribery: 140279237916286288}, function() {}),
+		new Goal("TVHM President of the United States", {effort: 210418856874429440, paperwork: 210418856874429440, yessir: 210418856874429440, bribery: 210418856874429440}, function() {}),
+		new Goal("TVHM Nobel Peace Prize", {effort: 315628285311644160, paperwork: 315628285311644160, yessir: 315628285311644160, bribery: 315628285311644160}, function() {}),
+		new Goal("TVHM Head of United Nations", {effort: 473442427967466240, paperwork: 473442427967466240, yessir: 473442427967466240, bribery: 473442427967466240}, function() {}),
+		new Goal("TVHM President of the Western Hemisphere", {effort: 710163641951199230, paperwork: 710163641951199230, yessir: 710163641951199230, bribery: 710163641951199230}, function() {}),
+		new Goal("TVHM President of Earth", {effort: 1065245462926798980, paperwork: 1065245462926798980, yessir: 1065245462926798980, bribery: 1065245462926798980}, function() {}),
+		new Goal("TVHM The Greatest Human, Like, Ever", {effort: 1597868194390198530, paperwork: 1597868194390198530, yessir: 1597868194390198530, bribery: 1597868194390198530}, function() {}),
+		new Goal("TVHM President of the Solar System", {effort: 3627160801265750500, paperwork: 3627160801265750500, yessir: 3627160801265750500, bribery: 3627160801265750500}, function() {}),
+		new Goal("TVHM President of the Solar Interstellar Neighborhood", {effort: 8233655018873253900, paperwork: 8233655018873253900, yessir: 8233655018873253900, bribery: 8233655018873253900}, function() {}),
+		new Goal("TVHM President of the Milky Way Galaxy", {effort: 18690396892842287000, paperwork: 18690396892842287000, yessir: 18690396892842287000, bribery: 18690396892842287000}, function() {}),
+		new Goal("TVHM President of the Local Galactic Group", {effort: 42427200946751990000, paperwork: 42427200946751990000, yessir: 42427200946751990000, bribery: 42427200946751990000}, function() {}),
+		new Goal("TVHM President of the Virgo Supercluster", {effort: 99703922224867180000, paperwork: 99703922224867180000, yessir: 99703922224867180000, bribery: 99703922224867180000}, function() {}),
+		new Goal("TVHM President of all Local Superclusters", {effort: 234304217228437880000, paperwork: 234304217228437880000, yessir: 234304217228437880000, bribery: 234304217228437880000}, function() {}),
+		new Goal("TVHM President of the Observable Universe", {effort: 550614910486829100000, paperwork: 550614910486829100000, yessir: 550614910486829100000, bribery: 550614910486829100000}, function() {}),
+		new Goal("TVHM President of Universe, Observable or Not", {effort: 1734436968033511800000, paperwork: 1734436968033511800000, yessir: 1734436968033511800000, bribery: 1734436968033511800000}, function() {}),
+		new Goal("TVHM President of The Multiverse", {effort: 5463476449305561000000, paperwork: 5463476449305561000000, yessir: 5463476449305561000000, bribery: 5463476449305561000000}, function() {}),
+		new Goal("TVHM President of Time", {effort: 17209950815312518000000, paperwork: 17209950815312518000000, yessir: 17209950815312518000000, bribery: 17209950815312518000000}, function() {}),
+		new Goal("TVHM Vice God", {effort: 54211345068234430000000, paperwork: 54211345068234430000000, yessir: 54211345068234430000000, bribery: 54211345068234430000000}, function() {}),
+		new Goal("TVHM God", {effort: 170765736964938440000000, paperwork: 170765736964938440000000, yessir: 170765736964938440000000, bribery: 170765736964938440000000}, function() {}),
+		new Goal("TVHM Ultra God", {effort: 537912071439556060000000, paperwork: 537912071439556060000000, yessir: 537912071439556060000000, bribery: 537912071439556060000000}, function() {}),
+		new Goal("TVHM The One", {effort: 1694423025034601500000000, paperwork: 1694423025034601500000000, yessir: 1694423025034601500000000, bribery: 1694423025034601500000000}, function() {}),
+		new Goal("TVHM Pretty Good Incremental Game Developer", {effort: 5337432528858995000000000, paperwork: 5337432528858995000000000, yessir: 5337432528858995000000000, bribery: 5337432528858995000000000}, function() {}),
+		new Goal("TVHM Awesome Game Developer", {effort: 16812912465905833000000000, paperwork: 16812912465905833000000000, yessir: 16812912465905833000000000, bribery: 16812912465905833000000000}, function() {}),
+		new Goal("TVHM Creator of GetElected!", {effort: 52960674267603370000000000, paperwork: 52960674267603370000000000, yessir: 52960674267603370000000000, bribery: 52960674267603370000000000}, function() {}),
+		new Goal("TVHM Nirvana", {effort: 166826123942950620000000000, paperwork: 166826123942950620000000000, yessir: 166826123942950620000000000, bribery: 166826123942950620000000000}, function() {}),
+		new Goal("Kill Screen", {effort: 166826123942950600000000000000, paperwork: 166826123942950600000000000000, yessir: 166826123942950600000000000000, bribery: 166826123942950600000000000000}, function() {})
 	];
 	
 	//Below code used to stress test.
@@ -420,5 +553,7 @@ var Initialize = function() {
 	//Last but not least, let's get some shit in place to track FPS, JUUUUST in case things start running slow.
 	lastRun = new Date().getTime();
 	if(startDate === 0 || isNaN(startDate)) startDate = (new Date()).getTime();
+	
+	fiveCol();
 	Loop();
 }

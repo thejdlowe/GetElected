@@ -116,7 +116,7 @@ pre {
         display: none;
 }
 
-#col1, #col2, #col3, #col4 {
+#col1, #col2, #col3, #col4, #col5 {
         position: absolute;
         top: 0px;
         bottom: 40px;
@@ -133,7 +133,7 @@ pre {
 	left: 0px;
 	width: 75%;
 	min-width: 256px;
-	z-index: 4;
+	z-index: 5;
 	border-right: 1px solid black;	
 }
 
@@ -142,7 +142,7 @@ pre {
         width: 25%;
         min-width: 256px;
         /*background-color: blue;*/
-        z-index: 3;
+        z-index: 4;
         display: none;
 }
 
@@ -151,13 +151,21 @@ pre {
         width: 25%;
         min-width: 256px;
         /*background-color: green;*/
-        z-index: 2;
+        z-index: 3;
         display: none;
 }
 
 #col4 {
-        right: 0px;
         width: 25%;
+        min-width: 256px;
+        /*background-color: orange;*/
+        z-index: 2;
+		display: none;
+}
+
+#col5 {
+        right: 0px;
+        width: 20%;
         min-width: 256px;
         /*background-color: orange;*/
         z-index: 10;

@@ -24,6 +24,7 @@ var listPowerUp = function(id) {
 		html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(compInt(func["cost"].effort, powerups[id]).toFixed(0)) : "") + " ";
 		html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(compInt(func["cost"].paperwork, powerups[id]).toFixed(0)) : "") + " ";
 		html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(compInt(func["cost"].yessir, powerups[id]).toFixed(0)) : "");
+		html += (func["cost"].bribery !== 0 ? "Bribery: " + numberWithCommas(compInt(func["cost"].bribery, powerups[id]).toFixed(0)) : "");
 		q.html(html);
 		q.attr("id", id + "_q");
 		li.append(q);
@@ -65,20 +66,26 @@ var listPowerUp = function(id) {
 		});*/
 		li.click(function(goal, id) {
 			return function() {
-				var effortVal = compInt(func["cost"].effort, powerups[id]), paperworkVal = compInt(func["cost"].paperwork, powerups[id]), yessirVal = compInt(func["cost"].yessir, powerups[id]);
+				var effortVal = compInt(func["cost"].effort, powerups[id]),
+					paperworkVal = compInt(func["cost"].paperwork, powerups[id]),
+					yessirVal = compInt(func["cost"].yessir, powerups[id]),
+					briberyVal = compInt(func["cost"].bribery, powerups[id]);
 				if(efforttally >= effortVal &&
 					paperworktally >= paperworkVal &&
-					yessirtally >= yessirVal) {
+					yessirtally >= yessirVal &&
+					briberytally >= briberyVal) {
 						if(func["onetime"] === true && powerups[id] > 0) return;
 						powerups[id]++;
 						efforttally -= effortVal;
 						paperworktally -= paperworkVal;
 						yessirtally -= yessirVal;
+						briberytally -= briberyVal;
 						var q = $("#" + id + "_q");
 						var html = "";
 						html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(compInt(func["cost"].effort, powerups[id]).toFixed(0)) : "") + " ";
 						html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(compInt(func["cost"].paperwork, powerups[id]).toFixed(0)) : "") + " ";
 						html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(compInt(func["cost"].yessir, powerups[id]).toFixed(0)) : "");
+						html += (func["cost"].bribery !== 0 ? "Bribery: " + numberWithCommas(compInt(func["cost"].bribery, powerups[id]).toFixed(0)) : "");
 						q.html(html);
 						var pre = $("#" + id + "_pre");
 						pre.html("" + powerups[id]);
@@ -99,7 +106,8 @@ var listPowerUp = function(id) {
 var buildPows = function() {
 	var targs = ["#effortPrimary","#effortSecondary","#effortTertiary",
 		"#paperworkPrimary","#paperworkSecondary","#paperworkTertiary",
-		"#yessirPrimary","#yessirSecondary","#yessirTertiary"].join(",");
+		"#yessirPrimary","#yessirSecondary","#yessirTertiary",
+		"#briberyPrimary","#briberySecondary","#briberyTertiary"].join(",");
 	$(targs).empty();
 	listPowerUp("grindstone");	listPowerUp("back");	listPowerUp("pain");	listPowerUp("mile");	listPowerUp("believe");
 	listPowerUp("stranger");	listPowerUp("perfectstrangers");	listPowerUp("perfectstrangers2");		

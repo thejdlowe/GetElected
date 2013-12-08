@@ -57,6 +57,7 @@ var randomCreate = function(pre) {	//if it gets pre passed to it, then it's not 
 				incrementEffort(efforttally * .1);
 				incrementPaperwork(paperworktally * .1);
 				incrementYessir(yessirtally * .1);
+				incrementBribery(briberytally * .1);
 				html = "Caucus: +10% all resources";
 			}
 			else if(lucky === "gridlock") {
@@ -81,19 +82,11 @@ var randomCreate = function(pre) {	//if it gets pre passed to it, then it's not 
 				incrementEffort(-efforttally * .1);
 				incrementPaperwork(-paperworktally * .1);
 				incrementYessir(-yessirtally * .1);
+				incrementBribery(-briberytally * .1);
 				html = "Lame Duck: -10% all resources";
 			}
 		}
 		log(html);
-		/*var obj = $("#log").clone();
-		obj.html(html);
-		$("body").append(obj);
-		obj.css({"display": "none", "position": "absolute", "z-index": "66669999", "bottom": (40 + obj.height()) + "px", "left": "50%", "margin": "0 0 0 -" + (obj.width() / 2) + "px"});
-		obj.fadeIn(1000).delay(5000);
-		obj.fadeOut(1000, function() {
-			$(this).remove();
-		});
-		*/
 		randomSpawn();
 	});
 	var randTimer = setTimeout(function() {
@@ -108,7 +101,9 @@ var randomSpawn = function() {
 	var oneMinute = 1000 * 60;	//Just...just to keep typing down. Yeah.
 	var min = 3;
 	var max = 7;
-	var result = getRandomInt(min, max) * oneMinute;
-	console.log("Next random spawn in " + result + "ms. You're welcome.");
-	randSpawnTimer = setTimeout(randomCreate, result);
+	var result = getRandomInt(min, max);
+	console.log("Next random spawn in " + result + " minutes. You're welcome.");
+	randSpawnTimer = setTimeout(randomCreate, result * oneMinute);
 }
+
+window.randomCreate = randomCreate;

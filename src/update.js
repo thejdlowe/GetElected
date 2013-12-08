@@ -7,25 +7,30 @@ var Update = function() {
 	var tempEff = Math.round((eps / fps) * 10000000) / 10000000;
 	var tempPap = Math.round((pps / fps) * 10000000) / 10000000;
 	var tempYes = Math.round((yps / fps) * 10000000) / 10000000;
+	var tempBri = Math.round((bps / fps) * 10000000) / 10000000;
 	
 	tempEff += (tempEff * calcBonus());
 	tempPap += (tempPap * calcBonus());
 	tempYes += (tempYes * calcBonus());
+	tempBri += (tempBri * calcBonus());
 	incrementEffort(tempEff);
 	incrementPaperwork(tempPap);
 	incrementYessir(tempYes);
+	incrementBribery(tempBri);
 	
 	var goal = goals[currentGoalIndex];
 	autogoal = $('#autogoal').prop('checked');
 	if(autogoal === true) {
 		if(efforttally >= goal.reqObj.effort &&
 			paperworktally >= goal.reqObj.paperwork &&
-			yessirtally >= goal.reqObj.yessir) {
+			yessirtally >= goal.reqObj.yessir &&
+			briberytally >= goal.reqObj.bribery) {
 				goal.unlocks();
 				currentGoalIndex++;
 				efforttally -= goal.reqObj.effort;
 				paperworktally -= goal.reqObj.paperwork;
 				yessirtally -= goal.reqObj.yessir;
+				briberytally -= goal.reqObj.bribery;
 				addPastGoal(goal);
 				updateCurrentGoals();
 				goal = goals[currentGoalIndex];

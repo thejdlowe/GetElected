@@ -5,6 +5,7 @@ var Reset = function() {
 	efforttally = 0;
 	paperworktally = 0;
 	yessirtally = 0;
+	briberytally = 0;
 	totalRestart += currentGoalIndex;
 	currentGoalIndex = 0;
 	totalEffortClicks = 0;
