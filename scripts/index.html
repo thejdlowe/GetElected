@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pass The Buck</title>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script>
+var count = 0;
+$(document).ready(function() {
+	var x = y = 0; //$( "#buck" ).offset().left, y = $( "#buck" ).offset().top;
+	$( "#buck" ).draggable({ containment: "parent", stop: function() {
+			var obj1 = {
+				x:		$(this).offset().left,
+				y:		$(this).offset().top,
+				width:	$(this).width(),
+				height:	$(this).height()
+			};
+			var obj2 = {
+				x:		$("#goal").offset().left,
+				y:		$("#goal").offset().top,
+				width:	$("#goal").width(),
+				height:	$("#goal").height()
+			};
+
+			if(obj1.x < obj2.x + obj2.width && obj1.x + obj1.width > obj2.x &&
+				obj1.y < obj2.y + obj2.height && obj1.y + obj1.height > obj2.y) {
+					count++;
+					$(this).animate({top: $("#goal").offset().top + ($("#goal").height() / 2), left: $("#goal").offset().left + ($("#goal").width() / 2), height: 0, width: 0}, 400, function() {
+						$(this).animate({top: y, left: x, height: 50, width: 50}, 5);
+					});
+			}
+			else {
+				$(this).animate({top: y, left: x}, 500);
+			}
+			$("#count").html(count);
+		}
+	});
+	$("#count").html(count);
+});
+</script>
+</head>
+<body>
+<div style="position: relative; width: 200px;height: 200px;border: 1px solid black">
+<img style="width: 50px;height: 50px;" id="buck" src="../images/stack-of-bills-money-clip-art.jpg" />
+<div style="position: absolute;width: 50px;height: 50px;border: 1px solid black;bottom: 0px; right: 0px;" id="goal">
+</div>
+</div>
+<span id="count"></span>
+</body>
+</html>
