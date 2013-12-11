@@ -21,7 +21,7 @@ var Draw = function() {
 			html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(effortVal.toFixed(0)) : "") + " ";
 			html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(paperworkVal.toFixed(0)) : "") + " ";
 			html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(yessirVal.toFixed(0)) : "");
-			html += (func["cost"].bribery !== 0 ? "Yes Sir: " + numberWithCommas(briberyVal.toFixed(0)) : "");
+			html += (func["cost"].bribery !== 0 ? "Bribery: " + numberWithCommas(briberyVal.toFixed(0)) : "");
 			q.html(html);
 		}
 	}

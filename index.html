@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ALPHA GetElected!</title>
+<title>BETA GetElected!</title>
 <!--
 Code copyright J.D. Lowe, 2013
 Background image care of http://subtlepatterns.com/
@@ -44,13 +44,13 @@ $(document).ready(Game.preLoad);
 <body>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
-  /*var js, fjs = d.getElementsByTagName(s)[0];
+  var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=198376976960083";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-*/
+
 </script>
 <div id="navbar">
 GetElected!&copy; <span id="fps"></span> - <a href="javascript:void(0)">J.D. Lowe</a> 2013
@@ -88,14 +88,6 @@ Loading
 		<div id="effortdescribe" style="width:80%;margin: 2px">
 		To get where you want to go, you gotta work for it! Push yourself! Click the button! And other positive self-motivating descriptors!
 		</div>
-		<span class="tabs"><a href="#effortPrimary">Primary</a> | <a href="#effortSecondary">Secondary</a> | <a href="#effortTertiary">Tertiary</a></span>
-		<span id="effortTarget"></span>
-		<ol id="effortPrimary">
-		</ol>
-		<ol id="effortSecondary">
-		</ol>
-		<ol id="effortTertiary">
-		</ol>
 	</div>
 	<div id="col2">
 		<div style="width:200px;margin: 0 auto;">
@@ -108,14 +100,6 @@ Loading
 		<div id="paperworkdescribe" style="width:80%;margin: 2px">
 		Ah, and now the paperwork! Move your mouse over the paper above to do paperwork to get ahead in life!
 		</div>
-		<span class="tabs"><a href="#paperworkPrimary">Primary</a> | <a href="#paperworkSecondary">Secondary</a> | <a href="#paperworkTertiary">Tertiary</a></span>
-		<span id="paperworkTarget"></span>
-		<ol id="paperworkPrimary">
-		</ol>
-		<ol id="paperworkSecondary">
-		</ol>
-		<ol id="paperworkTertiary">
-		</ol>
 	</div>
 	<div id="col3">
 		<div style="width:200px;margin: 0 auto; border:1px solid black;overflow:hidden;">
@@ -149,14 +133,6 @@ Loading
 		<div id="yessirdescribe" style="width:80%;margin: 2px">
 			Most important: Empty promises! Keep making promises to your voters by clicking the above box and scrolling (either with your mouse wheel, with the up and down arrows, or Page Up/Page Down) both up AND down!
 			</div>
-		<span class="tabs"><a href="#yessirPrimary">Primary</a> | <a href="#yessirSecondary">Secondary</a> | <a href="#yessirTertiary">Tertiary</a></span>
-		<span id="yessirTarget"></span>
-		<ol id="yessirPrimary">
-		</ol>
-		<ol id="yessirSecondary">
-		</ol>
-		<ol id="yessirTertiary">
-		</ol>
 	</div>
 	<div id="col4">
 		<div style="width:200px;margin: 0 auto;">
@@ -172,14 +148,6 @@ Loading
 		<div id="briberydescribe" style="width:80%;margin: 2px">
 		You need to bribe some people to get their votes! Drag the money into the box.
 		</div>
-		<span class="tabs"><a href="#briberyPrimary">Primary</a> | <a href="#briberySecondary">Secondary</a> | <a href="#briberyTertiary">Tertiary</a></span>
-		<span id="briberyTarget"></span>
-		<ol id="briberyPrimary">
-		</ol>
-		<ol id="briberySecondary">
-		</ol>
-		<ol id="briberyTertiary">
-		</ol>
 	</div>
 	<div id="col5">
 		GetElected! is an incremental game, like <a href="http://orteil.dashnet.org/cookieclicker/" target="_blank">Cookie Clicker</a> or <a href="http://clickingbad.nullism.com/" target="_blank">Clicking Bad</a>. Basically, an incremental game is exactly like Burger Time, except that it's not. You increase your resources, and you can either purchase goals (above) or purchase power ups which will add more resources for you.
@@ -205,16 +173,62 @@ Loading
 		google_ad_height = 200;
 		//-->
 		</script>
-		<!--script type="text/javascript" src="//pagead2.googlesyndication.com/pagead/show_ads.js">
-		</script -->
+		<script type="text/javascript" src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
 	</div>
-	
 	<div id="menu">
 		<div id="ticker">TICKER GOES HERE</div>
 		<div style="position: absolute; bottom: 0px; right: 0px;" id="currGoal">
 		Current Goal: <span id="currentGoal"></span>
 		</div>
 	</div>
+</div>
+<div id="store">
+	<span class="tabs"><a href="#effortStore">Effort</a> | <a href="#paperworkStore">Paperwork</a> | <a href="#yessirStore">Yes Sir</a> | <a href="#briberyStore">Bribery</a></span>
+	<br />
+	<span id="effortStore">
+		<span class="tabs"><a href="#effortPrimary">Primary</a> | <a href="#effortSecondary">Secondary</a> | <a href="#effortTertiary">Tertiary</a></span>
+		<span id="effortTarget"></span>
+		<ol id="effortPrimary">
+		</ol>
+		<ol id="effortSecondary">
+		</ol>
+		<ol id="effortTertiary">
+		</ol>
+	</span>
+	
+	<span id="paperworkStore">
+		<span class="tabs"><a href="#paperworkPrimary">Primary</a> | <a href="#paperworkSecondary">Secondary</a> | <a href="#paperworkTertiary">Tertiary</a></span>
+		<span id="paperworkTarget"></span>
+		<ol id="paperworkPrimary">
+		</ol>
+		<ol id="paperworkSecondary">
+		</ol>
+		<ol id="paperworkTertiary">
+		</ol>
+	</span>
+	
+	<span id="yessirStore">
+		<span class="tabs"><a href="#yessirPrimary">Primary</a> | <a href="#yessirSecondary">Secondary</a> | <a href="#yessirTertiary">Tertiary</a></span>
+		<span id="yessirTarget"></span>
+		<ol id="yessirPrimary">
+		</ol>
+		<ol id="yessirSecondary">
+		</ol>
+		<ol id="yessirTertiary">
+		</ol>
+	</span>
+	
+	<span id="briberyStore">
+		<span class="tabs"><a href="#briberyPrimary">Primary</a> | <a href="#briberySecondary">Secondary</a> | <a href="#briberyTertiary">Tertiary</a></span>
+		<span id="briberyTarget"></span>
+		<ol id="briberyPrimary">
+		</ol>
+		<ol id="briberySecondary">
+		</ol>
+		<ol id="briberyTertiary">
+		</ol>
+	</span>
 </div>
 <div id="stats">
 Stats For Your Current Game:
@@ -261,7 +275,7 @@ Game Saved
 <div id="effortclone" style="z-index:50">
 </div>
 <script>
-/*
+
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -269,7 +283,7 @@ Game Saved
 
   ga('create', 'UA-45684430-1', 'gdriv.es');
   ga('send', 'pageview');
-  */
+  
 </script>
 </body>
 </html>

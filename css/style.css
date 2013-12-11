@@ -31,7 +31,9 @@ html,body {
 
 li {
         border: 1px solid #696;
-        width:99%;
+        width:33%;
+		left: 50%;
+		margin-left: -14%;
         padding: 16px 0;
         text-align: center;
         -webkit-border-radius: 8px;
@@ -119,7 +121,7 @@ pre {
 #col1, #col2, #col3, #col4, #col5 {
         position: absolute;
         top: 0px;
-        bottom: 40px;
+        height: 381px !important;
 }
 
 #game, #stats, #update {
@@ -127,6 +129,15 @@ pre {
 	 background-image: url("../images/witewall_3.png");
 	/* background-image: url("../images/effortbackground3.png");
 	color: white;*/
+}
+
+#store {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 412px;
+	bottom: 40px;
+	overflow-y: auto;
 }
 
 #col1 {
@@ -338,7 +349,6 @@ background-position: 0px -400px;
 #paperworkPrimary, #paperworkSecondary, #paperworkTertiary, 
 #yessirPrimary, #yessirSecondary, #yessirTertiary {
 	position: relative;
-	overflow-y: auto;
 }
 
 #myAlert {
