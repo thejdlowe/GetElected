@@ -15,6 +15,5 @@ var Loop = function() {
 	//var currFPS = ~~(1/delta);
 	//console.log(currFPS + " fps");
 	//console.log(eps);
-	//console.log(autogoal + " " + localStorage["autogoal"] + " " +  $('#autogoal').prop('checked'));
 	setTimeout(Loop, 1000/fps);	//Execute logic, then draw (i.e. update tallies) every 1000 out of (frames per second) millisecond.
 }

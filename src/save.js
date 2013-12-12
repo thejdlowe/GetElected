@@ -19,6 +19,7 @@ var Save = function(str) {
 			obj["numberA"] = $("#numberA").val();
 			//obj["currentGoalIndex"] = currentGoalIndex;
 			obj["autogoal"] = autogoal;
+			obj["lowgraphics"] = lowgraphics;
 			obj["totalEffortClicks"] = totalEffortClicks;
 			obj["totalEffortGained"] = totalEffortGained;
 			obj["totalPaperworkWiggles"] = totalPaperworkWiggles;

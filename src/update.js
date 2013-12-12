@@ -20,6 +20,7 @@ var Update = function() {
 	
 	var goal = goals[currentGoalIndex];
 	autogoal = $('#autogoal').prop('checked');
+	lowgraphics = $("#lowgraphics").prop("checked");
 	if(autogoal === true) {
 		if(efforttally >= goal.reqObj.effort &&
 			paperworktally >= goal.reqObj.paperwork &&

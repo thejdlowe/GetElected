@@ -26,6 +26,7 @@ var Load = function() {
 				if(obj[i]) powerups[i] = l(obj[i]);
 			}
 			$("#autogoal").prop("checked", obj["autogoal"] === "true");
+			$("#lowgraphics").prop("checked", obj["lowgraphics"] === "true");
 			totalEffortClicks = l(obj["totalEffortClicks"]);
 			totalEffortGained = l(obj["totalEffortGained"]);
 			totalPaperworkWiggles = l(obj["totalPaperworkWiggles"]);
@@ -53,6 +54,7 @@ var Load = function() {
 				if(localStorage[i]) powerups[i] = Math.round(parseFloat(localStorage[i]));
 			}
 			$("#autogoal").prop("checked", localStorage["autogoal"] === "true");
+			$("#lowgraphics").prop("checked", localStorage["lowgraphics"] === "true");
 			totalEffortClicks = Math.round(parseFloat(localStorage["totalEffortClicks"]));
 			totalEffortGained = Math.round(parseFloat(localStorage["totalEffortGained"]));
 			totalPaperworkWiggles = Math.round(parseFloat(localStorage["totalPaperworkWiggles"]));

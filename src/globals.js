@@ -1,4 +1,4 @@
-var version = "0.1.0";
+var version = "0.1.2";
 var currNotes = "";
 var efforttally = paperworktally = yessirtally = briberytally = currentGoalIndex = 0;
 var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.
@@ -14,7 +14,7 @@ var totalBriberyDrags = 0;
 var totalRestart = 0;
 var startDate = 0;
 var randSpawnTimer = null;
-var autogoal = false;
+var autogoal = lowgraphics = false;
 var interest = 0.27;	//Be sure to tip your costs, and drive home safe!
 var missedFrames = 0;	//How many frames are missed due to latency / the window not being in focus
 var goals = [];

@@ -25,11 +25,19 @@ var updatePastGoals = function() {
 		var li = $("<li>");
 		$("#pastGoals").prepend(li);
 		var q = $("<q>");
+		/*
 		var html = "";
-		html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) : "") + " ";
-		html += (currGoal.reqObj.paperwork !== 0 ? "Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)) : "") + " ";
-		html += (currGoal.reqObj.yessir !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)) : "");
-		html += (currGoal.reqObj.bribery !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.bribery.toFixed(0)) : "");
+		html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) + " | " : "") + " ";
+		html += (currGoal.reqObj.paperwork !== 0 ? "Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)) + " | " : "") + " ";
+		html += (currGoal.reqObj.yessir !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)) + " | " : "") + " ";
+		html += (currGoal.reqObj.bribery !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.bribery.toFixed(0)) : "");*/
+		
+		var html = [];
+		if(currGoal.reqObj.effort !== 0) html.push("Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)));
+		if(currGoal.reqObj.paperwork !== 0) html.push("Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)));
+		if(currGoal.reqObj.yessir !== 0) html.push("Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)));
+		if(currGoal.reqObj.bribery!== 0) html.push("Bribery: " + numberWithCommas(currGoal.reqObj.bribery.toFixed(0)));
+		html = html.join(" | ");
 		q.html(html);
 		li.html(currGoal.name);
 		li.append(q);
@@ -41,11 +49,12 @@ var addPastGoal = function(currGoal) {
 	var li = $("<li>");
 	$("#pastGoals").prepend(li);
 	var q = $("<q>");
-	var html = "";
-	html += (currGoal.reqObj.effort !== 0 ? "Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)) : "") + " ";
-	html += (currGoal.reqObj.paperwork !== 0 ? "Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)) : "") + " ";
-	html += (currGoal.reqObj.yessir !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)) : "");
-	html += (currGoal.reqObj.bribery !== 0 ? "Yes Sir: " + numberWithCommas(currGoal.reqObj.bribery.toFixed(0)) : "");
+	var html = [];
+	if(currGoal.reqObj.effort !== 0) html.push("Effort: " + numberWithCommas(currGoal.reqObj.effort.toFixed(0)));
+	if(currGoal.reqObj.paperwork !== 0) html.push("Paperwork: " + numberWithCommas(currGoal.reqObj.paperwork.toFixed(0)));
+	if(currGoal.reqObj.yessir !== 0) html.push("Yes Sir: " + numberWithCommas(currGoal.reqObj.yessir.toFixed(0)));
+	if(currGoal.reqObj.bribery!== 0) html.push("Bribery: " + numberWithCommas(currGoal.reqObj.bribery.toFixed(0)));
+
 	q.html(html);
 	li.html(currGoal.name);
 	li.append(q);

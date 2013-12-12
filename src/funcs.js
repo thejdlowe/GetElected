@@ -69,7 +69,7 @@ var numberWithCommas = function(number) {
 				 }
 
 				 // Add the letter for the abbreviation
-				 number += " " + abbrev[i];
+				 number += "&nbsp;" + abbrev[i];
 
 				 // We are done... stop
 				 break;
@@ -105,7 +105,7 @@ var numberWithCommas = function(number) {
 				 }
 
 				 // Add the letter for the abbreviation
-				 number += " " + abbrev[i];
+				 number += "&nbsp;" + abbrev[i];
 
 				 // We are done... stop
 				 break;
@@ -115,7 +115,7 @@ var numberWithCommas = function(number) {
 		return number;
 	}
 	else if(numberA === "high") {
-		return Number(number).toExponential();
+		return Number(number).toExponential(3);
 	}
 	else {
 		var parts=number.toString().split(".");

@@ -14,7 +14,6 @@ var addPowerUp = function(id, cost, label, description, section, func, onetime, 
 var listPowerUp = function(id) {
 	if($("#" + id).length === 0) {
 		var func = powerupsfuncs[id];
-		console.log(id);
 		var target = $("#" + func["section"]);
 		var li = $("<li>");
 		li.attr("id", id);

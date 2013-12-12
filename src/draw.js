@@ -17,11 +17,18 @@ var Draw = function() {
 			else $("#" + i).removeClass("canPurchase").addClass("cannotPurchase").attr("title", "Cannot afford at this time");
 			
 			var q = $("#" + i + "_q");
-			var html = "";
-			html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(effortVal.toFixed(0)) : "") + " ";
-			html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(paperworkVal.toFixed(0)) : "") + " ";
-			html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(yessirVal.toFixed(0)) : "");
+			/*var html = "";
+			html += (func["cost"].effort !== 0 ? "Effort: " + numberWithCommas(effortVal.toFixed(0)) + " | " : "") + " ";
+			html += (func["cost"].paperwork !== 0 ? "Paperwork: " + numberWithCommas(paperworkVal.toFixed(0)) + " | " : "") + " ";
+			html += (func["cost"].yessir !== 0 ? "Yes Sir: " + numberWithCommas(yessirVal.toFixed(0)) + " | " : "") + " ";
 			html += (func["cost"].bribery !== 0 ? "Bribery: " + numberWithCommas(briberyVal.toFixed(0)) : "");
+			*/
+			var html = [];
+			if(func["cost"].effort !== 0) html.push("Effort: " + numberWithCommas(effortVal.toFixed(0)));
+			if(func["cost"].paperwork !== 0) html.push("Paperwork: " + numberWithCommas(paperworkVal.toFixed(0)));
+			if(func["cost"].yessir !== 0) html.push("Yes Sir: " + numberWithCommas(yessirVal.toFixed(0)));
+			if(func["cost"].bribery !== 0) html.push("Bribery: " + numberWithCommas(briberyVal.toFixed(0)));
+			html = html.join(" | ");
 			q.html(html);
 		}
 	}

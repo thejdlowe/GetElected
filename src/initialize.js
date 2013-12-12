@@ -19,16 +19,18 @@ var Initialize = function() {
 		/*
 			PRETTY PRETTY ANIMATIONS, DAMMIT
 		*/
-		var obj = $("#effortclone").clone();
-		obj.css("position", "absolute");
-		obj.html("+" + howMuch);
-		$("body").append(obj);
-		var left = 15 * efforttoggle;
-		efforttoggle *= -1;
-		obj.css({"opacity": 1, "left": e.pageX, "top": e.pageY - 30});
-		obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
-			$(this).remove();
-		});
+		if(lowgraphics === false) {
+			var obj = $("#effortclone").clone();
+			obj.css("position", "absolute");
+			obj.html("+" + howMuch);
+			$("body").append(obj);
+			var left = 15 * efforttoggle;
+			efforttoggle *= -1;
+			obj.css({"opacity": 1, "left": e.pageX, "top": e.pageY - 30});
+			obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
+				$(this).remove();
+			});
+		}
 		Draw();
 	});
 	
@@ -52,19 +54,20 @@ var Initialize = function() {
 		/*
 			PRETTY PRETTY ANIMATIONS, DAMMIT
 		*/
-		if(Math.random() < 0.10) {
-			var obj = $("#effortclone").clone();
-			obj.css("position", "absolute");
-			obj.html("+" + howMuch);
-			$("body").append(obj);
-			var left = 15 * efforttoggle;
-			efforttoggle *= -1;
-			obj.css({"opacity": 1, "left": e.pageX, "top": e.pageY - 30});
-			obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
-				$(this).remove();
-			});
+		if(lowgraphics === false) {
+			if(Math.random() < 0.10) {
+				var obj = $("#effortclone").clone();
+				obj.css("position", "absolute");
+				obj.html("+" + howMuch);
+				$("body").append(obj);
+				var left = 15 * efforttoggle;
+				efforttoggle *= -1;
+				obj.css({"opacity": 1, "left": e.pageX, "top": e.pageY - 30});
+				obj.animate({"opacity": 0, "top": (e.pageY - 60), "left": e.pageX - left}, 500, function() {
+					$(this).remove();
+				});
+			}
 		}
-		
 		Draw();
 	});
 	
