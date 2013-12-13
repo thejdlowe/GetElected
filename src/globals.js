@@ -3,7 +3,7 @@ var currNotes = "";
 var efforttally = paperworktally = yessirtally = briberytally = currentGoalIndex = 0;
 var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.
 var scrollStatus = "";
-var fps = 5;
+var fps = 8;
 var lastEffort = 0;
 var efforttoggle = 1;
 var totalEffortClicks = 0;
