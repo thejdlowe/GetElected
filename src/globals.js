@@ -1,4 +1,4 @@
-var version = "0.1.3";
+var version = "0.1.4";
 var currNotes = "";
 var efforttally = paperworktally = yessirtally = briberytally = currentGoalIndex = 0;
 var scrollerBase = 10;	//An arbitrary number; this is where the (hidden) scroll bar will lock itself on scroll for the Yes Sir section.

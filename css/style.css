@@ -346,7 +346,9 @@ background-position: 0px -400px;
 
 #effortPrimary, #effortSecondary, #effortTertiary,
 #paperworkPrimary, #paperworkSecondary, #paperworkTertiary, 
-#yessirPrimary, #yessirSecondary, #yessirTertiary {
+#yessirPrimary, #yessirSecondary, #yessirTertiary,
+#briberyPrimary, #briberySecondary, #briberyTertiary,
+#effortLevelUp, #paperworkLevelUp, #yessirLevelUp, #briberyLevelUp {
 	position: relative;
 }
 
