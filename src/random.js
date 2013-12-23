@@ -2,7 +2,8 @@ var randomCreate = function(pre) {	//if it gets pre passed to it, then it's not 
 	clearTimeout(randSpawnTimer);	//JUUUUST in case.
 	var life = 1000 * 15;		//Life will last fifteen seconds. SO MACABRE.
 	var width = height = 200;	//it will be 200 pixels in size.
-	var x = y = 0;
+	var x = 0;
+	var y = 0;
 	var myrand = $("<div>");
 	myrand.addClass("random");
 	$("body").append(myrand);
@@ -25,6 +26,13 @@ var randomCreate = function(pre) {	//if it gets pre passed to it, then it's not 
 				recalculate();
 			}, 1000 * 60);
 			html = "First One's Free: Resource generation 2x for 60 seconds";
+		}
+		else if(holiday && holiday === true) {
+			incrementEffort(efforttally * .02);
+			incrementPaperwork(paperworktally * .02);
+			incrementYessir(yessirtally * .02);
+			incrementBribery(briberytally * .02);
+			html = "Happy Holidays: +2% all resources";
 		}
 		else {
 			/*
